@@ -1,5 +1,13 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -91,3 +99,47 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// Enums
+export const billingCycleEnum = pgEnum("billing_cycle", ["monthly", "yearly"]);
+export const currencyEnum = pgEnum("currency", ["MXN", "USD", "EUR"]);
+
+// Tabla de suscripciones
+export const subscriptions = pgTable("subscriptions", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  name: text("name").notNull(),
+  platform: text("platform").notNull(), // "netflix", "spotify", etc.
+
+  price: integer("price").notNull(), // En centavos o unidad mínima
+  currency: currencyEnum("currency").notNull().default("MXN"),
+
+  billingCycle: billingCycleEnum("billing_cycle").notNull().default("monthly"),
+  billingDay: integer("billing_day").notNull(), // 1-31
+
+  // Opcionales útiles
+  description: text("description"),
+  url: text("url"), // Link al servicio
+
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Relaciones
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(user, {
+    fields: [subscriptions.userId],
+    references: [user.id],
+  }),
+}));
+
+// Tipos inferidos
+export type Subscription = typeof subscriptions.$inferSelect;
+export type NewSubscription = typeof subscriptions.$inferInsert;
