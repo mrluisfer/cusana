@@ -1,0 +1,18 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "cSpell.words": [
+    "bambu",
+    "Bambú",
+    "Canlas",
+    "Monfly",
+    "Nowports",
+    "pinterest"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
+  "biome.enabled": false
+}
