@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
-import React from "react";
+import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
   DropdownMenu,
@@ -15,6 +15,10 @@ import {
 
 export const UserMenu = () => {
   const { data, isPending, error } = useSession();
+
+  if (error) {
+    return <ErrorStateInline message="Error al cargar el usuario" />;
+  }
 
   if (isPending) {
     return <Loader message="Cargando información del usuario" />;
