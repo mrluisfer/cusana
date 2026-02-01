@@ -1,7 +1,5 @@
 import { Subscription, subscriptionsColumns } from "./columns";
 import { DataTable } from "./data-table";
-import { Button } from "@/components/ui/button";
-import { Plus, Download } from "lucide-react";
 
 export const subscriptionsExample: Subscription[] = [
   {

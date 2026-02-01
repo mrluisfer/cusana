@@ -30,11 +30,11 @@ export default function SubscriptionResume() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm">
+        <Button variant="outline">
           <DownloadIcon className="mr-2 size-4" />
           Exportar
         </Button>
-        <Button size="sm">
+        <Button>
           <PlusIcon className="mr-2 size-4" />
           Agregar suscripción
         </Button>

@@ -1,6 +1,5 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,16 +12,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ServiceKey } from "@/constants/icons";
+import { formatCurrency } from "@/utils/format-currency";
+import { getNextBillingDate } from "@/utils/get-next-billing-date";
+import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
+  Bell,
   Calendar,
+  ExternalLink,
   MoreHorizontal,
   Pencil,
   Trash2,
-  Bell,
-  ExternalLink,
 } from "lucide-react";
-import { ServiceKey } from "@/constants/icons";
+import { DataTableColumnHeader } from "./data-table-column-header";
 
 export type Subscription = {
   id: string;
@@ -35,55 +37,16 @@ export type Subscription = {
   nextBillingDate?: Date;
 };
 
-// Formateador de moneda
-const formatCurrency = (amount: number, currency: string) => {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
-
-// Calcular próxima fecha de cobro
-const getNextBillingDate = (billingDay: number): string => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-
-  let nextDate: Date;
-  if (currentDay >= billingDay) {
-    nextDate = new Date(currentYear, currentMonth + 1, billingDay);
-  } else {
-    nextDate = new Date(currentYear, currentMonth, billingDay);
-  }
-
-  const daysUntil = Math.ceil(
-    (nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-  );
-
-  if (daysUntil === 0) return "Hoy";
-  if (daysUntil === 1) return "Mañana";
-  if (daysUntil <= 7) return `En ${daysUntil} días`;
-
-  return nextDate.toLocaleDateString("es-MX", {
-    day: "numeric",
-    month: "short",
-  });
-};
-
 export const subscriptionsColumns: ColumnDef<Subscription>[] = [
   // Columna: Servicio (icono + nombre)
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Servicio
-        <ArrowUpDown className="ml-2 size-4" />
-      </Button>
+      <DataTableColumnHeader
+        column={column}
+        title="Servicio"
+        triggerClassName="ml-0"
+      />
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
@@ -104,14 +67,7 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
   {
     accessorKey: "price",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        className="-ml-4"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Precio
-        <ArrowUpDown className="ml-2 size-4" />
-      </Button>
+      <DataTableColumnHeader column={column} title="Precio" />
     ),
     cell: ({ row }) => (
       <div className="flex flex-col">
@@ -132,7 +88,7 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
     cell: ({ row }) => (
       <Badge
         variant={
-          row.original.billingCycle === "monthly" ? "secondary" : "outline"
+          row.original.billingCycle === "monthly" ? "default" : "outline"
         }
         className="capitalize"
       >

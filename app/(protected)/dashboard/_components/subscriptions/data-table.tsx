@@ -1,15 +1,17 @@
 "use client";
 
-import * as React from "react";
 import {
   ColumnDef,
+  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import * as React from "react";
 
 import {
   Table,
@@ -21,11 +23,18 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
+import { Field, FieldLabel } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  SearchIcon,
 } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
@@ -40,6 +49,9 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
 
   const table = useReactTable({
     data,
@@ -50,7 +62,10 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     state: {
       sorting,
+      columnFilters,
     },
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     initialState: {
       pagination: {
         pageSize,
@@ -60,8 +75,28 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center py-4">
+        <Field className="max-w-sm">
+          <FieldLabel htmlFor="input-group-url">Buscar suscripción</FieldLabel>
+          <InputGroup>
+            <InputGroupAddon align="inline-start">
+              <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupInput
+              id="input-group-url"
+              placeholder="Filtra subscripciones..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+            />
+          </InputGroup>
+        </Field>
+      </div>
       {/* Tabla */}
-      <div className="rounded-xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
+      <div className="border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
