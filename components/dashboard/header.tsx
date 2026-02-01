@@ -1,8 +1,5 @@
-import React from "react";
 import { Logo } from "../logo";
-import Avatar from "boring-avatars";
 import { UserMenu } from "./user-menu";
-import { Badge } from "../ui/badge";
 
 export default function Header() {
   return (
