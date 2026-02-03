@@ -18,6 +18,10 @@ export enum AllowedPlatforms {
   MERCADO_LIBRE = "mercado_libre",
   PATREON = "patreon",
   TWITTER = "twitter",
+  OTROS = "otros",
+  AMAZON = "amazon",
+  HBO = "hbo",
+  DISCORD = "discord",
 }
 
 export const allowedPlatformsArray = Object.values(AllowedPlatforms);
