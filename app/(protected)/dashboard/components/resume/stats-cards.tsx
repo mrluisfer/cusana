@@ -73,10 +73,10 @@ export function StatsCards() {
     );
   }
 
-  const total = data?.total ?? 0;
-  const monthlyAvg = data?.monthlyAvg ?? total;
-  const yearlyProjection = data?.yearlyProjection ?? total * 12;
-  const subscriptionCount = data?.subscriptionCount ?? 0;
+  const total = Number(data?.total) || 0;
+  const monthlyAvg = Number(data?.monthlyAvg) || total;
+  const yearlyProjection = Number(data?.yearlyProjection) || total * 12;
+  const subscriptionCount = Number(data?.subscriptionCount) || 0;
 
   return (
     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

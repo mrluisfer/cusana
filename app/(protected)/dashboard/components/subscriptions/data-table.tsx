@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { RefetchButton } from "@/components/dashboard/refetch-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
@@ -98,6 +99,7 @@ export function DataTable<TData, TValue>({
         </Field>
 
         <div className="flex flex-wrap items-center gap-2 md:justify-end">
+          <RefetchButton />
           <Button variant="outline" className="w-full sm:w-auto">
             <DownloadIcon className="mr-2 size-4" />
             Exportar
@@ -107,8 +109,8 @@ export function DataTable<TData, TValue>({
           </div>
         </div>
       </div>
-      {/* Tabla */}
-      <div className="border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
+      {/* Tabla - FIX: Removido overflow-hidden, agregado rounded-md */}
+      <div className="rounded-md border border-border bg-card/50 backdrop-blur-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -153,10 +155,10 @@ export function DataTable<TData, TValue>({
             : <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-32 text-center"
+                  className="h-24 text-center"
                 >
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                    <span className="text-4xl">📭</span>
+                    <span className="text-4xl">🔭</span>
                     <p>No hay suscripciones</p>
                     <p className="text-sm">
                       Agrega tu primera suscripción para comenzar

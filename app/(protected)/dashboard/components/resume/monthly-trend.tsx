@@ -65,7 +65,10 @@ export function MonthlyTrend() {
 
   // Generar datos de los últimos 6 meses basados en las suscripciones actuales
   const totalCurrent =
-    subscriptions?.reduce((sum, sub) => sum + sub.price, 0) ?? 0;
+    subscriptions?.reduce(
+      (sum, sub) => sum + (parseFloat(String(sub.price)) || 0),
+      0,
+    ) ?? 0;
 
   // Usar variaciones predefinidas en lugar de Math.random() para mantener consistencia
   const variations = [0.92, 0.95, 0.98, 1.0, 1.02, 1.0];

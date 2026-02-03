@@ -87,7 +87,8 @@ export function ResumeTotal() {
           >
             Total de{" "}
             <strong className="text-primary">
-              {Number.parseInt(data?.total ?? 0, 10)} {data?.currency}
+              {(parseFloat(data?.total) || 0).toLocaleString("es-MX")}{" "}
+              {data?.currency}
             </strong>{" "}
             en tus suscripciones.
           </span>

@@ -38,9 +38,10 @@ export async function GET(
     const rate =
       ratesData.rates[sub.currency as keyof typeof ratesData.rates] || 1;
 
-    let priceInSelectedCurrency = sub.price;
+    const price = parseFloat(String(sub.price)) || 0;
+    let priceInSelectedCurrency = price;
     if (sub.currency !== currency) {
-      priceInSelectedCurrency = sub.price / rate;
+      priceInSelectedCurrency = price / rate;
     }
 
     // Calcular según el ciclo de facturación

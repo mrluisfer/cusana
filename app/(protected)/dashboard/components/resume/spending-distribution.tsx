@@ -62,7 +62,7 @@ export function SpendingDistribution() {
         if (!acc[platform]) {
           acc[platform] = { total: 0, count: 0, currency: sub.currency };
         }
-        acc[platform].total += sub.price;
+        acc[platform].total += parseFloat(String(sub.price)) || 0;
         acc[platform].count += 1;
         return acc;
       },

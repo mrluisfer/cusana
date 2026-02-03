@@ -125,7 +125,9 @@ export function UpcomingPayments() {
                 <div className="flex items-center gap-2">
                   <Badge variant={getUrgencyColor(subscription.billingDay)}>
                     {currencySymbols[subscription.currency]}
-                    {subscription.price.toLocaleString("es-MX")}
+                    {(
+                      parseFloat(String(subscription.price)) || 0
+                    ).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
                   </Badge>
                 </div>
               </div>

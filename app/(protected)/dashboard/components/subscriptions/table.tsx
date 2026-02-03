@@ -70,25 +70,6 @@ export default function SubscriptionTable() {
 
   return (
     <section className="space-y-6 my-8 min-w-0">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-semibold">Tus suscripciones</h2>
-          <p className="text-sm text-muted-foreground">
-            {data.length}{" "}
-            {data.length === 1 ? "suscripción activa" : "suscripciones activas"}
-          </p>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => refetch()}
-          disabled={isRefetching}
-        >
-          <RefreshCw
-            className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`}
-          />
-        </Button>
-      </div>
       <DataTable columns={subscriptionsColumns} data={data} />
     </section>
   );
