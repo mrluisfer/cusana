@@ -3,6 +3,7 @@ import { Disney } from "@/assets/icons/disney";
 import { Netflix } from "@/assets/icons/netfilix";
 import { Spotify } from "@/assets/icons/spotify";
 import { YouTube } from "@/assets/icons/youtube";
+import { AllowedPlatforms } from "./allowed-platforms";
 
 type ServiceIcon = {
   name: string;
@@ -12,27 +13,27 @@ type ServiceIcon = {
 
 export const serviceIcons = {
   netflix: {
-    name: "netflix",
+    name: AllowedPlatforms.NETFLIX,
     color: "#E50914",
     icon: Netflix,
   },
   spotify: {
-    name: "spotify",
+    name: AllowedPlatforms.SPOTIFY,
     color: "#1DB954",
     icon: Spotify,
   },
   claude: {
-    name: "claude",
+    name: AllowedPlatforms.CLAUDE,
     color: "#00A67E",
     icon: ClaudeAI,
   },
   youtube: {
-    name: "youtube",
+    name: AllowedPlatforms.YOUTUBE,
     color: "#FF0000",
     icon: YouTube,
   },
   disney: {
-    name: "disney",
+    name: AllowedPlatforms.DISNEY,
     color: "#113CCF",
     icon: Disney,
   },
