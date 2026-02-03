@@ -34,8 +34,10 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  DownloadIcon,
   SearchIcon,
 } from "lucide-react";
+import { AddSubscription } from "./add-subscription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -75,7 +77,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center py-4">
+      <div className="flex items-end py-4 flex-1 gap-4 justify-between">
         <Field className="max-w-sm">
           <FieldLabel htmlFor="input-group-url">Buscar suscripción</FieldLabel>
           <InputGroup>
@@ -94,6 +96,14 @@ export function DataTable<TData, TValue>({
             />
           </InputGroup>
         </Field>
+
+        <div className="flex items-center gap-2">
+          <Button variant="outline">
+            <DownloadIcon className="mr-2 size-4" />
+            Exportar
+          </Button>
+          <AddSubscription />
+        </div>
       </div>
       {/* Tabla */}
       <div className="border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
