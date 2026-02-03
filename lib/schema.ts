@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  numeric,
   pgEnum,
   pgTable,
   text,
@@ -117,7 +118,7 @@ export const subscriptions = pgTable("subscriptions", {
   name: text("name").notNull(),
   platform: text("platform").notNull(), // "netflix", "spotify", etc.
 
-  price: integer("price").notNull(), // En centavos o unidad mínima
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   currency: currencyEnum("currency").notNull().default("MXN"),
 
   billingCycle: billingCycleEnum("billing_cycle").notNull().default("monthly"),

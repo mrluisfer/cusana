@@ -15,6 +15,13 @@
       "when": 1769980196250,
       "tag": "0001_wakeful_sebastian_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770091136190,
+      "tag": "0002_complete_wiccan",
+      "breakpoints": true
     }
   ]
 }
