@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export function AuthHeader() {
   return (
-    <header className="flex justify-between items-center w-full">
+    <header className="flex w-full items-center justify-between">
       <Button variant={"link"} render={<Link href={"/"} />}>
         <HugeiconsIcon icon={ArrowLeft01Icon} />
         Regresar

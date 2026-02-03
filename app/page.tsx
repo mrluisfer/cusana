@@ -58,9 +58,9 @@ const benefits = [
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-linear-to-b from-background to-muted/30 container max-w-6xl mx-auto px-4">
+    <main className="from-background to-muted/30 container mx-auto min-h-screen max-w-6xl bg-linear-to-b px-4">
       {/* Header */}
-      <header className="pt-4 flex items-center justify-between">
+      <header className="flex items-center justify-between pt-4">
         <Logo />
 
         <div className="flex items-center justify-end gap-3">
@@ -76,37 +76,37 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="pt-20 pb-16 md:pt-28 md:pb-24">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Left - Copy */}
           <div className="space-y-6">
             <Badge
               variant="secondary"
-              className="px-3 py-1.5 text-sm font-medium gap-1.5"
+              className="gap-1.5 px-3 py-1.5 text-sm font-medium"
             >
               <Sparkles className="size-3.5" />
               Nuevo: Insights con IA
             </Badge>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
+            <h1 className="text-foreground text-4xl leading-[1.1] font-bold tracking-tight md:text-5xl lg:text-6xl">
               Tus suscripciones,
               <span className="text-primary"> bajo control.</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
+            <p className="text-muted-foreground max-w-lg text-lg leading-relaxed">
               Deja de perder dinero en servicios que olvidas. TrackO te ayuda a
               visualizar, organizar y optimizar todos tus pagos recurrentes.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
               <Button
                 size="lg"
-                className="text-base px-6"
+                className="px-6 text-base"
                 render={<Link href="/register" />}
               >
                 Comenzar gratis
                 <ArrowRight className="ml-2 size-4" />
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-6">
+              <Button size="lg" variant="outline" className="px-6 text-base">
                 Ver demo
               </Button>
             </div>
@@ -115,9 +115,9 @@ export default function LandingPage() {
               {benefits.map((benefit) => (
                 <span
                   key={benefit}
-                  className="flex items-center gap-1.5 text-sm text-muted-foreground"
+                  className="text-muted-foreground flex items-center gap-1.5 text-sm"
                 >
-                  <Check className="size-4 text-primary" />
+                  <Check className="text-primary size-4" />
                   {benefit}
                 </span>
               ))}
@@ -129,15 +129,15 @@ export default function LandingPage() {
             {/* Floating service icons */}
             <ServiceIcon
               service="netflix"
-              className="absolute -left-4 top-8 animate-float"
+              className="animate-float absolute top-8 -left-4"
             />
             <ServiceIcon
               service="spotify"
-              className="absolute -right-24 top-20 animate-float-delayed"
+              className="animate-float-delayed absolute top-20 -right-24"
             />
             <ServiceIcon
               service="disney"
-              className="absolute left-8 bottom-12 animate-float"
+              className="animate-float absolute bottom-12 left-8"
             />
 
             {/* Phone mockup */}
@@ -148,19 +148,19 @@ export default function LandingPage() {
 
       {/* Stats */}
       <section className="py-16">
-        <div className="rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8 md:p-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="border-border bg-card/50 rounded-2xl border p-8 backdrop-blur-sm md:p-10">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
               <div
                 key={stat.label}
                 className={`text-center ${
-                  index < stats.length - 1 ? "md:border-r md:border-border" : ""
+                  index < stats.length - 1 ? "md:border-border md:border-r" : ""
                 }`}
               >
-                <p className="text-3xl md:text-4xl font-bold text-foreground">
+                <p className="text-foreground text-3xl font-bold md:text-4xl">
                   {stat.value}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1.5">
+                <p className="text-muted-foreground mt-1.5 text-sm">
                   {stat.label}
                 </p>
               </div>
@@ -171,32 +171,32 @@ export default function LandingPage() {
 
       {/* Features */}
       <section className="py-20">
-        <div className="text-center mb-14">
+        <div className="mb-14 text-center">
           <Badge variant="outline" className="mb-4">
             Características
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
             Todo lo que necesitas para{" "}
             <span className="text-primary">ahorrar</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
             Herramientas simples pero poderosas para que tengas visibilidad
             total de tus gastos recurrentes.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="grid gap-5 md:grid-cols-2">
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="group p-6 border-border bg-card/50 backdrop-blur-sm hover:bg-card hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300"
+              className="group border-border bg-card/50 hover:bg-card hover:shadow-primary/5 hover:border-primary/20 p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-xl"
             >
               <div className="flex items-start gap-4">
-                <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                <div className="bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground flex size-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-300">
                   <feature.icon className="size-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1.5">
+                  <h3 className="text-foreground mb-1.5 text-lg font-semibold">
                     {feature.title}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -211,16 +211,16 @@ export default function LandingPage() {
 
       {/* Social Proof */}
       <section className="py-16">
-        <div className="text-center mb-10">
-          <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">
+        <div className="mb-10 text-center">
+          <p className="text-muted-foreground text-sm font-medium tracking-wider uppercase">
             Trusted by teams at
           </p>
         </div>
-        <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 opacity-50 grayscale">
+        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-50 grayscale">
           {["Google", "Meta", "Apple", "Amazon", "Microsoft"].map((company) => (
             <span
               key={company}
-              className="text-xl font-semibold text-muted-foreground"
+              className="text-muted-foreground text-xl font-semibold"
             >
               {company}
             </span>
@@ -230,25 +230,25 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="py-20">
-        <div className="relative rounded-3xl p-8 md:p-14 text-center overflow-hidden bg-linear-to-br from-primary/90 to-primary">
+        <div className="from-primary/90 to-primary relative overflow-hidden rounded-3xl bg-linear-to-br p-8 text-center md:p-14">
           {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-72 h-72 bg-black/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+          <div className="absolute top-0 left-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute right-0 bottom-0 h-72 w-72 translate-x-1/2 translate-y-1/2 rounded-full bg-black/10 blur-3xl" />
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
 
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-4">
+          <div className="relative z-10 mx-auto max-w-2xl">
+            <h2 className="text-primary-foreground mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
               ¿Listo para tomar el control?
             </h2>
             <p className="text-primary-foreground/80 mb-8 text-lg">
               Únete a miles de personas que ya están ahorrando dinero con
               TrackO. Comienza gratis hoy.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <Button
                 size="lg"
                 variant="secondary"
-                className="text-base px-8"
+                className="px-8 text-base"
                 render={<Link href="/register" />}
               >
                 Comenzar gratis
@@ -257,7 +257,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="ghost"
-                className="text-primary-foreground hover:text-primary-foreground hover:bg-white/10 text-base px-8"
+                className="text-primary-foreground hover:text-primary-foreground px-8 text-base hover:bg-white/10"
               >
                 Contactar ventas
               </Button>
@@ -267,14 +267,14 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 border-t border-border">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      <footer className="border-border border-t py-10">
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-2">
             <FlowerIcon className="size-8" />
-            <span className="font-bold text-lg">TrackO.</span>
+            <span className="text-lg font-bold">TrackO.</span>
           </div>
 
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-6 text-sm">
             <Link href="#" className="hover:text-foreground transition-colors">
               Privacidad
             </Link>
@@ -286,7 +286,7 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             © 2025 TrackO. Todos los derechos reservados.
           </p>
         </div>

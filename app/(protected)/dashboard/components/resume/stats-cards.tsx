@@ -36,7 +36,7 @@ function StatsCardSkeleton() {
         <Skeleton className="h-4 w-24" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-8 w-32 mb-2" />
+        <Skeleton className="mb-2 h-8 w-32" />
         <Skeleton className="h-3 w-20" />
       </CardContent>
     </Card>
@@ -64,7 +64,7 @@ export function StatsCards() {
 
   if (isPending) {
     return (
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCardSkeleton />
         <StatsCardSkeleton />
         <StatsCardSkeleton />
@@ -79,19 +79,19 @@ export function StatsCards() {
   const subscriptionCount = Number(data?.subscriptionCount) || 0;
 
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-muted-foreground text-sm font-medium">
             Gasto Mensual
           </CardTitle>
-          <WalletIcon className="h-4 w-4 text-muted-foreground" />
+          <WalletIcon className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold font-mono">
+          <div className="font-mono text-2xl font-bold">
             {total.toLocaleString("es-MX")} {currency}
           </div>
-          <CardDescription className="flex items-center gap-1 mt-1">
+          <CardDescription className="mt-1 flex items-center gap-1">
             <Badge variant="secondary" className="text-xs">
               Total actual
             </Badge>
@@ -101,34 +101,34 @@ export function StatsCards() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-muted-foreground text-sm font-medium">
             Promedio Mensual
           </CardTitle>
-          <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
+          <TrendingUpIcon className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold font-mono">
+          <div className="font-mono text-2xl font-bold">
             {monthlyAvg.toLocaleString("es-MX")} {currency}
           </div>
-          <CardDescription className="flex items-center gap-1 mt-1">
+          <CardDescription className="mt-1 flex items-center gap-1">
             <TrendingUpIcon className="h-3 w-3 text-emerald-500" />
-            <span className="text-emerald-500 text-xs">Estable</span>
+            <span className="text-xs text-emerald-500">Estable</span>
           </CardDescription>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-muted-foreground text-sm font-medium">
             Proyección Anual
           </CardTitle>
-          <TrendingDownIcon className="h-4 w-4 text-muted-foreground" />
+          <TrendingDownIcon className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold font-mono">
+          <div className="font-mono text-2xl font-bold">
             {yearlyProjection.toLocaleString("es-MX")} {currency}
           </div>
-          <CardDescription className="flex items-center gap-1 mt-1">
+          <CardDescription className="mt-1 flex items-center gap-1">
             <Badge variant="outline" className="text-xs">
               12 meses
             </Badge>
@@ -138,16 +138,16 @@ export function StatsCards() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-muted-foreground text-sm font-medium">
             Suscripciones
           </CardTitle>
-          <CalendarClockIcon className="h-4 w-4 text-muted-foreground" />
+          <CalendarClockIcon className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold font-mono">
+          <div className="font-mono text-2xl font-bold">
             {subscriptionCount}
           </div>
-          <CardDescription className="flex items-center gap-1 mt-1">
+          <CardDescription className="mt-1 flex items-center gap-1">
             <Badge variant="default" className="text-xs">
               Activas
             </Badge>

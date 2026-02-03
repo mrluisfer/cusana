@@ -6,7 +6,7 @@ export function FieldDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-xs text-muted-foreground", className)} {...props}>
+    <p className={cn("text-muted-foreground text-xs", className)} {...props}>
       {children}
     </p>
   );

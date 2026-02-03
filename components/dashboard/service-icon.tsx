@@ -30,7 +30,7 @@ export function ServiceIcon({
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-muted text-muted-foreground",
+          "bg-muted text-muted-foreground flex items-center justify-center",
           sizeClasses[size],
           className,
         )}

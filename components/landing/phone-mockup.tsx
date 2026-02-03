@@ -14,19 +14,19 @@ const mockSubscriptions = [
 export default function PhoneMockup() {
   return (
     <div className="relative">
-      <div className="w-70 md:w-[320px] bg-white rounded-[2.5rem] p-3 shadow-2xl shadow-slate-200/80 border border-slate-200/60">
+      <div className="w-70 rounded-[2.5rem] border border-slate-200/60 bg-white p-3 shadow-2xl shadow-slate-200/80 md:w-[320px]">
         {/* Phone notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-b-2xl" />
+        <div className="absolute top-0 left-1/2 h-6 w-24 -translate-x-1/2 rounded-b-2xl bg-black" />
 
         {/* Screen content */}
-        <div className="bg-slate-50 rounded-[2rem] pt-8 pb-4 px-4 min-h-125">
+        <div className="min-h-125 rounded-[2rem] bg-slate-50 px-4 pt-8 pb-4">
           {/* Profile card */}
-          <div className="bg-white p-4 shadow-sm border border-slate-100 mb-4">
+          <div className="mb-4 border border-slate-100 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="size-10 rounded-full bg-linear-to-br from-blue-500 to-purple-500" />
                 <div>
-                  <p className="font-semibold text-sm text-slate-900">
+                  <p className="text-sm font-semibold text-slate-900">
                     Luis Alvarez
                   </p>
                   <p className="text-xs text-slate-500">Gasto mensual</p>
@@ -39,7 +39,7 @@ export default function PhoneMockup() {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2 mb-4">
+          <div className="mb-4 flex gap-2">
             <Button size={"sm"} className="flex-1">
               <PlusIcon className="size-3.5" />
               Agregar
@@ -52,30 +52,30 @@ export default function PhoneMockup() {
 
           {/* Subscriptions list */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
                 Suscripciones activas
               </p>
-              <p className="text-xs text-primary font-medium">Ver todo</p>
+              <p className="text-primary text-xs font-medium">Ver todo</p>
             </div>
 
             {mockSubscriptions.map((sub) => (
               <div
                 key={sub.name}
-                className="flex items-center justify-between bg-white p-3 border border-slate-100"
+                className="flex items-center justify-between border border-slate-100 bg-white p-3"
               >
                 <div className="flex items-center gap-3">
                   <ServiceIcon
                     service={sub.name as keyof typeof ServiceIcon}
                     className="size-9"
                   />
-                  <span className="font-medium text-sm text-slate-800 capitalize">
+                  <span className="text-sm font-medium text-slate-800 capitalize">
                     {sub.name}
                   </span>
                 </div>
-                <span className="text-sm text-slate-600 font-medium">
+                <span className="text-sm font-medium text-slate-600">
                   {sub.price}
-                  <span className="text-slate-400 text-xs">/mes</span>
+                  <span className="text-xs text-slate-400">/mes</span>
                 </span>
               </div>
             ))}
@@ -84,7 +84,7 @@ export default function PhoneMockup() {
       </div>
 
       {/* Glow effect */}
-      <div className="absolute -inset-4 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-[3rem] blur-3xl -z-10" />
+      <div className="absolute -inset-4 -z-10 rounded-[3rem] bg-linear-to-r from-blue-500/20 to-purple-500/20 blur-3xl" />
     </div>
   );
 }

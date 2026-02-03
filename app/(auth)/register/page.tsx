@@ -62,7 +62,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         ¿Ya tienes cuenta?{" "}
         <Button variant="link" className="px-1" render={<Link href="/login" />}>
           Inicia sesión

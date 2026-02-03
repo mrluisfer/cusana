@@ -94,12 +94,12 @@ export function SpendingDistribution() {
         </div>
       </CardHeader>
       <CardContent>
-        {isPending ?
+        {isPending ? (
           <DistributionSkeleton />
-        : sortedPlatforms.length > 0 ?
+        ) : sortedPlatforms.length > 0 ? (
           <div className="space-y-4">
             {/* Barra de distribución visual */}
-            <div className="flex h-3 w-full overflow-hidden rounded-full bg-muted">
+            <div className="bg-muted flex h-3 w-full overflow-hidden rounded-full">
               {sortedPlatforms.map(([platform, data], index) => {
                 const percentage = (data.total / totalSpending) * 100;
                 return (
@@ -136,13 +136,13 @@ export function SpendingDistribution() {
                         <p className="text-sm font-medium capitalize">
                           {platform}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-muted-foreground text-xs">
                           {data.count} suscripción{data.count > 1 ? "es" : ""}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-mono font-medium">
+                      <span className="font-mono text-sm font-medium">
                         {
                           currencySymbols[
                             data.currency as keyof typeof currencySymbols
@@ -159,14 +159,15 @@ export function SpendingDistribution() {
               })}
             </div>
           </div>
-        : <div className="py-8 text-center text-muted-foreground">
-            <PieChartIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
+        ) : (
+          <div className="text-muted-foreground py-8 text-center">
+            <PieChartIcon className="mx-auto mb-2 h-8 w-8 opacity-50" />
             <p className="text-sm">Sin datos disponibles</p>
             <p className="text-xs">
               Agrega suscripciones para ver la distribución
             </p>
           </div>
-        }
+        )}
       </CardContent>
     </Card>
   );

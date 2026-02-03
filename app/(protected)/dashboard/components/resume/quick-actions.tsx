@@ -108,7 +108,7 @@ export function QuickActions() {
 
         {/* Acciones adicionales */}
         <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
             Acciones
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -123,7 +123,7 @@ export function QuickActions() {
             <Button
               variant="outline"
               size="sm"
-              className="justify-start gap-2 col-span-2"
+              className="col-span-2 justify-start gap-2"
             >
               <DownloadIcon className="h-3 w-3" />
               <span className="text-xs">Exportar datos</span>
@@ -135,7 +135,7 @@ export function QuickActions() {
 
         {/* Info adicional */}
         <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
             Información
           </p>
           <div className="flex flex-wrap gap-2">

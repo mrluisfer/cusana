@@ -42,7 +42,7 @@ export default function SubscriptionTable() {
 
   if (isPending) {
     return (
-      <section className="space-y-6 mt-8">
+      <section className="mt-8 space-y-6">
         <TableSkeleton />
       </section>
     );
@@ -50,7 +50,7 @@ export default function SubscriptionTable() {
 
   if (error) {
     return (
-      <section className="space-y-6 mt-8">
+      <section className="mt-8 space-y-6">
         <ErrorState
           message={error.message}
           onRetry={() => refetch()}
@@ -62,14 +62,14 @@ export default function SubscriptionTable() {
 
   if (!data || data.length === 0) {
     return (
-      <section className="space-y-6 mt-8">
+      <section className="mt-8 space-y-6">
         <EmptyState />
       </section>
     );
   }
 
   return (
-    <section className="space-y-6 my-8 min-w-0">
+    <section className="my-8 min-w-0 space-y-6">
       <DataTable columns={subscriptionsColumns} data={data} />
     </section>
   );
@@ -86,7 +86,7 @@ function TableSkeleton() {
       </div>
 
       <div className="rounded-md border">
-        <div className="border-b bg-muted/50 p-4">
+        <div className="bg-muted/50 border-b p-4">
           <div className="flex gap-4">
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-4 flex-1" />
@@ -129,9 +129,11 @@ function ErrorState({
           onClick={onRetry}
           disabled={isRetrying}
         >
-          {isRetrying ?
-            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-          : <RefreshCw className="h-4 w-4 mr-2" />}
+          {isRetrying ? (
+            <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="mr-2 h-4 w-4" />
+          )}
           Reintentar
         </Button>
       </AlertDescription>
@@ -142,9 +144,9 @@ function ErrorState({
 function EmptyState() {
   return (
     <Card className="border-dashed">
-      <CardHeader className="text-center pb-2">
-        <div className="mx-auto rounded-full bg-muted p-3 w-fit mb-2">
-          <Inbox className="h-6 w-6 text-muted-foreground" />
+      <CardHeader className="pb-2 text-center">
+        <div className="bg-muted mx-auto mb-2 w-fit rounded-full p-3">
+          <Inbox className="text-muted-foreground h-6 w-6" />
         </div>
         <CardTitle className="text-lg">Sin suscripciones</CardTitle>
         <CardDescription>
@@ -153,7 +155,7 @@ function EmptyState() {
       </CardHeader>
       <CardContent className="text-center">
         <Button>
-          <CreditCard className="h-4 w-4 mr-2" />
+          <CreditCard className="mr-2 h-4 w-4" />
           Agregar suscripción
         </Button>
       </CardContent>

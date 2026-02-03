@@ -56,13 +56,13 @@ export function UpcomingPayments() {
     .sort((a, b) => {
       const today = new Date().getDate();
       const daysUntilA =
-        a.billingDay >= today ?
-          a.billingDay - today
-        : 30 - today + a.billingDay;
+        a.billingDay >= today
+          ? a.billingDay - today
+          : 30 - today + a.billingDay;
       const daysUntilB =
-        b.billingDay >= today ?
-          b.billingDay - today
-        : 30 - today + b.billingDay;
+        b.billingDay >= today
+          ? b.billingDay - today
+          : 30 - today + b.billingDay;
       return daysUntilA - daysUntilB;
     })
     .slice(0, 5);
@@ -91,13 +91,13 @@ export function UpcomingPayments() {
             </CardDescription>
           </div>
           <Badge variant="outline" className="text-xs">
-            <ClockIcon className="h-3 w-3 mr-1" />
+            <ClockIcon className="mr-1 h-3 w-3" />
             {sortedSubscriptions?.length ?? 0} pendientes
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-1">
-        {isPending ?
+        {isPending ? (
           <>
             <UpcomingPaymentSkeleton />
             <Separator />
@@ -105,19 +105,19 @@ export function UpcomingPayments() {
             <Separator />
             <UpcomingPaymentSkeleton />
           </>
-        : sortedSubscriptions && sortedSubscriptions.length > 0 ?
+        ) : sortedSubscriptions && sortedSubscriptions.length > 0 ? (
           sortedSubscriptions.map((subscription, index) => (
             <div key={subscription.id}>
               <div className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                  <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
                     <span className="text-sm font-semibold uppercase">
                       {subscription.platform.slice(0, 2)}
                     </span>
                   </div>
                   <div>
-                    <p className="font-medium text-sm">{subscription.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm font-medium">{subscription.name}</p>
+                    <p className="text-muted-foreground text-xs">
                       {getNextBillingDate(subscription.billingDay)}
                     </p>
                   </div>
@@ -134,12 +134,13 @@ export function UpcomingPayments() {
               {index < sortedSubscriptions.length - 1 && <Separator />}
             </div>
           ))
-        : <div className="py-8 text-center text-muted-foreground">
-            <CalendarIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
+        ) : (
+          <div className="text-muted-foreground py-8 text-center">
+            <CalendarIcon className="mx-auto mb-2 h-8 w-8 opacity-50" />
             <p className="text-sm">No hay pagos próximos</p>
             <p className="text-xs">Agrega tu primera suscripción</p>
           </div>
-        }
+        )}
       </CardContent>
     </Card>
   );

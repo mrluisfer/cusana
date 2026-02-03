@@ -54,19 +54,19 @@ export function ErrorState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center text-center px-4",
+        "flex flex-col items-center justify-center px-4 text-center",
         variantStyles[variant],
         className,
       )}
     >
       {/* Icono */}
-      <div className="size-12 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
-        {icon ?? <AlertCircle className="size-6 text-destructive" />}
+      <div className="bg-destructive/10 mb-4 flex size-12 items-center justify-center rounded-full">
+        {icon ?? <AlertCircle className="text-destructive size-6" />}
       </div>
 
       {/* Texto */}
-      <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
-      <p className="text-sm text-muted-foreground max-w-sm mb-6">{message}</p>
+      <h3 className="text-foreground mb-1 text-lg font-semibold">{title}</h3>
+      <p className="text-muted-foreground mb-6 max-w-sm text-sm">{message}</p>
 
       {/* Acciones */}
       <div className="flex flex-wrap items-center justify-center gap-2">
@@ -106,13 +106,13 @@ export function ErrorStateInline({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-4 p-4 rounded-lg bg-destructive/5 border border-destructive/20",
+        "bg-destructive/5 border-destructive/20 flex items-center justify-between gap-4 rounded-lg border p-4",
         className,
       )}
     >
       <div className="flex items-center gap-3">
-        <AlertCircle className="size-5 text-destructive shrink-0" />
-        <p className="text-sm text-destructive">{message}</p>
+        <AlertCircle className="text-destructive size-5 shrink-0" />
+        <p className="text-destructive text-sm">{message}</p>
       </div>
       {onRetry && (
         <Button

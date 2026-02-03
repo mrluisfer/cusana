@@ -88,11 +88,11 @@ export function MonthlyTrend() {
   const avgAmount =
     trendData.reduce((sum, d) => sum + d.amount, 0) / trendData.length;
   const trend =
-    trendData.length >= 2 ?
-      ((trendData[trendData.length - 1].amount - trendData[0].amount) /
-        (trendData[0].amount || 1)) *
-      100
-    : 0;
+    trendData.length >= 2
+      ? ((trendData[trendData.length - 1].amount - trendData[0].amount) /
+          (trendData[0].amount || 1)) *
+        100
+      : 0;
 
   return (
     <Card className="h-full">
@@ -110,7 +110,7 @@ export function MonthlyTrend() {
             className="text-xs"
           >
             <TrendingUpIcon
-              className={cn("h-3 w-3 mr-1", trend < 0 && "rotate-180")}
+              className={cn("mr-1 h-3 w-3", trend < 0 && "rotate-180")}
             />
             {trend >= 0 ? "+" : ""}
             {trend.toFixed(1)}%
@@ -118,39 +118,39 @@ export function MonthlyTrend() {
         </div>
       </CardHeader>
       <CardContent>
-        {isPending ?
+        {isPending ? (
           <TrendSkeleton />
-        : subscriptions && subscriptions.length > 0 ?
+        ) : subscriptions && subscriptions.length > 0 ? (
           <div className="space-y-3">
             {trendData.map((data) => (
               <div key={data.month} className="flex items-center gap-3">
                 <span
                   className={cn(
                     "w-8 text-xs font-medium",
-                    data.isCurrent ?
-                      "text-primary font-bold"
-                    : "text-muted-foreground",
+                    data.isCurrent
+                      ? "text-primary font-bold"
+                      : "text-muted-foreground",
                   )}
                 >
                   {data.month}
                 </span>
-                <div className="flex-1 h-6 bg-muted rounded-sm overflow-hidden">
+                <div className="bg-muted h-6 flex-1 overflow-hidden rounded-sm">
                   <div
                     className={cn(
-                      "h-full transition-all duration-500 flex items-center justify-end pr-2",
+                      "flex h-full items-center justify-end pr-2 transition-all duration-500",
                       data.isCurrent ? "bg-primary" : "bg-primary/50",
                     )}
                     style={{ width: `${(data.amount / maxAmount) * 100}%` }}
                   >
                     {(data.amount / maxAmount) * 100 > 30 && (
-                      <span className="text-[10px] font-mono text-primary-foreground">
+                      <span className="text-primary-foreground font-mono text-[10px]">
                         {data.amount.toLocaleString("es-MX")}
                       </span>
                     )}
                   </div>
                 </div>
                 {(data.amount / maxAmount) * 100 <= 30 && (
-                  <span className="text-xs font-mono text-muted-foreground">
+                  <span className="text-muted-foreground font-mono text-xs">
                     {data.amount.toLocaleString("es-MX")}
                   </span>
                 )}
@@ -158,47 +158,48 @@ export function MonthlyTrend() {
             ))}
 
             {/* Estadísticas adicionales */}
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="flex items-center justify-between border-t pt-4">
               <div className="text-center">
-                <p className="text-lg font-bold font-mono">
+                <p className="font-mono text-lg font-bold">
                   {avgAmount.toLocaleString("es-MX", {
                     maximumFractionDigits: 0,
                   })}
                 </p>
-                <p className="text-[10px] text-muted-foreground uppercase">
+                <p className="text-muted-foreground text-[10px] uppercase">
                   Promedio
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold font-mono">
+                <p className="font-mono text-lg font-bold">
                   {Math.max(...trendData.map((d) => d.amount)).toLocaleString(
                     "es-MX",
                   )}
                 </p>
-                <p className="text-[10px] text-muted-foreground uppercase">
+                <p className="text-muted-foreground text-[10px] uppercase">
                   Máximo
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold font-mono">
+                <p className="font-mono text-lg font-bold">
                   {Math.min(...trendData.map((d) => d.amount)).toLocaleString(
                     "es-MX",
                   )}
                 </p>
-                <p className="text-[10px] text-muted-foreground uppercase">
+                <p className="text-muted-foreground text-[10px] uppercase">
                   Mínimo
                 </p>
               </div>
             </div>
           </div>
-        : <div className="py-8 text-center text-muted-foreground">
-            <BarChart3Icon className="h-8 w-8 mx-auto mb-2 opacity-50" />
+        ) : (
+          <div className="text-muted-foreground py-8 text-center">
+            <BarChart3Icon className="mx-auto mb-2 h-8 w-8 opacity-50" />
             <p className="text-sm">Sin datos de tendencia</p>
             <p className="text-xs">
               Agrega suscripciones para ver estadísticas
             </p>
           </div>
-        }
+        )}
       </CardContent>
     </Card>
   );

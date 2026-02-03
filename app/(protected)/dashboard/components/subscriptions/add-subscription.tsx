@@ -265,7 +265,7 @@ export const AddSubscription = () => {
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>Precio</FieldLabel>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                      <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm">
                         {currencySymbols[selectedCurrency]}
                       </span>
                       <Input
@@ -384,16 +384,17 @@ export const AddSubscription = () => {
               disabled={isSubmitting}
               className="min-w-30"
             >
-              {isSubmitting ?
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" />
                   Guardando...
                 </>
-              : <>
+              ) : (
+                <>
                   <SaveIcon className="mr-2 size-4" />
                   Guardar
                 </>
-              }
+              )}
             </Button>
           </div>
         </SheetFooter>

@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {/* Tabla - FIX: Removido overflow-hidden, agregado rounded-md */}
-      <div className="rounded-md border border-border bg-card/50 backdrop-blur-sm">
+      <div className="border-border bg-card/50 rounded-md border backdrop-blur-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -121,26 +121,26 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                    className="text-muted-foreground text-xs font-semibold tracking-wider uppercase"
                   >
-                    {header.isPlaceholder ? null : (
-                      flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )
-                    )}
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ?
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group transition-colors hover:bg-muted/30"
+                  className="group hover:bg-muted/30 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-4">
@@ -152,12 +152,13 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
-            : <TableRow>
+            ) : (
+              <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <div className="text-muted-foreground flex flex-col items-center gap-2">
                     <span className="text-4xl">🔭</span>
                     <p>No hay suscripciones</p>
                     <p className="text-sm">
@@ -166,7 +167,7 @@ export function DataTable<TData, TValue>({
                   </div>
                 </TableCell>
               </TableRow>
-            }
+            )}
           </TableBody>
         </Table>
       </div>
@@ -174,15 +175,15 @@ export function DataTable<TData, TValue>({
       {/* Paginación */}
       {table.getPageCount() > 1 && (
         <div className="flex items-center justify-between px-2">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Mostrando{" "}
-            <span className="font-medium text-foreground">
+            <span className="text-foreground font-medium">
               {table.getState().pagination.pageIndex *
                 table.getState().pagination.pageSize +
                 1}
             </span>{" "}
             a{" "}
-            <span className="font-medium text-foreground">
+            <span className="text-foreground font-medium">
               {Math.min(
                 (table.getState().pagination.pageIndex + 1) *
                   table.getState().pagination.pageSize,
@@ -190,7 +191,7 @@ export function DataTable<TData, TValue>({
               )}
             </span>{" "}
             de{" "}
-            <span className="font-medium text-foreground">
+            <span className="text-foreground font-medium">
               {table.getFilteredRowModel().rows.length}
             </span>{" "}
             suscripciones
@@ -218,12 +219,12 @@ export function DataTable<TData, TValue>({
               <span className="sr-only">Página anterior</span>
             </Button>
 
-            <div className="flex items-center gap-1 mx-2">
-              <span className="text-sm text-muted-foreground">Página</span>
+            <div className="mx-2 flex items-center gap-1">
+              <span className="text-muted-foreground text-sm">Página</span>
               <span className="text-sm font-medium">
                 {table.getState().pagination.pageIndex + 1}
               </span>
-              <span className="text-sm text-muted-foreground">de</span>
+              <span className="text-muted-foreground text-sm">de</span>
               <span className="text-sm font-medium">
                 {table.getPageCount()}
               </span>

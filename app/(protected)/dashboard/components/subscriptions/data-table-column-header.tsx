@@ -46,11 +46,13 @@ export function DataTableColumnHeader<TData, TValue>({
           }
         >
           <span>{title}</span>
-          {column.getIsSorted() === "desc" ?
+          {column.getIsSorted() === "desc" ? (
             <ArrowDown />
-          : column.getIsSorted() === "asc" ?
+          ) : column.getIsSorted() === "asc" ? (
             <ArrowUp />
-          : <ChevronsUpDown />}
+          ) : (
+            <ChevronsUpDown />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>

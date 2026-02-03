@@ -88,15 +88,16 @@ export function BillingCalendar() {
         </div>
       </CardHeader>
       <CardContent>
-        {isPending ?
+        {isPending ? (
           <CalendarSkeleton />
-        : <div className="space-y-2">
+        ) : (
+          <div className="space-y-2">
             {/* Encabezado de días */}
             <div className="grid grid-cols-7 gap-1">
               {weekDays.map((day) => (
                 <div
                   key={day}
-                  className="flex h-8 items-center justify-center text-xs font-medium text-muted-foreground"
+                  className="text-muted-foreground flex h-8 items-center justify-center text-xs font-medium"
                 >
                   {day}
                 </div>
@@ -134,14 +135,14 @@ export function BillingCalendar() {
                       !isToday && !hasPayments && !isPast && "text-foreground",
                     )}
                     title={
-                      hasPayments ?
-                        `${payments.length} cobro(s): ${payments.map((p) => p.name).join(", ")}`
-                      : undefined
+                      hasPayments
+                        ? `${payments.length} cobro(s): ${payments.map((p) => p.name).join(", ")}`
+                        : undefined
                     }
                   >
                     {day}
                     {hasPayments && !isToday && (
-                      <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-destructive text-[8px] font-bold text-destructive-foreground">
+                      <span className="bg-destructive text-destructive-foreground absolute -top-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full text-[8px] font-bold">
                         {payments.length}
                       </span>
                     )}
@@ -153,16 +154,16 @@ export function BillingCalendar() {
             {/* Leyenda */}
             <div className="flex items-center justify-center gap-4 pt-4 text-xs">
               <div className="flex items-center gap-1">
-                <div className="h-3 w-3 bg-primary" />
+                <div className="bg-primary h-3 w-3" />
                 <span className="text-muted-foreground">Hoy</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="h-3 w-3 bg-destructive/20" />
+                <div className="bg-destructive/20 h-3 w-3" />
                 <span className="text-muted-foreground">Cobro programado</span>
               </div>
             </div>
           </div>
-        }
+        )}
       </CardContent>
     </Card>
   );

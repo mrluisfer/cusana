@@ -6,10 +6,10 @@ import { UserMenu } from "./user-menu";
 export default function Header() {
   const { data: session } = useSession();
   return (
-    <header className="pt-4 flex items-center justify-between">
+    <header className="flex items-center justify-between pt-4">
       <Logo />
       <div className="flex items-end justify-end gap-4">
-        <p className="text-xl capitalize font-mono">
+        <p className="font-mono text-xl capitalize">
           Hola, {session?.user.name}
         </p>
         <UserMenu />

@@ -52,10 +52,10 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
       <div className="flex items-center gap-3">
         <ServiceIcon service={row.original.platform} />
         <div className="flex flex-col">
-          <span className="font-medium text-foreground">
+          <span className="text-foreground font-medium">
             {row.original.name}
           </span>
-          <span className="text-xs text-muted-foreground capitalize">
+          <span className="text-muted-foreground text-xs capitalize">
             {row.original.platform}
           </span>
         </div>
@@ -71,10 +71,10 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-semibold text-foreground">
+        <span className="text-foreground font-semibold">
           {formatCurrency(row.original.price, row.original.currency)}
         </span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-muted-foreground text-xs">
           {row.original.billingCycle === "monthly" ? "/mes" : "/año"}
         </span>
       </div>

@@ -64,7 +64,7 @@ export default function LoginPage() {
 
       <OAuthButtons />
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         ¿No tienes cuenta?{" "}
         <Button
           variant="link"
