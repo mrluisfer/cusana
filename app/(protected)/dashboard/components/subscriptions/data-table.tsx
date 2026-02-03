@@ -78,7 +78,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="grid items-start gap-4 py-4 md:grid-cols-[minmax(0,1fr)_auto]">
+      <div className="grid items-end gap-4 py-4 md:grid-cols-[minmax(0,1fr)_auto]">
         <Field className="w-full min-w-0 md:max-w-sm">
           <FieldLabel htmlFor="input-group-url">Buscar suscripción</FieldLabel>
           <InputGroup>
