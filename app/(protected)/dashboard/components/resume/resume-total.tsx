@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/item";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { CircleAlertIcon, WalletIcon } from "lucide-react";
@@ -38,38 +39,58 @@ export function ResumeTotal() {
   return (
     <Item>
       <ItemMedia variant={"icon"}>
-        {error ?
-          <CircleAlertIcon className="size-4" />
-        : null}
-        {isPending ?
-          <Loader className="size-4" />
-        : null}
-        {data && !isPending && !error ?
-          <WalletIcon className="size-4" />
-        : null}
+        <span className="relative inline-flex size-4 items-center justify-center">
+          <CircleAlertIcon
+            className={cn(
+              "absolute size-4 transition-opacity",
+              error ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <Loader
+            className={cn(
+              "absolute size-4 transition-opacity",
+              isPending ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <WalletIcon
+            className={cn(
+              "absolute size-4 transition-opacity",
+              data && !isPending && !error ? "opacity-100" : "opacity-0",
+            )}
+          />
+        </span>
       </ItemMedia>
       <ItemContent>
         <ItemTitle>Resumen de gastos</ItemTitle>
-        <ItemDescription>
-          {error || isPending ?
-            <>
-              {error ?
-                <>{error.message}</>
-              : null}
-              {isPending ?
-                <>Cargando total...</>
-              : null}
-            </>
-          : null}
-          {data && !isPending && !error ?
-            <>
-              Total de{" "}
-              <strong className="text-primary">
-                {Number.parseInt(data.total, 10)} {data.currency}
-              </strong>{" "}
-              en tus suscripciones.
-            </>
-          : null}
+        <ItemDescription className="relative min-h-[2.5rem]">
+          <span
+            className={cn(
+              "absolute inset-0 transition-opacity",
+              error ? "opacity-100" : "opacity-0",
+            )}
+          >
+            {error?.message ?? "Ocurrió un error al cargar el total."}
+          </span>
+          <span
+            className={cn(
+              "absolute inset-0 transition-opacity",
+              isPending ? "opacity-100" : "opacity-0",
+            )}
+          >
+            Cargando total...
+          </span>
+          <span
+            className={cn(
+              "absolute inset-0 transition-opacity",
+              data && !isPending && !error ? "opacity-100" : "opacity-0",
+            )}
+          >
+            Total de{" "}
+            <strong className="text-primary">
+              {Number.parseInt(data?.total ?? 0, 10)} {data?.currency}
+            </strong>{" "}
+            en tus suscripciones.
+          </span>
         </ItemDescription>
       </ItemContent>
     </Item>
