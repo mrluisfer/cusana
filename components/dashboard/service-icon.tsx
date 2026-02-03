@@ -40,11 +40,11 @@ export function ServiceIcon({
     );
   }
 
-  const { icon: Icon, color, name } = config;
+  const { icon: Icon, color, name, label, bgColor } = config;
 
   return (
     <div
-      style={{ backgroundColor: `${color}15` }}
+      style={{ backgroundColor: bgColor ?? `${color}15` }}
       className={cn(
         "flex items-center justify-center shadow-sm",
         sizeClasses[size],
@@ -52,7 +52,7 @@ export function ServiceIcon({
       )}
     >
       <Icon className={iconSizeClasses[size]} style={{ color }} />
-      <span className="sr-only">{name}</span>
+      <span className="sr-only">{label ?? name}</span>
     </div>
   );
 }

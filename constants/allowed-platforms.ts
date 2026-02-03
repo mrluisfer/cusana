@@ -4,6 +4,20 @@ export enum AllowedPlatforms {
   SPOTIFY = "spotify",
   CLAUDE = "claude",
   DISNEY = "disney",
+  TWITCH = "twitch",
+  GOOGLE = "google",
+  PRIME_VIDEO = "prime_video",
+  COPILOT = "copilot",
+  UBER = "uber",
+  XBOX = "xbox",
+  APPLE_MUSIC = "apple_music",
+  APPLE = "apple",
+  TIDAL = "tidal",
+  APPSTORE = "appstore",
+  GOOGLE_PLAY = "google_play",
+  MERCADO_LIBRE = "mercado_libre",
+  PATREON = "patreon",
+  TWITTER = "twitter",
 }
 
 export const allowedPlatformsArray = Object.values(AllowedPlatforms);
