@@ -77,8 +77,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-end py-4 flex-1 gap-4 justify-between">
-        <Field className="max-w-sm">
+      <div className="grid items-start gap-4 py-4 md:grid-cols-[minmax(0,1fr)_auto]">
+        <Field className="w-full min-w-0 md:max-w-sm">
           <FieldLabel htmlFor="input-group-url">Buscar suscripción</FieldLabel>
           <InputGroup>
             <InputGroupAddon align="inline-start">
@@ -97,12 +97,14 @@ export function DataTable<TData, TValue>({
           </InputGroup>
         </Field>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline">
+        <div className="flex flex-wrap items-center gap-2 md:justify-end">
+          <Button variant="outline" className="w-full sm:w-auto">
             <DownloadIcon className="mr-2 size-4" />
             Exportar
           </Button>
-          <AddSubscription />
+          <div className="w-full sm:w-auto">
+            <AddSubscription />
+          </div>
         </div>
       </div>
       {/* Tabla */}

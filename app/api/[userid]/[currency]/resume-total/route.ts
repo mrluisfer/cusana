@@ -13,8 +13,15 @@ export async function GET(
   // return Response.json({ total }, { status: 200 });
   if (subscriptionsResume.length === 0) {
     return Response.json(
-      { message: "No subscriptions found", total: 0 },
-      { status: 404 },
+      {
+        message: "No subscriptions found",
+        total: 0,
+        monthlyAvg: 0,
+        yearlyProjection: 0,
+        subscriptionCount: 0,
+        currency,
+      },
+      { status: 200 },
     );
   }
 
@@ -24,7 +31,10 @@ export async function GET(
 
   const ratesData: FrankfurterRatesResponse = await frankfurterRes.json();
 
-  const totalInSelectedCurrency = subscriptionsResume.reduce((acc, sub) => {
+  let monthlyTotal = 0;
+  let yearlyTotal = 0;
+
+  subscriptionsResume.forEach((sub) => {
     const rate =
       ratesData.rates[sub.currency as keyof typeof ratesData.rates] || 1;
 
@@ -33,11 +43,24 @@ export async function GET(
       priceInSelectedCurrency = sub.price / rate;
     }
 
-    return acc + priceInSelectedCurrency;
-  }, 0);
+    // Calcular según el ciclo de facturación
+    if (sub.billingCycle === "yearly") {
+      yearlyTotal += priceInSelectedCurrency;
+      monthlyTotal += priceInSelectedCurrency / 12;
+    } else {
+      monthlyTotal += priceInSelectedCurrency;
+      yearlyTotal += priceInSelectedCurrency * 12;
+    }
+  });
 
   return Response.json(
-    { total: totalInSelectedCurrency, currency },
+    {
+      total: Math.round(monthlyTotal),
+      monthlyAvg: Math.round(monthlyTotal),
+      yearlyProjection: Math.round(yearlyTotal),
+      subscriptionCount: subscriptionsResume.length,
+      currency,
+    },
     { status: 200 },
   );
 }

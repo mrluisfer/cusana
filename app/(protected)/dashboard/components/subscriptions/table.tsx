@@ -69,7 +69,7 @@ export default function SubscriptionTable() {
   }
 
   return (
-    <section className="space-y-6 mt-8">
+    <section className="space-y-6 my-8 min-w-0">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Tus suscripciones</h2>
@@ -97,9 +97,11 @@ export default function SubscriptionTable() {
 function TableSkeleton() {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-9 w-32" />
+      <div className="grid items-start gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
+        <Skeleton className="h-8 w-full md:w-48" />
+        <div className="flex items-center gap-2 md:justify-self-end">
+          <Skeleton className="h-9 w-full sm:w-32" />
+        </div>
       </div>
 
       <div className="rounded-md border">

@@ -8,6 +8,7 @@ export async function getResumeTotalByUser(userId: string) {
     columns: {
       price: true,
       currency: true,
+      billingCycle: true,
     },
   });
 }
