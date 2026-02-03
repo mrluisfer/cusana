@@ -16,6 +16,18 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3Icon, TrendingUpIcon } from "lucide-react";
 
+// Función de fetch extraída para evitar closures
+async function fetchSubscriptionsForTrend(
+  userId: string,
+): Promise<Subscription[]> {
+  const response = await fetch(`/api/${userId}/subscription`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch subscriptions");
+  }
+  const data = await response.json();
+  return data.subscriptions ?? [];
+}
+
 function TrendSkeleton() {
   return (
     <div className="space-y-3">
@@ -31,18 +43,12 @@ function TrendSkeleton() {
 
 export function MonthlyTrend() {
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const { data: subscriptions, isPending } = useQuery<Subscription[]>({
     queryKey: [QueryKeys.SUBSCRIPTIONS, "list"],
-    queryFn: async () => {
-      const response = await fetch(`/api/${session!.user.id}/subscription`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch subscriptions");
-      }
-      const data = await response.json();
-      return data.subscriptions ?? [];
-    },
-    enabled: !!session?.user.id,
+    queryFn: () => fetchSubscriptionsForTrend(userId!),
+    enabled: !!userId,
     staleTime: 1000 * 60 * 5,
   });
 

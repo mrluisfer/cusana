@@ -12,6 +12,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { useCallback } from "react";
 
 import {
   Table,
@@ -76,6 +77,22 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // Handlers memorizados para evitar closures innecesarios
+  const handleFilterChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      table.getColumn("name")?.setFilterValue(event.target.value);
+    },
+    [table],
+  );
+
+  const goToFirstPage = useCallback(() => table.setPageIndex(0), [table]);
+  const goToPreviousPage = useCallback(() => table.previousPage(), [table]);
+  const goToNextPage = useCallback(() => table.nextPage(), [table]);
+  const goToLastPage = useCallback(
+    () => table.setPageIndex(table.getPageCount() - 1),
+    [table],
+  );
+
   return (
     <div className="space-y-4">
       <div className="grid items-end gap-4 py-4 md:grid-cols-[minmax(0,1fr)_auto]">
@@ -91,9 +108,7 @@ export function DataTable<TData, TValue>({
               value={
                 (table.getColumn("name")?.getFilterValue() as string) ?? ""
               }
-              onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
-              }
+              onChange={handleFilterChange}
             />
           </InputGroup>
         </Field>
@@ -202,7 +217,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => table.setPageIndex(0)}
+              onClick={goToFirstPage}
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronsLeft className="size-4" />
@@ -212,7 +227,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => table.previousPage()}
+              onClick={goToPreviousPage}
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronLeft className="size-4" />
@@ -234,7 +249,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => table.nextPage()}
+              onClick={goToNextPage}
               disabled={!table.getCanNextPage()}
             >
               <ChevronRight className="size-4" />
@@ -244,7 +259,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              onClick={goToLastPage}
               disabled={!table.getCanNextPage()}
             >
               <ChevronsRight className="size-4" />

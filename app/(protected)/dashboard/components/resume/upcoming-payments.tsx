@@ -18,6 +18,16 @@ import { getNextBillingDate } from "@/utils/get-next-billing-date";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon, ClockIcon } from "lucide-react";
 
+// Función de fetch extraída para evitar closures
+async function fetchSubscriptionsList(userId: string): Promise<Subscription[]> {
+  const response = await fetch(`/api/${userId}/subscription`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch subscriptions");
+  }
+  const data = await response.json();
+  return data.subscriptions ?? [];
+}
+
 function UpcomingPaymentSkeleton() {
   return (
     <div className="flex items-center justify-between py-3">
@@ -35,18 +45,12 @@ function UpcomingPaymentSkeleton() {
 
 export function UpcomingPayments() {
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const { data: subscriptions, isPending } = useQuery<Subscription[]>({
     queryKey: [QueryKeys.SUBSCRIPTIONS, "list"],
-    queryFn: async () => {
-      const response = await fetch(`/api/${session!.user.id}/subscription`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch subscriptions");
-      }
-      const data = await response.json();
-      return data.subscriptions ?? [];
-    },
-    enabled: !!session?.user.id,
+    queryFn: () => fetchSubscriptionsList(userId!),
+    enabled: !!userId,
     staleTime: 1000 * 60 * 5,
   });
 

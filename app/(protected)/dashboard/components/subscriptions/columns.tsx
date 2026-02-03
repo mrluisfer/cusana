@@ -24,6 +24,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useCallback } from "react";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
 export type Subscription = {
@@ -36,6 +37,87 @@ export type Subscription = {
   billingDay: number;
   nextBillingDate?: Date;
 };
+
+// Handlers extraídos como funciones puras para evitar closures
+function handleEdit(subscriptionId: string) {
+  console.log("Edit:", subscriptionId);
+}
+
+function handleReminder(subscriptionId: string) {
+  console.log("Reminder:", subscriptionId);
+}
+
+function handleOpenSite(platform: string) {
+  console.log("Open:", platform);
+}
+
+function handleDelete(subscriptionId: string) {
+  console.log("Delete:", subscriptionId);
+}
+
+// Componente de acciones separado para evitar closures en la definición de columnas
+function SubscriptionActions({ subscription }: { subscription: Subscription }) {
+  // Handlers con useCallback para evitar recreación en cada render
+  const onEdit = useCallback(
+    () => handleEdit(subscription.id),
+    [subscription.id],
+  );
+  const onReminder = useCallback(
+    () => handleReminder(subscription.id),
+    [subscription.id],
+  );
+  const onOpenSite = useCallback(
+    () => handleOpenSite(subscription.platform),
+    [subscription.platform],
+  );
+  const onDelete = useCallback(
+    () => handleDelete(subscription.id),
+    [subscription.id],
+  );
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" className="size-8 p-0">
+            <span className="sr-only">Abrir menú</span>
+            <MoreHorizontal className="size-4" />
+          </Button>
+        }
+      />
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem onClick={onEdit}>
+          <Pencil className="mr-2 size-4" />
+          Editar
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onReminder}>
+          <Bell className="mr-2 size-4" />
+          Configurar recordatorio
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpenSite}>
+          <ExternalLink className="mr-2 size-4" />
+          Abrir sitio web
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onClick={onDelete}
+          className="text-destructive focus:text-destructive"
+        >
+          <Trash2 className="mr-2 size-4" />
+          Eliminar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export const subscriptionsColumns: ColumnDef<Subscription>[] = [
   // Columna: Servicio (icono + nombre)
@@ -123,64 +205,10 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
     },
   },
 
-  // Columna: Acciones
-  // En columns.tsx - columna de acciones
-
+  // Columna: Acciones - usando componente separado para evitar closures
   {
     id: "actions",
     header: () => <span className="sr-only">Acciones</span>,
-    cell: ({ row }) => {
-      const subscription = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button variant="ghost" className="size-8 p-0">
-                <span className="sr-only">Abrir menú</span>
-                <MoreHorizontal className="size-4" />
-              </Button>
-            }
-          />
-          <DropdownMenuContent align="end" className="w-48">
-            {/* Opción 1: Wrap en Group */}
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              onClick={() => console.log("Edit:", subscription.id)}
-            >
-              <Pencil className="mr-2 size-4" />
-              Editar
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log("Reminder:", subscription.id)}
-            >
-              <Bell className="mr-2 size-4" />
-              Configurar recordatorio
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log("Open:", subscription.platform)}
-            >
-              <ExternalLink className="mr-2 size-4" />
-              Abrir sitio web
-            </DropdownMenuItem>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              onClick={() => console.log("Delete:", subscription.id)}
-              className="text-destructive focus:text-destructive"
-            >
-              <Trash2 className="mr-2 size-4" />
-              Eliminar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <SubscriptionActions subscription={row.original} />,
   },
 ];

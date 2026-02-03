@@ -18,26 +18,26 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
 import { AlertCircle, CreditCard, Inbox, RefreshCw } from "lucide-react";
 
+// Función de fetch extraída para evitar closures
+async function fetchSubscriptions(userId: string) {
+  const res = await fetch(`/api/${userId}/subscription`);
+
+  if (!res.ok) {
+    throw new Error("No se pudieron cargar las suscripciones");
+  }
+
+  const json = await res.json();
+  return json.subscriptions;
+}
+
 export default function SubscriptionTable() {
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const { data, error, isPending, refetch, isRefetching } = useQuery({
-    queryKey: [QueryKeys.SUBSCRIPTIONS, session?.user.id],
-    queryFn: async () => {
-      if (!session?.user.id) {
-        throw new Error("User ID is required");
-      }
-
-      const res = await fetch(`/api/${session.user.id}/subscription`);
-
-      if (!res.ok) {
-        throw new Error("No se pudieron cargar las suscripciones");
-      }
-
-      const json = await res.json();
-      return json.subscriptions;
-    },
-    enabled: !!session?.user.id,
+    queryKey: [QueryKeys.SUBSCRIPTIONS, userId],
+    queryFn: () => fetchSubscriptions(userId!),
+    enabled: !!userId,
   });
 
   if (isPending) {
@@ -53,7 +53,7 @@ export default function SubscriptionTable() {
       <section className="mt-8 space-y-6">
         <ErrorState
           message={error.message}
-          onRetry={() => refetch()}
+          onRetry={refetch}
           isRetrying={isRefetching}
         />
       </section>

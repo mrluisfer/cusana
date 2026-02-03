@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { useCallback } from "react";
 
 interface DataTableColumnHeaderProps<
   TData,
@@ -26,6 +27,20 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
   triggerClassName,
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  // Handlers memorizados para evitar closures innecesarios
+  const handleSortAsc = useCallback(
+    () => column.toggleSorting(false),
+    [column],
+  );
+  const handleSortDesc = useCallback(
+    () => column.toggleSorting(true),
+    [column],
+  );
+  const handleHide = useCallback(
+    () => column.toggleVisibility(false),
+    [column],
+  );
+
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -55,16 +70,16 @@ export function DataTableColumnHeader<TData, TValue>({
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+          <DropdownMenuItem onClick={handleSortAsc}>
             <ArrowUp />
             Asc
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+          <DropdownMenuItem onClick={handleSortDesc}>
             <ArrowDown />
             Desc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+          <DropdownMenuItem onClick={handleHide}>
             <EyeOff />
             Hide
           </DropdownMenuItem>

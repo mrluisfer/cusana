@@ -29,6 +29,18 @@ interface StatsData {
   subscriptionCount: number;
 }
 
+// Función de fetch extraída para evitar closures
+async function fetchStats(
+  userId: string,
+  currency: string,
+): Promise<StatsData> {
+  const response = await fetch(`/api/${userId}/${currency}/resume-total`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch stats");
+  }
+  return response.json();
+}
+
 function StatsCardSkeleton() {
   return (
     <Card>
@@ -45,20 +57,13 @@ function StatsCardSkeleton() {
 
 export function StatsCards() {
   const { data: session } = useSession();
+  const userId = session?.user.id;
   const currency = useAtomValue(currencyAtom);
 
   const { data, isPending } = useQuery<StatsData>({
     queryKey: [QueryKeys.SUBSCRIPTIONS, currency],
-    queryFn: async () => {
-      const response = await fetch(
-        `/api/${session!.user.id}/${currency}/resume-total`,
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch stats");
-      }
-      return response.json();
-    },
-    enabled: !!session?.user.id,
+    queryFn: () => fetchStats(userId!, currency),
+    enabled: !!userId,
     staleTime: 1000 * 60 * 5,
   });
 

@@ -1,10 +1,35 @@
-import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth-client";
+import { useCallback } from "react";
 
 const providers = [
   { id: "google", label: "Google" },
   { id: "github", label: "GitHub" },
 ] as const;
+
+type ProviderId = (typeof providers)[number]["id"];
+
+// Handler de autenticación extraído para evitar closures
+function handleOAuthSignIn(providerId: ProviderId) {
+  signIn.social({
+    provider: providerId,
+    callbackURL: "/dashboard",
+  });
+}
+
+// Componente individual de botón OAuth para evitar closures en el map
+function OAuthButton({ provider }: { provider: (typeof providers)[number] }) {
+  const handleClick = useCallback(
+    () => handleOAuthSignIn(provider.id),
+    [provider.id],
+  );
+
+  return (
+    <Button type="button" variant="outline" onClick={handleClick}>
+      {provider.label}
+    </Button>
+  );
+}
 
 export function OAuthButtons() {
   return (
@@ -22,19 +47,7 @@ export function OAuthButtons() {
 
       <div className="grid grid-cols-2 gap-3">
         {providers.map((provider) => (
-          <Button
-            key={provider.id}
-            type="button"
-            variant="outline"
-            onClick={() =>
-              signIn.social({
-                provider: provider.id,
-                callbackURL: "/dashboard",
-              })
-            }
-          >
-            {provider.label}
-          </Button>
+          <OAuthButton key={provider.id} provider={provider} />
         ))}
       </div>
     </>

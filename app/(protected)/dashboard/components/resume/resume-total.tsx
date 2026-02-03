@@ -16,24 +16,26 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { CircleAlertIcon, WalletIcon } from "lucide-react";
 
+// Función de fetch extraída para evitar closures
+async function fetchResumeTotal(userId: string, currency: string) {
+  const response = await fetch(`/api/${userId}/${currency}/resume-total`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch total resume");
+  }
+  return response.json();
+}
+
 export function ResumeTotal() {
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const currency = useAtomValue(currencyAtom);
 
   const { data, isPending, error } = useQuery({
-    queryKey: [QueryKeys.SUBSCRIPTIONS, currency], // ← Agregar currency aquí
-    queryFn: async () => {
-      const response = await fetch(
-        `/api/${session!.user.id}/${currency}/resume-total`,
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch total resume");
-      }
-      return response.json();
-    },
-    enabled: !!session?.user.id, // ← Evita ejecutar sin session
-    staleTime: 1000 * 60 * 5, // ← Opcional: 5 min cache para no refetchear innecesariamente
+    queryKey: [QueryKeys.SUBSCRIPTIONS, currency],
+    queryFn: () => fetchResumeTotal(userId!, currency),
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
   });
 
   return (
