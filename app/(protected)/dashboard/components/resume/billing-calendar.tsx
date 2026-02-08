@@ -1,7 +1,6 @@
 "use client";
 
 import { CardHeaderIcon } from "@/components/card-header-icon";
-import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -20,7 +19,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { currencySymbols } from "@/constants/currency";
-import type { ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import type { Subscription } from "@/lib/schema";
@@ -103,11 +101,6 @@ function DayTooltipContent({
 
           return (
             <li key={payment.id} className="flex items-center gap-2">
-              <ServiceIcon
-                service={payment.platform as ServiceKey}
-                size="sm"
-                className="h-5! w-5!"
-              />
               <span className="flex-1 truncate text-xs">{payment.name}</span>
               <span className="font-mono text-xs font-medium tabular-nums">
                 {symbol}
