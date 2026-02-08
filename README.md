@@ -14,17 +14,17 @@ A modern subscription tracker built with Next.js 16, designed to help you monito
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [Next.js 16](https://nextjs.org) (App Router) |
-| Language | [TypeScript](https://typescriptlang.org) |
-| Database | [Neon](https://neon.tech) (Serverless PostgreSQL) |
-| ORM | [Drizzle](https://orm.drizzle.team) |
-| Auth | [Better Auth](https://www.better-auth.com) |
-| UI | [shadcn/ui](https://ui.shadcn.com) + [Base UI](https://base-ui.com) |
-| State | [TanStack React Query](https://tanstack.com/query) + [Jotai](https://jotai.org) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
-| Validation | [Zod](https://zod.dev) + [React Hook Form](https://react-hook-form.com) |
+| Layer      | Technology                                                                      |
+| ---------- | ------------------------------------------------------------------------------- |
+| Framework  | [Next.js 16](https://nextjs.org) (App Router)                                   |
+| Language   | [TypeScript](https://typescriptlang.org)                                        |
+| Database   | [Neon](https://neon.tech) (Serverless PostgreSQL)                               |
+| ORM        | [Drizzle](https://orm.drizzle.team)                                             |
+| Auth       | [Better Auth](https://www.better-auth.com)                                      |
+| UI         | [shadcn/ui](https://ui.shadcn.com) + [Base UI](https://base-ui.com)             |
+| State      | [TanStack React Query](https://tanstack.com/query) + [Jotai](https://jotai.org) |
+| Styling    | [Tailwind CSS v4](https://tailwindcss.com)                                      |
+| Validation | [Zod](https://zod.dev) + [React Hook Form](https://react-hook-form.com)         |
 
 ## Getting Started
 
@@ -62,31 +62,31 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | Neon PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Yes | Auth secret — generate with `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Yes | Base URL of your app (e.g. `http://localhost:3000`) |
-| `NEXT_PUBLIC_BETTER_AUTH_URL` | Yes | Public base URL (same as above) |
-| `GOOGLE_CLIENT_ID` | No | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | No | Google OAuth client secret |
-| `GITHUB_CLIENT_ID` | No | GitHub OAuth client ID |
-| `GITHUB_CLIENT_SECRET` | No | GitHub OAuth client secret |
+| Variable                      | Required | Description                                           |
+| ----------------------------- | -------- | ----------------------------------------------------- |
+| `DATABASE_URL`                | Yes      | Neon PostgreSQL connection string                     |
+| `BETTER_AUTH_SECRET`          | Yes      | Auth secret — generate with `openssl rand -base64 32` |
+| `BETTER_AUTH_URL`             | Yes      | Base URL of your app (e.g. `http://localhost:3000`)   |
+| `NEXT_PUBLIC_BETTER_AUTH_URL` | Yes      | Public base URL (same as above)                       |
+| `GOOGLE_CLIENT_ID`            | No       | Google OAuth client ID                                |
+| `GOOGLE_CLIENT_SECRET`        | No       | Google OAuth client secret                            |
+| `GITHUB_CLIENT_ID`            | No       | GitHub OAuth client ID                                |
+| `GITHUB_CLIENT_SECRET`        | No       | GitHub OAuth client secret                            |
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build for production |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint |
-| `pnpm type-check` | Run TypeScript type checking |
-| `pnpm format` | Format code with Prettier |
-| `pnpm db:generate` | Generate Drizzle migrations |
-| `pnpm db:push` | Push schema to database |
-| `pnpm db:migrate` | Run pending migrations |
-| `pnpm db:studio` | Open Drizzle Studio |
+| Command            | Description                  |
+| ------------------ | ---------------------------- |
+| `pnpm dev`         | Start development server     |
+| `pnpm build`       | Build for production         |
+| `pnpm start`       | Start production server      |
+| `pnpm lint`        | Run ESLint                   |
+| `pnpm type-check`  | Run TypeScript type checking |
+| `pnpm format`      | Format code with Prettier    |
+| `pnpm db:generate` | Generate Drizzle migrations  |
+| `pnpm db:push`     | Push schema to database      |
+| `pnpm db:migrate`  | Run pending migrations       |
+| `pnpm db:studio`   | Open Drizzle Studio          |
 
 ## Project Structure
 

@@ -204,7 +204,7 @@ function StatItem({ label, value }: StatItemProps) {
       <p className="font-mono text-sm font-semibold tabular-nums sm:text-lg">
         {value}
       </p>
-      <p className="text-muted-foreground text-[10px] uppercase tracking-wider">
+      <p className="text-muted-foreground text-[10px] tracking-wider uppercase">
         {label}
       </p>
     </div>

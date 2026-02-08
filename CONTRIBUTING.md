@@ -52,13 +52,13 @@ Thank you for your interest in contributing! This guide will help you get starte
 
 ## Branch Naming
 
-| Prefix | Purpose |
-|--------|---------|
-| `feat/` | New features |
-| `fix/` | Bug fixes |
-| `docs/` | Documentation |
-| `refactor/` | Code refactoring |
-| `chore/` | Maintenance tasks |
+| Prefix      | Purpose           |
+| ----------- | ----------------- |
+| `feat/`     | New features      |
+| `fix/`      | Bug fixes         |
+| `docs/`     | Documentation     |
+| `refactor/` | Code refactoring  |
+| `chore/`    | Maintenance tasks |
 
 ## Code Style
 
