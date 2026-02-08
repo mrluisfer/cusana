@@ -1,20 +1,20 @@
 "use client";
+import { ServiceIcon } from "@/components/dashboard/service-icon";
+import PhoneMockup from "@/components/landing/phone-mockup";
 import { FlowerIcon, Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   ArrowRight,
   Bell,
+  Check,
   CreditCard,
   PieChart,
   Plus,
   Sparkles,
-  Check,
 } from "lucide-react";
 import Link from "next/link";
-import { ServiceIcon } from "@/components/dashboard/service-icon";
-import PhoneMockup from "@/components/landing/phone-mockup";
 
 const features = [
   {
@@ -290,7 +290,11 @@ export default function LandingPage() {
             >
               Términos
             </Link>
-            <Link href="#" className="hover:text-foreground transition-colors">
+            <Link
+              href="mailto:lolesuncrak@gmail.com"
+              className="hover:text-foreground transition-colors"
+              aria-hidden="true"
+            >
               Contacto
             </Link>
           </nav>
