@@ -25,7 +25,6 @@ export default function LoginPage() {
     const { error } = await signIn.email({
       email: formData.get("email") as string,
       password: formData.get("password") as string,
-      callbackURL: "/dashboard",
     });
 
     if (error) {
