@@ -32,7 +32,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
-import { DollarSignIcon, FilterIcon, SettingsIcon } from "lucide-react";
+import {
+  ChartLineIcon,
+  ClockIcon,
+  DollarSignIcon,
+  FilterIcon,
+  SettingsIcon,
+} from "lucide-react";
 import { AddSubscription } from "../subscriptions/actions/add-subscription";
 import { ExportData } from "../subscriptions/actions/export-data";
 
@@ -126,11 +132,11 @@ export function QuickActions() {
             Información
           </p>
           <div className="flex flex-wrap gap-2">
-            <Badge variant="outline" className="text-xs">
-              <span className="mr-1">🔄</span> Actualizado hace 5 min
+            <Badge variant="secondary" className="text-xs">
+              <ClockIcon /> Actualizado hace 5 min
             </Badge>
             <Badge variant="secondary" className="text-xs">
-              <span className="mr-1">📊</span> Datos en tiempo real
+              <ChartLineIcon /> Datos en tiempo real
             </Badge>
           </div>
         </div>
