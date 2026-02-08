@@ -2,6 +2,7 @@
 import { signOut, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
 import { LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
@@ -15,16 +16,12 @@ import {
 } from "../ui/dropdown-menu";
 
 export const UserMenu = () => {
+  const router = useRouter();
   const { data, isPending, error } = useSession();
 
-  function handleSignOut() {
-    signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = "/login";
-        },
-      },
-    });
+  async function handleSignOut() {
+    await signOut();
+    router.push("/login");
   }
 
   if (error) {
