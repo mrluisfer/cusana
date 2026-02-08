@@ -1,17 +1,18 @@
 // proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 const protectedRoutes = ["/dashboard", "/settings", "/profile"];
 const authRoutes = ["/login", "/register"];
 
-export default async function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const sessionCookie = request.cookies.get("better-auth.session_token");
+  const sessionCookie = getSessionCookie(request);
   const isAuthenticated = !!sessionCookie;
 
-  // Rutas protegidas → redirigir a login
+  // Rutas protegidas → redirigir a login si no está autenticado
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL("/login", request.url));
