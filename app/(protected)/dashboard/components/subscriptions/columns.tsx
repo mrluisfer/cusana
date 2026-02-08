@@ -99,7 +99,7 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
       <EditSubscription
         subscription={subscription}
         open={editOpen}
-        onOpenChange={setEditOpen}
+        onOpenChangeAction={setEditOpen}
       />
       <DeleteSubscription
         subscription={subscription}
