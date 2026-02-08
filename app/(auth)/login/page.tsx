@@ -22,18 +22,22 @@ export default function LoginPage() {
     setIsPending(true);
 
     const formData = new FormData(e.currentTarget);
-    const { error } = await signIn.email({
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    });
 
-    if (error) {
-      setError(error.message ?? "Error al iniciar sesión");
-      setIsPending(false);
-      return;
-    }
-
-    router.push("/dashboard");
+    await signIn.email(
+      {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+        onError: (ctx) => {
+          setError(ctx.error.message ?? "Error al iniciar sesión");
+          setIsPending(false);
+        },
+      },
+    );
   }
 
   return (

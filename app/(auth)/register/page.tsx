@@ -21,19 +21,23 @@ export default function RegisterPage() {
     setIsPending(true);
 
     const formData = new FormData(e.currentTarget);
-    const { error } = await signUp.email({
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    });
 
-    if (error) {
-      setError(error.message ?? "Error al crear cuenta");
-      setIsPending(false);
-      return;
-    }
-
-    router.push("/dashboard");
+    await signUp.email(
+      {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+        onError: (ctx) => {
+          setError(ctx.error.message ?? "Error al crear cuenta");
+          setIsPending(false);
+        },
+      },
+    );
   }
 
   return (
