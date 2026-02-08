@@ -1,4 +1,4 @@
-# Track0
+# Cusana
 
 A modern subscription tracker built with Next.js 16, designed to help you monitor, manage, and analyze all your recurring expenses in one place.
 
@@ -38,8 +38,8 @@ A modern subscription tracker built with Next.js 16, designed to help you monito
 
 ```bash
 # Clone the repository
-git clone https://github.com/mrluisfer/track0.git
-cd track0
+git clone https://github.com/mrluisfer/cusana.git
+cd cusana
 
 # Install dependencies
 pnpm install
@@ -91,7 +91,7 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 ## Project Structure
 
 ```
-track0/
+cusana/
 ├── app/
 │   ├── (auth)/               # Auth pages (login, register)
 │   ├── (protected)/          # Authenticated routes

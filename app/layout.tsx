@@ -9,7 +9,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Track0.",
+  title: "Cusana",
   description: "Mantén el control de tus suscripciones y gastos mensuales.",
 };
 

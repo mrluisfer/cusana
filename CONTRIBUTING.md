@@ -1,4 +1,4 @@
-# Contributing to Track0
+# Contributing to Cusana
 
 Thank you for your interest in contributing! This guide will help you get started.
 
@@ -7,8 +7,8 @@ Thank you for your interest in contributing! This guide will help you get starte
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/track0.git
-   cd track0
+   git clone https://github.com/<your-username>/cusana.git
+   cd cusana
    ```
 3. Install dependencies:
    ```bash
@@ -82,7 +82,7 @@ If your change requires a schema modification:
 
 ## Reporting Issues
 
-- Use the [issue templates](https://github.com/mrluisfer/track0/issues/new/choose) when available
+- Use the [issue templates](https://github.com/mrluisfer/cusana/issues/new/choose) when available
 - Include steps to reproduce for bug reports
 - Provide screenshots for UI-related issues
 

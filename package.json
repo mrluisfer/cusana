@@ -1,12 +1,12 @@
 {
-  "name": "track0",
+  "name": "cusana",
   "version": "0.1.0",
   "description": "A modern subscription tracker to monitor, manage, and analyze recurring expenses",
   "author": "mrluisfer",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrluisfer/track0.git"
+    "url": "https://github.com/mrluisfer/cusana.git"
   },
   "scripts": {
     "dev": "next dev",
