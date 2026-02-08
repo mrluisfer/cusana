@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "@/lib/auth-client";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -12,7 +11,6 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
 
@@ -30,7 +28,7 @@ export default function LoginPage() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard");
+          window.location.href = "/dashboard";
         },
         onError: (ctx) => {
           setError(ctx.error.message ?? "Error al iniciar sesión");

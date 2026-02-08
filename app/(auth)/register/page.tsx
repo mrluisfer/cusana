@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signUp } from "@/lib/auth-client";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -11,7 +10,6 @@ import { AuthError } from "@/components/auth/auth-error";
 import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
 
@@ -30,7 +28,7 @@ export default function RegisterPage() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard");
+          window.location.href = "/dashboard";
         },
         onError: (ctx) => {
           setError(ctx.error.message ?? "Error al crear cuenta");
