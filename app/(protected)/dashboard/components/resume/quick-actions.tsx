@@ -38,7 +38,7 @@ import {
   FilterIcon,
   SettingsIcon,
 } from "lucide-react";
-import { AddSubscription } from "../subscriptions/add-subscription";
+import { AddSubscription } from "../subscriptions/actions/add-subscription";
 
 export function QuickActions() {
   const [currency, setCurrency] = useAtom(currencyAtom);

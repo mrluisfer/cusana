@@ -36,10 +36,10 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  DownloadIcon,
   SearchIcon,
 } from "lucide-react";
-import { AddSubscription } from "./add-subscription";
+import { AddSubscription } from "./actions/add-subscription";
+import { ExportData } from "./actions/export-data";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -115,10 +115,7 @@ export function DataTable<TData, TValue>({
 
         <div className="flex flex-wrap items-center gap-2 md:justify-end">
           <RefetchButton />
-          <Button variant="outline" className="w-full sm:w-auto">
-            <DownloadIcon className="mr-2 size-4" />
-            Exportar
-          </Button>
+          <ExportData data={data as React.ComponentProps<typeof ExportData>["data"]} />
           <div className="w-full sm:w-auto">
             <AddSubscription />
           </div>
