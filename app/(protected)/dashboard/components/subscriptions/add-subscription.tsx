@@ -104,10 +104,11 @@ const defaultValues: FormValues = {
   billingDay: "1",
 };
 
-// ============================================
-// Componente
-// ============================================
-export const AddSubscription = () => {
+type AddSubscriptionProps = {
+  triggerProps?: React.ComponentPropsWithoutRef<typeof Button>;
+};
+
+export const AddSubscription = ({ triggerProps }: AddSubscriptionProps) => {
   const formId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -182,7 +183,7 @@ export const AddSubscription = () => {
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
-      <SheetTrigger render={<Button />}>
+      <SheetTrigger render={<Button {...triggerProps} />}>
         <PlusIcon className="mr-2 size-4" />
         <span className="hidden sm:inline">Agregar suscripción</span>
         <span className="sm:hidden">Agregar</span>

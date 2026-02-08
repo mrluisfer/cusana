@@ -84,7 +84,7 @@ export function Logo() {
   return (
     <div className="flex items-center justify-start gap-1 select-none">
       <FlowerIcon className="size-10" />
-      <span className="text-xl font-extrabold">TrackO.</span>
+      <span className="font-mono text-xl font-extrabold">TrackO.</span>
     </div>
   );
 }

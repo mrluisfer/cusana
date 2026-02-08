@@ -1,6 +1,7 @@
 "use client";
 
 import { currencyAtom } from "@/atoms";
+import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,9 +36,9 @@ import {
   DollarSignIcon,
   DownloadIcon,
   FilterIcon,
-  PlusIcon,
   SettingsIcon,
 } from "lucide-react";
+import { AddSubscription } from "../subscriptions/add-subscription";
 
 export function QuickActions() {
   const [currency, setCurrency] = useAtom(currencyAtom);
@@ -59,7 +60,7 @@ export function QuickActions() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <SettingsIcon className="h-4 w-4" />
+              <CardHeaderIcon icon={SettingsIcon} />
               Acciones Rápidas
             </CardTitle>
             <CardDescription className="mt-1">
@@ -87,7 +88,7 @@ export function QuickActions() {
               value={currency}
               onValueChange={onCurrencyChange}
             >
-              <SelectTrigger className="w-[100px]">
+              <SelectTrigger className="w-25">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -112,10 +113,7 @@ export function QuickActions() {
             Acciones
           </p>
           <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" size="sm" className="justify-start gap-2">
-              <PlusIcon className="h-3 w-3" />
-              <span className="text-xs">Nueva</span>
-            </Button>
+            <AddSubscription triggerProps={{ size: "sm" }} />
             <Button variant="outline" size="sm" className="justify-start gap-2">
               <FilterIcon className="h-3 w-3" />
               <span className="text-xs">Filtrar</span>

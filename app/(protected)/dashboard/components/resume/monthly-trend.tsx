@@ -1,207 +1,312 @@
 "use client";
 
+import type { MonthlyTrendResponse } from "@/app/api/[userid]/[currency]/monthly-trend/route";
+import { currencyAtom } from "@/atoms";
+import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { QueryKeys } from "@/constants/query-keys";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { currencySymbols } from "@/constants/currency";
 import { useSession } from "@/lib/auth-client";
-import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3Icon, TrendingUpIcon } from "lucide-react";
+import { useAtomValue } from "jotai";
+import {
+  BarChart3Icon,
+  MinusIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
 
-// Función de fetch extraída para evitar closures
-async function fetchSubscriptionsForTrend(
+const MONTHS_TO_SHOW = 6;
+
+async function fetchMonthlyTrend(
   userId: string,
-): Promise<Subscription[]> {
-  const response = await fetch(`/api/${userId}/subscription`);
+  currency: string,
+): Promise<MonthlyTrendResponse> {
+  const response = await fetch(
+    `/api/${userId}/${currency}/monthly-trend?months=${MONTHS_TO_SHOW}`,
+  );
   if (!response.ok) {
-    throw new Error("Failed to fetch subscriptions");
+    throw new Error("Failed to fetch monthly trend");
   }
-  const data = await response.json();
-  return data.subscriptions ?? [];
+  return response.json();
 }
 
 function TrendSkeleton() {
   return (
     <div className="space-y-3">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-2">
+      {Array.from({ length: MONTHS_TO_SHOW }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3">
           <Skeleton className="h-4 w-8" />
-          <Skeleton className="h-6 flex-1" />
+          <Skeleton className="h-7 flex-1" />
         </div>
       ))}
+      <Separator />
+      <div className="flex justify-between gap-4 pt-1">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex flex-col items-center gap-1">
+            <Skeleton className="h-5 w-14" />
+            <Skeleton className="h-3 w-10" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TrendIcon({ change }: { change: number }) {
+  if (change > 0.5) return <TrendingUpIcon className="h-3 w-3" />;
+  if (change < -0.5) return <TrendingDownIcon className="h-3 w-3" />;
+  return <MinusIcon className="h-3 w-3" />;
+}
+
+function TrendBadge({ change }: { change: number }) {
+  const isUp = change > 0.5;
+  const isDown = change < -0.5;
+
+  return (
+    <Badge
+      variant={isUp ? "destructive" : isDown ? "default" : "outline"}
+      className="gap-1 text-xs tabular-nums"
+    >
+      <TrendIcon change={change} />
+      {isUp ? "+" : ""}
+      {change.toFixed(1)}%
+    </Badge>
+  );
+}
+
+type BarProps = {
+  month: string;
+  amount: number;
+  maxAmount: number;
+  isCurrent: boolean;
+  subscriptionCount: number;
+  currencySymbol: string;
+  year: number;
+};
+
+function TrendBar({
+  month,
+  amount,
+  maxAmount,
+  isCurrent,
+  subscriptionCount,
+  currencySymbol,
+  year,
+}: BarProps) {
+  const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
+  const showInnerLabel = percentage > 35;
+
+  const formattedAmount = amount.toLocaleString("es-MX", {
+    maximumFractionDigits: 0,
+  });
+
+  const bar = (
+    <div
+      className="flex items-center gap-3"
+      role="row"
+      aria-label={`${month} ${year}: ${currencySymbol}${formattedAmount}, ${subscriptionCount} suscripciones`}
+    >
+      <span
+        className={cn(
+          "w-8 text-right text-xs font-medium",
+          isCurrent ? "text-primary font-bold" : "text-muted-foreground",
+        )}
+        aria-hidden="true"
+      >
+        {month}
+      </span>
+      <div className="bg-muted/50 relative h-7 flex-1 overflow-hidden">
+        <div
+          className={cn(
+            "flex h-full items-center justify-end pr-2 transition-all duration-500",
+            isCurrent ? "bg-primary" : "bg-primary/40",
+          )}
+          style={{ width: `${Math.max(percentage, 3)}%` }}
+          role="meter"
+          aria-valuenow={amount}
+          aria-valuemin={0}
+          aria-valuemax={maxAmount}
+          aria-label={`${currencySymbol}${formattedAmount}`}
+        >
+          {showInnerLabel && (
+            <span className="text-primary-foreground font-mono text-[10px] tabular-nums">
+              {currencySymbol}
+              {formattedAmount}
+            </span>
+          )}
+        </div>
+      </div>
+      {!showInnerLabel && (
+        <span className="text-muted-foreground min-w-12 font-mono text-xs tabular-nums">
+          {currencySymbol}
+          {formattedAmount}
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger className="w-full outline-none">{bar}</TooltipTrigger>
+      <TooltipContent side="right" sideOffset={8}>
+        <div className="space-y-1">
+          <p className="font-medium capitalize">
+            {month} {year}
+            {isCurrent && (
+              <span className="text-primary ml-1 text-[10px] font-normal">
+                (actual)
+              </span>
+            )}
+          </p>
+          <p className="font-mono text-xs tabular-nums">
+            {currencySymbol}
+            {amount.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+          <p className="text-muted-foreground text-[10px]">
+            {subscriptionCount} suscripción
+            {subscriptionCount !== 1 ? "es" : ""} activa
+            {subscriptionCount !== 1 ? "s" : ""}
+          </p>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+type StatItemProps = {
+  label: string;
+  value: string;
+};
+
+function StatItem({ label, value }: StatItemProps) {
+  return (
+    <div className="flex-1 text-center">
+      <p className="font-mono text-sm font-semibold tabular-nums sm:text-lg">
+        {value}
+      </p>
+      <p className="text-muted-foreground text-[10px] uppercase tracking-wider">
+        {label}
+      </p>
     </div>
   );
 }
 
 export function MonthlyTrend() {
   const { data: session } = useSession();
-  const userId = session?.user.id;
+  const selectedCurrency = useAtomValue(currencyAtom);
 
-  const { data: subscriptions, isPending } = useQuery<Subscription[]>({
-    queryKey: [QueryKeys.SUBSCRIPTIONS, "list"],
-    queryFn: () => fetchSubscriptionsForTrend(userId!),
-    enabled: !!userId,
-    staleTime: 1000 * 60 * 5,
+  const { data, isPending } = useQuery<MonthlyTrendResponse>({
+    queryKey: ["monthly-trend", selectedCurrency],
+    queryFn: () => fetchMonthlyTrend(session!.user.id, selectedCurrency),
+    enabled: !!session?.user.id,
+    staleTime: 1000 * 60 * 10,
   });
 
-  // Simular datos de tendencia mensual (en un caso real vendrían del backend)
-  const currentMonth = new Date().getMonth();
-  const months = [
-    "Ene",
-    "Feb",
-    "Mar",
-    "Abr",
-    "May",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dic",
-  ];
+  const currencySymbol =
+    currencySymbols[selectedCurrency as keyof typeof currencySymbols] ?? "$";
 
-  // Generar datos de los últimos 6 meses basados en las suscripciones actuales
-  const totalCurrent =
-    subscriptions?.reduce(
-      (sum, sub) => sum + (parseFloat(String(sub.price)) || 0),
-      0,
-    ) ?? 0;
-
-  // Usar variaciones predefinidas en lugar de Math.random() para mantener consistencia
-  const variations = [0.92, 0.95, 0.98, 1.0, 1.02, 1.0];
-
-  const trendData = Array.from({ length: 6 }).map((_, i) => {
-    const monthIndex = (currentMonth - 5 + i + 12) % 12;
-    // Usar variación predefinida para simular tendencia estable
-    const variation = variations[i];
-    return {
-      month: months[monthIndex],
-      amount: Math.round(totalCurrent * variation),
-      isCurrent: i === 5,
-    };
-  });
-
-  const maxAmount = Math.max(...trendData.map((d) => d.amount), 1);
-  const avgAmount =
-    trendData.reduce((sum, d) => sum + d.amount, 0) / trendData.length;
-  const trend =
-    trendData.length >= 2
-      ? ((trendData[trendData.length - 1].amount - trendData[0].amount) /
-          (trendData[0].amount || 1)) *
-        100
-      : 0;
+  const trend = data?.trend ?? [];
+  const maxAmount = Math.max(...trend.map((d) => d.amount), 1);
+  const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
 
   return (
     <Card className="h-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3Icon className="h-4 w-4" />
-              Tendencia Mensual
-            </CardTitle>
-            <CardDescription className="mt-1">Últimos 6 meses</CardDescription>
-          </div>
-          <Badge
-            variant={trend >= 0 ? "destructive" : "default"}
-            className="text-xs"
-          >
-            <TrendingUpIcon
-              className={cn("mr-1 h-3 w-3", trend < 0 && "rotate-180")}
-            />
-            {trend >= 0 ? "+" : ""}
-            {trend.toFixed(1)}%
-          </Badge>
-        </div>
+        <CardTitle className="flex items-center gap-2">
+          <CardHeaderIcon icon={BarChart3Icon} />
+          Tendencia Mensual
+        </CardTitle>
+        <CardDescription>
+          {isPending ? (
+            <Skeleton className="h-3 w-28" />
+          ) : hasData ? (
+            `Últimos ${trend.length} meses en ${selectedCurrency}`
+          ) : (
+            "Historial de gastos mensuales"
+          )}
+        </CardDescription>
+        {!isPending && hasData && (
+          <CardAction>
+            <TrendBadge change={data?.changePercent ?? 0} />
+          </CardAction>
+        )}
       </CardHeader>
+
       <CardContent>
         {isPending ? (
           <TrendSkeleton />
-        ) : subscriptions && subscriptions.length > 0 ? (
-          <div className="space-y-3">
-            {trendData.map((data) => (
-              <div key={data.month} className="flex items-center gap-3">
-                <span
-                  className={cn(
-                    "w-8 text-xs font-medium",
-                    data.isCurrent
-                      ? "text-primary font-bold"
-                      : "text-muted-foreground",
-                  )}
-                >
-                  {data.month}
-                </span>
-                <div className="bg-muted h-6 flex-1 overflow-hidden rounded-sm">
-                  <div
-                    className={cn(
-                      "flex h-full items-center justify-end pr-2 transition-all duration-500",
-                      data.isCurrent ? "bg-primary" : "bg-primary/50",
-                    )}
-                    style={{ width: `${(data.amount / maxAmount) * 100}%` }}
-                  >
-                    {(data.amount / maxAmount) * 100 > 30 && (
-                      <span className="text-primary-foreground font-mono text-[10px]">
-                        {data.amount.toLocaleString("es-MX")}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                {(data.amount / maxAmount) * 100 <= 30 && (
-                  <span className="text-muted-foreground font-mono text-xs">
-                    {data.amount.toLocaleString("es-MX")}
-                  </span>
-                )}
+        ) : hasData ? (
+          <TooltipProvider delay={150}>
+            <div className="space-y-4">
+              <div
+                className="space-y-2"
+                role="table"
+                aria-label="Tendencia de gastos mensuales"
+              >
+                {trend.map((item) => (
+                  <TrendBar
+                    key={`${item.month}-${item.year}`}
+                    month={item.month}
+                    amount={item.amount}
+                    maxAmount={maxAmount}
+                    isCurrent={item.isCurrent}
+                    subscriptionCount={item.subscriptionCount}
+                    currencySymbol={currencySymbol}
+                    year={item.year}
+                  />
+                ))}
               </div>
-            ))}
 
-            {/* Estadísticas adicionales */}
-            <div className="flex items-center justify-between border-t pt-4">
-              <div className="text-center">
-                <p className="font-mono text-lg font-bold">
-                  {avgAmount.toLocaleString("es-MX", {
-                    maximumFractionDigits: 0,
-                  })}
-                </p>
-                <p className="text-muted-foreground text-[10px] uppercase">
-                  Promedio
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="font-mono text-lg font-bold">
-                  {Math.max(...trendData.map((d) => d.amount)).toLocaleString(
-                    "es-MX",
-                  )}
-                </p>
-                <p className="text-muted-foreground text-[10px] uppercase">
-                  Máximo
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="font-mono text-lg font-bold">
-                  {Math.min(...trendData.map((d) => d.amount)).toLocaleString(
-                    "es-MX",
-                  )}
-                </p>
-                <p className="text-muted-foreground text-[10px] uppercase">
-                  Mínimo
-                </p>
+              <Separator />
+
+              <div
+                className="flex items-center gap-2"
+                aria-label="Estadísticas de tendencia"
+              >
+                <StatItem
+                  label="Promedio"
+                  value={`${currencySymbol}${(data?.average ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                />
+                <Separator orientation="vertical" className="h-8" />
+                <StatItem
+                  label="Máximo"
+                  value={`${currencySymbol}${(data?.max ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                />
+                <Separator orientation="vertical" className="h-8" />
+                <StatItem
+                  label="Mínimo"
+                  value={`${currencySymbol}${(data?.min ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                />
               </div>
             </div>
-          </div>
+          </TooltipProvider>
         ) : (
-          <div className="text-muted-foreground py-8 text-center">
-            <BarChart3Icon className="mx-auto mb-2 h-8 w-8 opacity-50" />
-            <p className="text-sm">Sin datos de tendencia</p>
-            <p className="text-xs">
+          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
+            <div className="bg-muted/50 mb-4 flex h-16 w-16 items-center justify-center">
+              <BarChart3Icon className="h-8 w-8 opacity-40" />
+            </div>
+            <p className="text-sm font-medium">Sin datos de tendencia</p>
+            <p className="mt-1 text-xs opacity-70">
               Agrega suscripciones para ver estadísticas
             </p>
           </div>

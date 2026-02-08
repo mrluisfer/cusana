@@ -1,6 +1,7 @@
 "use client";
 
 import { currencyAtom } from "@/atoms";
+import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -90,7 +91,8 @@ export function StatsCards() {
           <CardTitle className="text-muted-foreground text-sm font-medium">
             Gasto Mensual
           </CardTitle>
-          <WalletIcon className="text-muted-foreground h-4 w-4" />
+          {/* <WalletIcon className="text-muted-foreground h-4 w-4" /> */}
+          <CardHeaderIcon icon={WalletIcon} />
         </CardHeader>
         <CardContent>
           <div className="font-mono text-2xl font-bold">
@@ -109,7 +111,7 @@ export function StatsCards() {
           <CardTitle className="text-muted-foreground text-sm font-medium">
             Promedio Mensual
           </CardTitle>
-          <TrendingUpIcon className="text-muted-foreground h-4 w-4" />
+          <CardHeaderIcon icon={TrendingUpIcon} />
         </CardHeader>
         <CardContent>
           <div className="font-mono text-2xl font-bold">
@@ -127,7 +129,7 @@ export function StatsCards() {
           <CardTitle className="text-muted-foreground text-sm font-medium">
             Proyección Anual
           </CardTitle>
-          <TrendingDownIcon className="text-muted-foreground h-4 w-4" />
+          <CardHeaderIcon icon={TrendingDownIcon} />
         </CardHeader>
         <CardContent>
           <div className="font-mono text-2xl font-bold">
@@ -146,7 +148,7 @@ export function StatsCards() {
           <CardTitle className="text-muted-foreground text-sm font-medium">
             Suscripciones
           </CardTitle>
-          <CalendarClockIcon className="text-muted-foreground h-4 w-4" />
+          <CardHeaderIcon icon={CalendarClockIcon} />
         </CardHeader>
         <CardContent>
           <div className="font-mono text-2xl font-bold">

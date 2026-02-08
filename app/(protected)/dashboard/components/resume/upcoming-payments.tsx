@@ -1,5 +1,7 @@
 "use client";
 
+import { CardHeaderIcon } from "@/components/card-header-icon";
+import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -11,6 +13,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { currencySymbols } from "@/constants/currency";
+import { serviceIcons } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import type { Subscription } from "@/lib/schema";
@@ -84,10 +87,10 @@ export function UpcomingPayments() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4" />
+              <CardHeaderIcon icon={CalendarIcon} />
               Próximos Pagos
             </CardTitle>
             <CardDescription className="mt-1">
@@ -114,11 +117,9 @@ export function UpcomingPayments() {
             <div key={subscription.id}>
               <div className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-3">
-                  <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
-                    <span className="text-sm font-semibold uppercase">
-                      {subscription.platform.slice(0, 2)}
-                    </span>
-                  </div>
+                  <ServiceIcon
+                    service={subscription.platform as keyof typeof serviceIcons}
+                  />
                   <div>
                     <p className="text-sm font-medium">{subscription.name}</p>
                     <p className="text-muted-foreground text-xs">
