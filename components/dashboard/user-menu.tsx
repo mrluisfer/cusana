@@ -50,7 +50,7 @@ export const UserMenu = () => {
           <DropdownMenuSeparator />
         </DropdownMenuGroup>
         <DropdownMenuItem
-          onSelect={handleSignOut}
+          onClick={handleSignOut}
           className="text-destructive focus:text-destructive"
         >
           <LogOutIcon className="mr-2 size-4" />
