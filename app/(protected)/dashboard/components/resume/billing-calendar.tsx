@@ -210,13 +210,21 @@ export function BillingCalendar() {
 
   const billingDays = useMemo(() => {
     const map = new Map<number, Subscription[]>();
+    const viewMonth = viewDate.getMonth();
+
     subscriptions?.forEach((sub) => {
+      // For yearly subscriptions, only show in the correct month
+      if (sub.billingCycle === "yearly" && sub.createdAt) {
+        const createdMonth = new Date(sub.createdAt).getMonth();
+        if (createdMonth !== viewMonth) return;
+      }
+
       const day = Math.min(sub.billingDay, daysInMonth);
       const existing = map.get(day) ?? [];
       map.set(day, [...existing, sub]);
     });
     return map;
-  }, [subscriptions, daysInMonth]);
+  }, [subscriptions, daysInMonth, viewDate]);
 
   const totalPaymentsThisMonth = useMemo(() => {
     let total = 0;

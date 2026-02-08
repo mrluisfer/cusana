@@ -17,7 +17,10 @@ import { serviceIcons } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import type { Subscription } from "@/lib/schema";
-import { getNextBillingDate } from "@/utils/get-next-billing-date";
+import {
+  getNextBillingDate,
+  getNextBillingDateFull,
+} from "@/utils/get-next-billing-date";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon, ClockIcon } from "lucide-react";
 
@@ -57,27 +60,35 @@ export function UpcomingPayments() {
     staleTime: 1000 * 60 * 5,
   });
 
-  // Ordenar por próximo día de cobro
+  // Sort by actual next billing date (supports yearly cycles)
   const sortedSubscriptions = subscriptions
     ?.slice()
     .sort((a, b) => {
-      const today = new Date().getDate();
-      const daysUntilA =
-        a.billingDay >= today
-          ? a.billingDay - today
-          : 30 - today + a.billingDay;
-      const daysUntilB =
-        b.billingDay >= today
-          ? b.billingDay - today
-          : 30 - today + b.billingDay;
-      return daysUntilA - daysUntilB;
+      const nextA = getNextBillingDateFull({
+        billingDay: a.billingDay,
+        billingCycle: a.billingCycle,
+        createdAt: a.createdAt,
+      });
+      const nextB = getNextBillingDateFull({
+        billingDay: b.billingDay,
+        billingCycle: b.billingCycle,
+        createdAt: b.createdAt,
+      });
+      return nextA.getTime() - nextB.getTime();
     })
     .slice(0, 5);
 
-  const getUrgencyColor = (billingDay: number) => {
-    const today = new Date().getDate();
-    const daysUntil =
-      billingDay >= today ? billingDay - today : 30 - today + billingDay;
+  const getUrgencyColor = (sub: Subscription) => {
+    const nextDate = getNextBillingDateFull({
+      billingDay: sub.billingDay,
+      billingCycle: sub.billingCycle,
+      createdAt: sub.createdAt,
+    });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysUntil = Math.ceil(
+      (nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    );
 
     if (daysUntil <= 3) return "destructive";
     if (daysUntil <= 7) return "secondary";
@@ -123,12 +134,16 @@ export function UpcomingPayments() {
                   <div>
                     <p className="text-sm font-medium">{subscription.name}</p>
                     <p className="text-muted-foreground text-xs">
-                      {getNextBillingDate(subscription.billingDay)}
+                      {getNextBillingDate({
+                        billingDay: subscription.billingDay,
+                        billingCycle: subscription.billingCycle,
+                        createdAt: subscription.createdAt,
+                      })}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant={getUrgencyColor(subscription.billingDay)}>
+                  <Badge variant={getUrgencyColor(subscription)}>
                     {currencySymbols[subscription.currency]}
                     {(
                       parseFloat(String(subscription.price)) || 0

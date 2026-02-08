@@ -10,6 +10,7 @@ type ExportableSubscription = {
   currency: string;
   billingCycle: "monthly" | "yearly";
   billingDay: number;
+  createdAt: string | Date;
 };
 
 type ExportRow = {
@@ -43,7 +44,11 @@ function toExportRows(subscriptions: ExportableSubscription[]): ExportRow[] {
     Moneda: sub.currency,
     Ciclo: sub.billingCycle === "monthly" ? "Mensual" : "Anual",
     "Día de cobro": sub.billingDay,
-    "Próximo cobro": getNextBillingDate(sub.billingDay),
+    "Próximo cobro": getNextBillingDate({
+      billingDay: sub.billingDay,
+      billingCycle: sub.billingCycle,
+      createdAt: sub.createdAt,
+    }),
   }));
 }
 
