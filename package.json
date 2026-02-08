@@ -1,17 +1,25 @@
 {
-  "name": "subscriptions-tracker",
+  "name": "track0",
   "version": "0.1.0",
-  "private": true,
+  "description": "A modern subscription tracker to monitor, manage, and analyze recurring expenses",
+  "author": "mrluisfer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrluisfer/track0.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "drizzle-kit migrate",
-    "format": "prettier --write ."
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@base-ui/react": "1.1.0",
