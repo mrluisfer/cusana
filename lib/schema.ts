@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   numeric,
   pgEnum,
   pgTable,
@@ -85,6 +86,8 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  subscriptions: many(subscriptions),
+  subscriptionEvents: many(subscriptionEvents),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -134,13 +137,123 @@ export const subscriptions = pgTable("subscriptions", {
 });
 
 // Relaciones
-export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
-  user: one(user, {
-    fields: [subscriptions.userId],
-    references: [user.id],
+export const subscriptionsRelations = relations(
+  subscriptions,
+  ({ one, many }) => ({
+    user: one(user, {
+      fields: [subscriptions.userId],
+      references: [user.id],
+    }),
+    events: many(subscriptionEvents),
   }),
-}));
+);
 
 // Tipos inferidos
 export type Subscription = typeof subscriptions.$inferSelect;
 export type NewSubscription = typeof subscriptions.$inferInsert;
+
+// ─── Historial / Audit Log de Suscripciones ───────────────────────────
+
+export const subscriptionEventTypeEnum = pgEnum("subscription_event_type", [
+  "created",
+  "updated",
+  "deleted",
+  "price_changed",
+  "cycle_changed",
+  "reactivated",
+]);
+
+/**
+ * Tabla de eventos/historial de suscripciones.
+ * Funciona como un audit log inmutable (append-only):
+ * - Cada acción sobre una suscripción genera un INSERT.
+ * - Nunca se actualiza ni elimina un registro de esta tabla.
+ * - `snapshot` guarda el estado completo de la suscripción en ese momento.
+ * - `changes` guarda solo los campos que cambiaron (para updates).
+ */
+export const subscriptionEvents = pgTable(
+  "subscription_events",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    // Quién hizo la acción
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+
+    // A qué suscripción se refiere (nullable: si fue deleted, la sub ya no existe)
+    subscriptionId: text("subscription_id"),
+
+    // Tipo de evento
+    eventType: subscriptionEventTypeEnum("event_type").notNull(),
+
+    // Snapshot completo de la suscripción al momento del evento
+    snapshot: jsonb("snapshot").$type<SubscriptionSnapshot>().notNull(),
+
+    // Para updates: solo los campos que cambiaron { field: { from, to } }
+    changes: jsonb("changes").$type<SubscriptionChanges | null>(),
+
+    // Metadata opcional (IP, user agent, fuente, etc.)
+    metadata: jsonb("metadata").$type<EventMetadata | null>(),
+
+    // Cuándo ocurrió el evento
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("sub_events_user_idx").on(table.userId),
+    index("sub_events_subscription_idx").on(table.subscriptionId),
+    index("sub_events_type_idx").on(table.eventType),
+    index("sub_events_created_idx").on(table.createdAt),
+  ],
+);
+
+// Relaciones
+export const subscriptionEventsRelations = relations(
+  subscriptionEvents,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [subscriptionEvents.userId],
+      references: [user.id],
+    }),
+    subscription: one(subscriptions, {
+      fields: [subscriptionEvents.subscriptionId],
+      references: [subscriptions.id],
+    }),
+  }),
+);
+
+// ─── Tipos para JSONB ─────────────────────────────────────────────────
+
+/** Estado completo de la suscripción al momento del evento */
+export type SubscriptionSnapshot = {
+  name: string;
+  platform: string;
+  price: string;
+  currency: string;
+  billingCycle: string;
+  billingDay: number;
+  description?: string | null;
+  url?: string | null;
+};
+
+/** Cambios realizados en un update: { campo: { from: valor_anterior, to: valor_nuevo } } */
+export type SubscriptionChanges = Partial<
+  Record<
+    keyof SubscriptionSnapshot,
+    { from: string | number | null; to: string | number | null }
+  >
+>;
+
+/** Metadata opcional del evento */
+export type EventMetadata = {
+  source?: "web" | "api" | "import" | "system";
+  ipAddress?: string;
+  userAgent?: string;
+  note?: string;
+};
+
+// Tipos inferidos del audit log
+export type SubscriptionEvent = typeof subscriptionEvents.$inferSelect;
+export type NewSubscriptionEvent = typeof subscriptionEvents.$inferInsert;
