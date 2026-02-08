@@ -1,6 +1,7 @@
 "use client";
-import { useSession } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
+import { LogOutIcon } from "lucide-react";
 import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
@@ -15,6 +16,16 @@ import {
 
 export const UserMenu = () => {
   const { data, isPending, error } = useSession();
+
+  function handleSignOut() {
+    signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = "/login";
+        },
+      },
+    });
+  }
 
   if (error) {
     return <ErrorStateInline message="Error al cargar el usuario" />;
@@ -31,16 +42,23 @@ export const UserMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+          <DropdownMenuItem>Perfil</DropdownMenuItem>
           <DropdownMenuSeparator />
         </DropdownMenuGroup>
         <DropdownMenuGroup>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Appearance</DropdownMenuItem>
-          <DropdownMenuItem>Privacy</DropdownMenuItem>
+          <DropdownMenuItem>Ajustes</DropdownMenuItem>
+          <DropdownMenuItem>Apariencia</DropdownMenuItem>
+          <DropdownMenuItem>Privacidad</DropdownMenuItem>
+          <DropdownMenuSeparator />
         </DropdownMenuGroup>
+        <DropdownMenuItem
+          onSelect={handleSignOut}
+          className="text-destructive focus:text-destructive"
+        >
+          <LogOutIcon className="mr-2 size-4" />
+          Cerrar sesion
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
