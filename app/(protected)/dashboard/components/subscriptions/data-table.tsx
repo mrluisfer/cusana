@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>({
 
         <div className="flex flex-wrap items-center gap-2 md:justify-end">
           <RefetchButton />
-          <ExportData data={data as React.ComponentProps<typeof ExportData>["data"]} />
+          <ExportData />
           <div className="w-full sm:w-auto">
             <AddSubscription />
           </div>
