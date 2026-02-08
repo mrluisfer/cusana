@@ -13,19 +13,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ServiceKey } from "@/constants/icons";
+import { PLATFORM_URLS } from "@/constants/platform-urls";
 import { formatCurrency } from "@/utils/format-currency";
 import { getNextBillingDate } from "@/utils/get-next-billing-date";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  Bell,
   Calendar,
   ExternalLink,
   MoreHorizontal,
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { DataTableColumnHeader } from "./data-table-column-header";
+import { DeleteSubscription } from "./delete-subscription";
+import { EditSubscription } from "./edit-subscription";
 
 export type Subscription = {
   id: string;
@@ -38,84 +40,73 @@ export type Subscription = {
   nextBillingDate?: Date;
 };
 
-// Handlers extraídos como funciones puras para evitar closures
-function handleEdit(subscriptionId: string) {
-  console.log("Edit:", subscriptionId);
-}
-
-function handleReminder(subscriptionId: string) {
-  console.log("Reminder:", subscriptionId);
-}
-
-function handleOpenSite(platform: string) {
-  console.log("Open:", platform);
-}
-
-function handleDelete(subscriptionId: string) {
-  console.log("Delete:", subscriptionId);
-}
-
-// Componente de acciones separado para evitar closures en la definición de columnas
+// Componente de acciones con modales integrados
 function SubscriptionActions({ subscription }: { subscription: Subscription }) {
-  // Handlers con useCallback para evitar recreación en cada render
-  const onEdit = useCallback(
-    () => handleEdit(subscription.id),
-    [subscription.id],
-  );
-  const onReminder = useCallback(
-    () => handleReminder(subscription.id),
-    [subscription.id],
-  );
-  const onOpenSite = useCallback(
-    () => handleOpenSite(subscription.platform),
-    [subscription.platform],
-  );
-  const onDelete = useCallback(
-    () => handleDelete(subscription.id),
-    [subscription.id],
-  );
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const onEdit = useCallback(() => setEditOpen(true), []);
+  const onDelete = useCallback(() => setDeleteOpen(true), []);
+
+  const onOpenSite = useCallback(() => {
+    const url = PLATFORM_URLS[subscription.platform];
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  }, [subscription.platform]);
+
+  const hasSiteUrl = !!PLATFORM_URLS[subscription.platform];
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button variant="ghost" className="size-8 p-0">
-            <span className="sr-only">Abrir menú</span>
-            <MoreHorizontal className="size-4" />
-          </Button>
-        }
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="ghost" className="size-8 p-0">
+              <span className="sr-only">Abrir menú</span>
+              <MoreHorizontal className="size-4" />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem onClick={onEdit}>
+            <Pencil className="mr-2 size-4" />
+            Editar
+          </DropdownMenuItem>
+          {hasSiteUrl && (
+            <DropdownMenuItem onClick={onOpenSite}>
+              <ExternalLink className="mr-2 size-4" />
+              Abrir sitio web
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            onClick={onDelete}
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="mr-2 size-4" />
+            Eliminar
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <EditSubscription
+        subscription={subscription}
+        open={editOpen}
+        onOpenChange={setEditOpen}
       />
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-        </DropdownMenuGroup>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem onClick={onEdit}>
-          <Pencil className="mr-2 size-4" />
-          Editar
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={onReminder}>
-          <Bell className="mr-2 size-4" />
-          Configurar recordatorio
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={onOpenSite}>
-          <ExternalLink className="mr-2 size-4" />
-          Abrir sitio web
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          onClick={onDelete}
-          className="text-destructive focus:text-destructive"
-        >
-          <Trash2 className="mr-2 size-4" />
-          Eliminar
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <DeleteSubscription
+        subscription={subscription}
+        open={deleteOpen}
+        onOpenChangeAction={setDeleteOpen}
+      />
+    </>
   );
 }
 
@@ -205,7 +196,7 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
     },
   },
 
-  // Columna: Acciones - usando componente separado para evitar closures
+  // Columna: Acciones
   {
     id: "actions",
     header: () => <span className="sr-only">Acciones</span>,

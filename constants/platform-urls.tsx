@@ -1,0 +1,26 @@
+import { ServiceKey } from "./icons";
+
+export const PLATFORM_URLS: Partial<Record<ServiceKey, string>> = {
+  netflix: "https://netflix.com",
+  spotify: "https://spotify.com",
+  youtube: "https://youtube.com",
+  disney: "https://disneyplus.com",
+  hbo: "https://max.com",
+  prime_video: "https://primevideo.com",
+  apple_music: "https://music.apple.com",
+  twitch: "https://twitch.tv",
+  discord: "https://discord.com",
+  claude: "https://claude.ai",
+  copilot: "https://github.com/features/copilot",
+  uber: "https://uber.com",
+  amazon: "https://amazon.com",
+  mercado_libre: "https://mercadolibre.com",
+  patreon: "https://patreon.com",
+  twitter: "https://x.com",
+  xbox: "https://xbox.com",
+  tidal: "https://tidal.com",
+  google: "https://one.google.com",
+  appstore: "https://apps.apple.com",
+  google_play: "https://play.google.com",
+  apple: "https://apple.com",
+} as const;
