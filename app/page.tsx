@@ -125,19 +125,19 @@ export default function LandingPage() {
           </div>
 
           {/* Right - App Mockup */}
-          <div className="relative flex justify-center lg:justify-end">
-            {/* Floating service icons */}
+          <div className="relative flex justify-center overflow-hidden lg:justify-end lg:overflow-visible">
+            {/* Floating service icons - hidden on small screens to prevent overflow */}
             <ServiceIcon
               service="netflix"
-              className="animate-float absolute top-8 -left-4"
+              className="animate-float absolute top-8 -left-4 hidden sm:block"
             />
             <ServiceIcon
               service="spotify"
-              className="animate-float-delayed absolute top-20 -right-24"
+              className="animate-float-delayed absolute top-20 right-0 hidden sm:block lg:-right-24"
             />
             <ServiceIcon
               service="disney"
-              className="animate-float absolute bottom-12 left-8"
+              className="animate-float absolute bottom-12 left-8 hidden sm:block"
             />
 
             {/* Phone mockup */}
