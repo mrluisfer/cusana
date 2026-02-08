@@ -129,15 +129,15 @@ export default function LandingPage() {
             {/* Floating service icons - hidden on small screens to prevent overflow */}
             <ServiceIcon
               service="netflix"
-              className="animate-float absolute top-8 -left-4 hidden sm:block"
+              className="animate-float absolute top-8 -left-4 hidden sm:flex"
             />
             <ServiceIcon
               service="spotify"
-              className="animate-float-delayed absolute top-20 right-0 hidden sm:block lg:-right-24"
+              className="animate-float-delayed absolute top-20 right-0 hidden sm:flex lg:-right-24"
             />
             <ServiceIcon
               service="disney"
-              className="animate-float absolute bottom-12 left-8 hidden sm:block"
+              className="animate-float absolute bottom-12 left-8 hidden sm:flex"
             />
 
             {/* Phone mockup */}
