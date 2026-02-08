@@ -32,13 +32,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
-import {
-  DollarSignIcon,
-  DownloadIcon,
-  FilterIcon,
-  SettingsIcon,
-} from "lucide-react";
+import { DollarSignIcon, FilterIcon, SettingsIcon } from "lucide-react";
 import { AddSubscription } from "../subscriptions/actions/add-subscription";
+import { ExportData } from "../subscriptions/actions/export-data";
 
 export function QuickActions() {
   const [currency, setCurrency] = useAtom(currencyAtom);
@@ -113,19 +109,12 @@ export function QuickActions() {
             Acciones
           </p>
           <div className="grid grid-cols-2 gap-2">
-            <AddSubscription triggerProps={{ size: "sm" }} />
+            <AddSubscription />
             <Button variant="outline" size="sm" className="justify-start gap-2">
               <FilterIcon className="h-3 w-3" />
               <span className="text-xs">Filtrar</span>
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="col-span-2 justify-start gap-2"
-            >
-              <DownloadIcon className="h-3 w-3" />
-              <span className="text-xs">Exportar datos</span>
-            </Button>
+            <ExportData />
           </div>
         </div>
 
