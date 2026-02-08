@@ -84,7 +84,7 @@ function DayTooltipContent({
         <p className="font-medium">
           Día {day}
           {isToday && (
-            <span className="text-primary ml-1.5 text-[10px] font-normal">
+            <span className="ml-1.5 text-[10px] font-normal text-white">
               (hoy)
             </span>
           )}
@@ -100,7 +100,7 @@ function DayTooltipContent({
           const symbol = currencySymbols[payment.currency] ?? "$";
 
           return (
-            <li key={payment.id} className="flex items-center gap-2">
+            <li key={payment.id} className="flex items-center gap-2 capitalize">
               <span className="flex-1 truncate text-xs">{payment.name}</span>
               <span className="font-mono text-xs font-medium tabular-nums">
                 {symbol}
@@ -108,6 +108,9 @@ function DayTooltipContent({
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 2,
                 })}
+                <span className="ms-0.5 font-mono text-xs">
+                  {payment.currency}
+                </span>
               </span>
             </li>
           );
