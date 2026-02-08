@@ -93,7 +93,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-muted-foreground max-w-lg text-lg leading-relaxed">
-              Deja de perder dinero en servicios que olvidas. TrackO te ayuda a
+              Deja de perder dinero en servicios que olvidas. Cusana te ayuda a
               visualizar, organizar y optimizar todos tus pagos recurrentes.
             </p>
 
@@ -242,7 +242,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-primary-foreground/80 mb-8 text-lg">
               Únete a miles de personas que ya están ahorrando dinero con
-              TrackO. Comienza gratis hoy.
+              Cusana. Comienza gratis hoy.
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <Button
@@ -271,23 +271,33 @@ export default function LandingPage() {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-2">
             <FlowerIcon className="size-8" />
-            <span className="text-lg font-bold">TrackO.</span>
+            <span className="text-lg font-bold">Cusana</span>
           </div>
 
-          <div className="text-muted-foreground flex items-center gap-6 text-sm">
-            <Link href="#" className="hover:text-foreground transition-colors">
+          <nav
+            className="text-muted-foreground flex items-center gap-6 text-sm"
+            aria-label="Legal"
+          >
+            <Link
+              href="/privacy"
+              className="hover:text-foreground transition-colors"
+            >
               Privacidad
             </Link>
-            <Link href="#" className="hover:text-foreground transition-colors">
+            <Link
+              href="/terms"
+              className="hover:text-foreground transition-colors"
+            >
               Términos
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
               Contacto
             </Link>
-          </div>
+          </nav>
 
           <p className="text-muted-foreground text-sm">
-            © 2025 TrackO. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} Cusana. Todos los derechos
+            reservados.
           </p>
         </div>
       </footer>

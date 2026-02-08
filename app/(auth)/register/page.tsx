@@ -57,6 +57,18 @@ export default function RegisterPage() {
           minLength={8}
           required
         />
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          Al crear tu cuenta, aceptas nuestros{" "}
+          <Link href="/terms" className="text-foreground underline">
+            Términos de Servicio
+          </Link>{" "}
+          y{" "}
+          <Link href="/privacy" className="text-foreground underline">
+            Política de Privacidad
+          </Link>
+          .
+        </p>
+
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending ? "Creando cuenta..." : "Crear cuenta"}
         </Button>
