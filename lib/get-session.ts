@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 export async function getSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: {
+      disableCookieCache: true,
+    },
   });
   return session;
 }
