@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
-import { AlertCircle, CreditCard, Inbox, RefreshCw } from "lucide-react";
+import { AlertCircle, Inbox, RefreshCw } from "lucide-react";
+import { AddSubscription } from "./actions/add-subscription";
 
 // Función de fetch extraída para evitar closures
 async function fetchSubscriptions(userId: string) {
@@ -154,10 +155,7 @@ function EmptyState() {
         </CardDescription>
       </CardHeader>
       <CardContent className="text-center">
-        <Button>
-          <CreditCard className="mr-2 h-4 w-4" />
-          Agregar suscripción
-        </Button>
+        <AddSubscription />
       </CardContent>
     </Card>
   );
