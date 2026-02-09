@@ -146,10 +146,18 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
       <DataTableColumnHeader column={column} title="Precio" />
     ),
     cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="text-foreground font-semibold">
-          {formatCurrency(row.original.price, row.original.currency)}
-        </span>
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center gap-1.5">
+          <span className="text-foreground font-semibold">
+            {formatCurrency(row.original.price, row.original.currency)}
+          </span>
+          <Badge
+            variant="outline"
+            className="text-muted-foreground px-1 py-0 font-mono text-[10px] leading-tight"
+          >
+            {row.original.currency}
+          </Badge>
+        </div>
         <span className="text-muted-foreground text-xs">
           {row.original.billingCycle === "monthly" ? "/mes" : "/año"}
         </span>

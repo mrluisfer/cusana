@@ -62,8 +62,8 @@ export function DeleteSubscription({
           <AlertDialogTitle>Eliminar suscripción</AlertDialogTitle>
           <AlertDialogDescription>
             ¿Estás seguro de eliminar{" "}
-            <strong className="text-foreground">{subscription.name}</strong>?
-            La suscripción será desactivada y dejará de ser visible y
+            <strong className="text-foreground">{subscription.name}</strong>? La
+            suscripción será desactivada y dejará de ser visible y
             contabilizada.
           </AlertDialogDescription>
         </AlertDialogHeader>
