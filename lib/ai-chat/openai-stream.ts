@@ -29,13 +29,10 @@ export async function streamChatCompletion(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      const message =
-        errorData?.error?.message ?? `Error ${response.status}`;
+      const message = errorData?.error?.message ?? `Error ${response.status}`;
 
       if (response.status === 401) {
-        throw new Error(
-          "Clave API inválida. Verifica tu clave de OpenAI.",
-        );
+        throw new Error("Clave API inválida. Verifica tu clave de OpenAI.");
       }
       if (response.status === 429) {
         throw new Error(
@@ -89,8 +86,6 @@ export async function streamChatCompletion(
       onDone();
       return;
     }
-    onError(
-      error instanceof Error ? error : new Error("Error desconocido"),
-    );
+    onError(error instanceof Error ? error : new Error("Error desconocido"));
   }
 }

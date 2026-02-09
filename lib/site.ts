@@ -2,9 +2,7 @@ const rawSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   process.env.NEXT_PUBLIC_BETTER_AUTH_URL ??
   "http://localhost:3000";
-const siteUrl = rawSiteUrl.endsWith("/")
-  ? rawSiteUrl.slice(0, -1)
-  : rawSiteUrl;
+const siteUrl = rawSiteUrl.endsWith("/") ? rawSiteUrl.slice(0, -1) : rawSiteUrl;
 
 export const siteConfig = {
   name: "Cusana",
