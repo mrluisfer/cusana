@@ -1,9 +1,8 @@
 "use client";
 
-import { currencyAtom } from "@/atoms";
+import { currencyAtom, defaultFilters, filtersAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -38,12 +37,22 @@ import {
   DollarSignIcon,
   FilterIcon,
   SettingsIcon,
+  XIcon,
 } from "lucide-react";
-import { AddSubscription } from "../subscriptions/actions/add-subscription";
-import { ExportData } from "../subscriptions/actions/export-data";
+import { useMemo } from "react";
+import { FilterSubscriptions } from "../subscriptions/actions/filter-subscriptions";
 
 export function QuickActions() {
   const [currency, setCurrency] = useAtom(currencyAtom);
+  const [filters, setFilters] = useAtom(filtersAtom);
+
+  const activeFilterCount = useMemo(
+    () =>
+      filters.billingCycle.length +
+      filters.currency.length +
+      filters.active.length,
+    [filters],
+  );
 
   const currenciesItems = currencyArray.map((curr) => ({
     label: curr,
@@ -71,7 +80,7 @@ export function QuickActions() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Selector de moneda */}
         <Item variant="muted" className="p-3">
           <ItemMedia variant="icon">
@@ -107,22 +116,37 @@ export function QuickActions() {
           </ItemActions>
         </Item>
 
-        <Separator />
-
-        {/* Acciones adicionales */}
-        <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Acciones
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <AddSubscription />
-            <Button variant="outline" size="sm" className="justify-start gap-2">
-              <FilterIcon className="h-3 w-3" />
-              <span className="text-xs">Filtrar</span>
-            </Button>
-            <ExportData />
-          </div>
-        </div>
+        {/* Filtros activos */}
+        <Item variant="muted" className="p-3">
+          <ItemMedia variant="icon">
+            <FilterIcon className="text-primary" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Filtros</ItemTitle>
+            <ItemDescription className="text-xs">
+              {activeFilterCount > 0
+                ? `${activeFilterCount} filtro${activeFilterCount > 1 ? "s" : ""} activo${activeFilterCount > 1 ? "s" : ""}`
+                : "Sin filtros aplicados"}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions className="gap-1">
+            {activeFilterCount > 0 && (
+              <button
+                onClick={() => setFilters(defaultFilters)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Limpiar filtros"
+              >
+                <XIcon className="size-4" />
+              </button>
+            )}
+            <FilterSubscriptions
+              triggerProps={{
+                variant: activeFilterCount > 0 ? "default" : "outline",
+                size: "sm",
+              }}
+            />
+          </ItemActions>
+        </Item>
 
         <Separator />
 
