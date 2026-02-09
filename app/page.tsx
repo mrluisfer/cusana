@@ -64,7 +64,7 @@ export default function LandingPage() {
         <Logo />
 
         <div className="flex items-center justify-end gap-3">
-          <Button variant="ghost" render={<Link href="/login" />}>
+          <Button variant="outline" render={<Link href="/login" />}>
             Iniciar sesión
           </Button>
           <Button render={<Link href="/register" />}>
