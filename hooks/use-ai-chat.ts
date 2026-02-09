@@ -3,7 +3,7 @@
 import { streamChatCompletion } from "@/lib/ai-chat/openai-stream";
 import { CUSANA_SYSTEM_PROMPT } from "@/lib/ai-chat/system-prompt";
 import type { ChatMessage, OpenAIChatMessage } from "@/lib/ai-chat/types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "cusana-openai-token";
 
@@ -11,37 +11,72 @@ function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
+const tokenListeners = new Set<() => void>();
+
+function notifyTokenListeners() {
+  tokenListeners.forEach((listener) => listener());
+}
+
+function subscribeToToken(listener: () => void) {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.storageArea === sessionStorage && event.key === STORAGE_KEY) {
+      listener();
+    }
+  };
+
+  tokenListeners.add(listener);
+  window.addEventListener("storage", handleStorage);
+
+  return () => {
+    tokenListeners.delete(listener);
+    window.removeEventListener("storage", handleStorage);
+  };
+}
+
+function getTokenSnapshot() {
+  if (typeof window === "undefined") return false;
+  return !!sessionStorage.getItem(STORAGE_KEY);
+}
+
+function getServerTokenSnapshot() {
+  return false;
+}
+
 export function useAiChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasToken, setHasToken] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Check token on mount (avoid SSR mismatch)
-  useEffect(() => {
-    setHasToken(!!sessionStorage.getItem(STORAGE_KEY));
-  }, []);
+  const hasToken = useSyncExternalStore(
+    subscribeToToken,
+    getTokenSnapshot,
+    getServerTokenSnapshot,
+  );
 
   const getToken = useCallback((): string | null => {
+    if (typeof window === "undefined") return null;
     return sessionStorage.getItem(STORAGE_KEY);
   }, []);
 
   const saveToken = useCallback((token: string) => {
     sessionStorage.setItem(STORAGE_KEY, token);
-    setHasToken(true);
+    notifyTokenListeners();
   }, []);
 
   const removeToken = useCallback(() => {
     sessionStorage.removeItem(STORAGE_KEY);
-    setHasToken(false);
+    notifyTokenListeners();
     setMessages([]);
     setError(null);
   }, []);
 
   const sendMessage = useCallback(
     async (content: string) => {
-      const token = sessionStorage.getItem(STORAGE_KEY);
+      const token = getToken();
       if (!token || !content.trim()) return;
 
       setError(null);
@@ -110,7 +145,7 @@ export function useAiChat() {
         abortController.signal,
       );
     },
-    [messages],
+    [getToken, messages],
   );
 
   const cancelStream = useCallback(() => {
