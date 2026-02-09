@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { AiChatButton } from "@/components/ai-chat/ai-chat-button";
 import { RefetchButton } from "@/components/dashboard/refetch-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -116,6 +117,7 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-wrap items-center gap-2 md:justify-end">
           <RefetchButton />
           <ExportData />
+          <AiChatButton />
           <div className="w-full sm:w-auto">
             <AddSubscription />
           </div>
