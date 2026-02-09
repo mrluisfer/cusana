@@ -9,7 +9,10 @@ import {
 
 export async function getSubscriptionsByUser(userId: string) {
   return db.query.subscriptions.findMany({
-    where: eq(subscriptions.userId, userId),
+    where: and(
+      eq(subscriptions.userId, userId),
+      eq(subscriptions.active, true),
+    ),
     orderBy: (subscriptions, { asc }) => [asc(subscriptions.billingDay)],
   });
 }
@@ -55,12 +58,16 @@ export async function updateSubscription(
 }
 
 export async function deleteSubscription(id: string, userId: string) {
-  // Capturar estado antes de eliminar
+  // Capturar estado antes de desactivar
   const before = await getSubscriptionById(id, userId);
+  if (!before) return null;
 
+  // Soft delete: marcar como inactiva en vez de eliminar
   const result = await db
-    .delete(subscriptions)
-    .where(and(eq(subscriptions.id, id), eq(subscriptions.userId, userId)));
+    .update(subscriptions)
+    .set({ active: false, updatedAt: new Date() })
+    .where(and(eq(subscriptions.id, id), eq(subscriptions.userId, userId)))
+    .returning();
 
   // Registrar evento de eliminación
   if (before) {

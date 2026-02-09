@@ -63,8 +63,8 @@ export function DeleteSubscription({
           <AlertDialogDescription>
             ¿Estás seguro de eliminar{" "}
             <strong className="text-foreground">{subscription.name}</strong>?
-            Esta acción no se puede deshacer, pero quedará registrada en tu
-            historial.
+            La suscripción será desactivada y dejará de ser visible y
+            contabilizada.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

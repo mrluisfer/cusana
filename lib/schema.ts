@@ -128,6 +128,9 @@ export const subscriptions = pgTable("subscriptions", {
   billingDay: integer("billing_day").notNull(), // 1-31
   billingMonth: integer("billing_month"), // 1-12, opcional (para anuales)
 
+  // Estado
+  active: boolean("active").notNull().default(true),
+
   // Opcionales útiles
   description: text("description"),
   url: text("url"), // Link al servicio
