@@ -1,12 +1,17 @@
+import { siteConfig, siteKeywords } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono } from "next/font/google";
-import { siteConfig, siteKeywords } from "@/lib/site";
+import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
+  subsets: ["latin"],
+});
+
+const interMono = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -88,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="overflow-x-hidden">
       <body
-        className={`${geistMono.variable} overflow-x-hidden antialiased`}
+        className={`${geistMono.variable} ${interMono.variable} overflow-x-hidden antialiased`}
       >
         <Providers>{children}</Providers>
       </body>
