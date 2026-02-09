@@ -1,10 +1,11 @@
 import { getResumeTotalByUser } from "@/lib/queries/resume-total";
 import { FrankfurterRatesResponse } from "@/types/frankfurter";
+import type { RouteContext } from "@/types/route-context";
 import type { NextRequest } from "next/server";
 
 export async function GET(
   _req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/[currency]/resume-total">,
+  ctx: RouteContext<{ userid: string; currency: string }>,
 ) {
   const { userid, currency } = await ctx.params;
 

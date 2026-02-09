@@ -5,11 +5,12 @@ import {
   getSubscriptionsByUser,
   updateSubscription,
 } from "@/lib/queries/subscriptions";
+import type { RouteContext } from "@/types/route-context";
 import type { NextRequest } from "next/server";
 
 export async function GET(
   _req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/subscription">,
+  ctx: RouteContext<{ userid: string }>,
 ) {
   const { userid } = await ctx.params;
 
@@ -31,7 +32,7 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/subscription">,
+  ctx: RouteContext<{ userid: string }>,
 ) {
   const { userid } = await ctx.params;
 
@@ -67,7 +68,7 @@ export async function POST(
 
 export async function PATCH(
   req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/subscription">,
+  ctx: RouteContext<{ userid: string }>,
 ) {
   const { userid } = await ctx.params;
 
@@ -102,7 +103,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/subscription">,
+  ctx: RouteContext<{ userid: string }>,
 ) {
   const { userid } = await ctx.params;
 

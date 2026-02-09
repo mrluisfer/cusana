@@ -1,5 +1,6 @@
 import { getSubscriptionsForTrend } from "@/lib/queries/monthly-trend";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
+import type { RouteContext } from "@/types/route-context";
 import type { NextRequest } from "next/server";
 
 type MonthData = {
@@ -22,7 +23,7 @@ export type MonthlyTrendResponse = {
 
 export async function GET(
   req: NextRequest,
-  ctx: RouteContext<"/api/[userid]/[currency]/monthly-trend">,
+  ctx: RouteContext<{ userid: string; currency: string }>,
 ) {
   const { userid, currency } = await ctx.params;
 
