@@ -214,9 +214,11 @@ export function BillingCalendar() {
 
     subscriptions?.forEach((sub) => {
       // For yearly subscriptions, only show in the correct month
-      if (sub.billingCycle === "yearly" && sub.createdAt) {
-        const createdMonth = new Date(sub.createdAt).getMonth();
-        if (createdMonth !== viewMonth) return;
+      if (sub.billingCycle === "yearly") {
+        const resolvedMonth = sub.billingMonth
+          ? sub.billingMonth - 1 // Convert 1-12 to 0-11
+          : new Date(sub.createdAt).getMonth();
+        if (resolvedMonth !== viewMonth) return;
       }
 
       const day = Math.min(sub.billingDay, daysInMonth);

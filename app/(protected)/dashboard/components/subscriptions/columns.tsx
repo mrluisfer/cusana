@@ -37,6 +37,7 @@ export type Subscription = {
   currency: string;
   billingCycle: "monthly" | "yearly";
   billingDay: number;
+  billingMonth?: number | null;
   createdAt: string | Date;
   nextBillingDate?: Date;
 };
@@ -185,6 +186,7 @@ export const subscriptionsColumns: ColumnDef<Subscription>[] = [
         billingDay: row.original.billingDay,
         billingCycle: row.original.billingCycle,
         createdAt: row.original.createdAt,
+        billingMonth: row.original.billingMonth,
       });
       const isUrgent =
         nextBilling === "Hoy" ||

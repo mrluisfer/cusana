@@ -68,11 +68,13 @@ export function UpcomingPayments() {
         billingDay: a.billingDay,
         billingCycle: a.billingCycle,
         createdAt: a.createdAt,
+        billingMonth: a.billingMonth,
       });
       const nextB = getNextBillingDateFull({
         billingDay: b.billingDay,
         billingCycle: b.billingCycle,
         createdAt: b.createdAt,
+        billingMonth: b.billingMonth,
       });
       return nextA.getTime() - nextB.getTime();
     })
@@ -83,6 +85,7 @@ export function UpcomingPayments() {
       billingDay: sub.billingDay,
       billingCycle: sub.billingCycle,
       createdAt: sub.createdAt,
+      billingMonth: sub.billingMonth,
     });
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -138,6 +141,7 @@ export function UpcomingPayments() {
                         billingDay: subscription.billingDay,
                         billingCycle: subscription.billingCycle,
                         createdAt: subscription.createdAt,
+                        billingMonth: subscription.billingMonth,
                       })}
                     </p>
                   </div>

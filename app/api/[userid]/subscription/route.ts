@@ -48,6 +48,7 @@ export async function POST(
     currency: body.currency,
     billingCycle: body.billingCycle,
     billingDay: body.billingDay,
+    billingMonth: body.billingMonth ?? null,
     userId: userid,
   });
 

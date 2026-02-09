@@ -10,6 +10,7 @@ type ExportableSubscription = {
   currency: string;
   billingCycle: "monthly" | "yearly";
   billingDay: number;
+  billingMonth?: number | null;
   createdAt: string | Date;
 };
 
@@ -48,6 +49,7 @@ function toExportRows(subscriptions: ExportableSubscription[]): ExportRow[] {
       billingDay: sub.billingDay,
       billingCycle: sub.billingCycle,
       createdAt: sub.createdAt,
+      billingMonth: sub.billingMonth,
     }),
   }));
 }

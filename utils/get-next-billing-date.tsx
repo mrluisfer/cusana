@@ -4,6 +4,7 @@ interface BillingDateOptions {
   billingDay: number;
   billingCycle: BillingCycle;
   createdAt: string | Date;
+  billingMonth?: number | null;
 }
 
 /**
@@ -16,6 +17,7 @@ export function getNextBillingDateFull({
   billingDay,
   billingCycle,
   createdAt,
+  billingMonth,
 }: BillingDateOptions): Date {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -25,15 +27,17 @@ export function getNextBillingDateFull({
   const currentYear = today.getFullYear();
 
   if (billingCycle === "yearly") {
-    const created = new Date(createdAt);
-    const billingMonth = created.getMonth();
+    // Use explicit billingMonth (1-12) if provided, otherwise fallback to createdAt month
+    const resolvedMonth = billingMonth
+      ? billingMonth - 1 // Convert 1-12 to 0-11
+      : new Date(createdAt).getMonth();
 
     // This year's anniversary
-    let nextDate = new Date(currentYear, billingMonth, billingDay);
+    let nextDate = new Date(currentYear, resolvedMonth, billingDay);
 
     // If it already passed this year, go to next year
     if (nextDate.getTime() < today.getTime()) {
-      nextDate = new Date(currentYear + 1, billingMonth, billingDay);
+      nextDate = new Date(currentYear + 1, resolvedMonth, billingDay);
     }
 
     return nextDate;

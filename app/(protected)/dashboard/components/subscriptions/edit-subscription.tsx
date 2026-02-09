@@ -1,26 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useId } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
+import { useId, useMemo } from "react";
 
-import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Sheet,
   SheetClose,
@@ -30,50 +12,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { allowedPlatformsArray } from "@/constants/allowed-platforms";
-import {
-  billingCycleArray,
-  billingCycleLabels,
-} from "@/constants/billing-cycle";
-import { currencyArray, currencySymbols } from "@/constants/currency";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, SaveIcon } from "lucide-react";
 import type { Subscription } from "./columns";
-
-const editSchema = z.object({
-  name: z
-    .string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "El nombre no puede exceder 100 caracteres"),
-  platform: z.enum(allowedPlatformsArray, {
-    message: "Selecciona una plataforma",
-  }),
-  price: z
-    .string()
-    .min(1, "El precio es requerido")
-    .refine((val) => !Number.isNaN(Number(val)) && Number(val) > 0, {
-      message: "El precio debe ser mayor a 0",
-    }),
-  currency: z.enum(currencyArray, {
-    message: "Selecciona una moneda",
-  }),
-  billingCycle: z.enum(billingCycleArray, {
-    message: "Selecciona un ciclo",
-  }),
-  billingDay: z
-    .string()
-    .min(1, "El día es requerido")
-    .refine(
-      (val) => {
-        const num = Number(val);
-        return !Number.isNaN(num) && num >= 1 && num <= 31;
-      },
-      { message: "Día debe ser entre 1 y 31" },
-    ),
-});
-
-type EditFormValues = z.infer<typeof editSchema>;
+import {
+  SubscriptionForm,
+  type SubscriptionFormValues,
+} from "./subscription-form";
 
 async function updateSubscriptionApi(
   userId: string,
@@ -107,32 +53,20 @@ export function EditSubscription({
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const form = useForm<EditFormValues>({
-    resolver: zodResolver(editSchema),
-    mode: "onTouched",
-    defaultValues: {
+  const defaultValues = useMemo<SubscriptionFormValues>(
+    () => ({
       name: subscription.name,
-      platform: subscription.platform as EditFormValues["platform"],
+      platform: subscription.platform as SubscriptionFormValues["platform"],
       price: String(subscription.price),
-      currency: subscription.currency as EditFormValues["currency"],
+      currency: subscription.currency as SubscriptionFormValues["currency"],
       billingCycle: subscription.billingCycle,
       billingDay: String(subscription.billingDay),
-    },
-  });
-
-  // Reset form when subscription changes
-  useEffect(() => {
-    if (open) {
-      form.reset({
-        name: subscription.name,
-        platform: subscription.platform as EditFormValues["platform"],
-        price: String(subscription.price),
-        currency: subscription.currency as EditFormValues["currency"],
-        billingCycle: subscription.billingCycle,
-        billingDay: String(subscription.billingDay),
-      });
-    }
-  }, [subscription, open, form]);
+      billingMonth: subscription.billingMonth
+        ? String(subscription.billingMonth)
+        : undefined,
+    }),
+    [subscription],
+  );
 
   const mutation = useMutation({
     mutationFn: (payload: { id: string } & Record<string, unknown>) =>
@@ -143,7 +77,7 @@ export function EditSubscription({
     },
   });
 
-  const onSubmit = (data: EditFormValues) => {
+  const onSubmit = (data: SubscriptionFormValues) => {
     mutation.mutate({
       id: subscription.id,
       name: data.name.trim(),
@@ -152,13 +86,9 @@ export function EditSubscription({
       currency: data.currency,
       billingCycle: data.billingCycle,
       billingDay: Number(data.billingDay),
+      billingMonth: data.billingMonth ? Number(data.billingMonth) : null,
     });
   };
-
-  const selectedCurrency = useWatch({
-    control: form.control,
-    name: "currency",
-  });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChangeAction}>
@@ -171,172 +101,12 @@ export function EditSubscription({
           </SheetDescription>
         </SheetHeader>
 
-        <form
-          id={formId}
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex-1 overflow-y-auto"
-        >
-          <FieldGroup className="space-y-5 p-6">
-            {/* Nombre */}
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Nombre del servicio
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="text"
-                    placeholder="Ej: Netflix Premium"
-                    autoComplete="off"
-                  />
-                  {fieldState.error && (
-                    <FieldError>{fieldState.error.message}</FieldError>
-                  )}
-                </Field>
-              )}
-            />
-
-            {/* Plataforma */}
-            <Controller
-              name="platform"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Plataforma</FieldLabel>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id={field.name} className="w-full">
-                      <SelectValue placeholder="Selecciona una plataforma" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allowedPlatformsArray.map((platform) => (
-                        <SelectItem key={platform} value={platform}>
-                          <div className="flex items-center gap-2">
-                            <ServiceIcon service={platform} size="sm" />
-                            <span className="capitalize">{platform}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {fieldState.error && (
-                    <FieldError>{fieldState.error.message}</FieldError>
-                  )}
-                </Field>
-              )}
-            />
-
-            {/* Precio y Moneda */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_120px]">
-              <Controller
-                name="price"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Precio</FieldLabel>
-                    <div className="relative">
-                      <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm">
-                        {currencySymbols[selectedCurrency]}
-                      </span>
-                      <Input
-                        {...field}
-                        id={field.name}
-                        type="text"
-                        inputMode="decimal"
-                        placeholder="0.00"
-                        className="pl-8"
-                        autoComplete="off"
-                      />
-                    </div>
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="currency"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Moneda</FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id={field.name} className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {currencyArray.map((currency) => (
-                          <SelectItem key={currency} value={currency}>
-                            <span className="font-mono">
-                              {currencySymbols[currency]}
-                            </span>{" "}
-                            {currency}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-            </div>
-
-            {/* Ciclo y Día */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Controller
-                name="billingCycle"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Ciclo</FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id={field.name} className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {billingCycleArray.map((cycle) => (
-                          <SelectItem key={cycle} value={cycle}>
-                            {billingCycleLabels[cycle]}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="billingDay"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Día de cobro</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="1-31"
-                      autoComplete="off"
-                    />
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-            </div>
-          </FieldGroup>
-        </form>
+        <SubscriptionForm
+          formId={formId}
+          defaultValues={defaultValues}
+          onSubmitAction={onSubmit}
+          resetKey={open ? subscription.id : null}
+        />
 
         <SheetFooter className="border-t px-6 py-4">
           <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:justify-end">
