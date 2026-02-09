@@ -22,10 +22,7 @@ function MessageBubble({
 
   return (
     <div
-      className={cn(
-        "flex gap-2.5",
-        isUser ? "flex-row-reverse" : "flex-row",
-      )}
+      className={cn("flex gap-2.5", isUser ? "flex-row-reverse" : "flex-row")}
     >
       <div
         className={cn(
@@ -64,10 +61,7 @@ function MessageBubble({
   );
 }
 
-export function AiChatMessages({
-  messages,
-  isStreaming,
-}: AiChatMessagesProps) {
+export function AiChatMessages({ messages, isStreaming }: AiChatMessagesProps) {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,7 +92,9 @@ export function AiChatMessages({
           key={message.id}
           message={message}
           isStreaming={
-            isStreaming && index === messages.length - 1 && message.role === "assistant"
+            isStreaming &&
+            index === messages.length - 1 &&
+            message.role === "assistant"
           }
         />
       ))}
