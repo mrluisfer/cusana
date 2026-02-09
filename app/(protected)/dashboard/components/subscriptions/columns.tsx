@@ -62,7 +62,7 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
-            <Button variant="ghost" className="size-8 p-0">
+            <Button variant="outline" className="size-8 p-0">
               <span className="sr-only">Abrir menú</span>
               <MoreHorizontal className="size-4" />
             </Button>
