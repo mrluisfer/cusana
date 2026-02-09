@@ -6,7 +6,7 @@ type CardHeaderIconProps = {
 export const CardHeaderIcon = ({ icon }: CardHeaderIconProps) => {
   const Icon = icon;
   return (
-    <div className="bg-primary/10 flex h-7 w-7 items-center justify-center">
+    <div className="bg-primary/10 flex h-7 w-7 items-center justify-center rounded-md">
       <Icon className="text-primary h-4 w-4" />
     </div>
   );
