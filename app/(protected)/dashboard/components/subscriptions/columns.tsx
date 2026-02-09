@@ -38,6 +38,7 @@ export type Subscription = {
   billingCycle: "monthly" | "yearly";
   billingDay: number;
   billingMonth?: number | null;
+  active: boolean;
   createdAt: string | Date;
   nextBillingDate?: Date;
 };

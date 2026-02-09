@@ -1,5 +1,6 @@
 "use client";
 
+import { defaultFilters, filtersAtom } from "@/atoms";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,8 +12,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useAtom } from "jotai";
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import {
   Table,
@@ -25,6 +27,7 @@ import {
 
 import { AiChatButton } from "@/components/ai-chat/ai-chat-button";
 import { RefetchButton } from "@/components/dashboard/refetch-button";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
@@ -37,10 +40,14 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  FilterIcon,
   SearchIcon,
+  XIcon,
 } from "lucide-react";
 import { AddSubscription } from "./actions/add-subscription";
 import { ExportData } from "./actions/export-data";
+import { FilterSubscriptions } from "./actions/filter-subscriptions";
+import { Separator } from "@/components/ui/separator";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,11 +64,51 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [filters, setFilters] = useAtom(filtersAtom);
+
+  const filteredData = useMemo(() => {
+    const hasFilters =
+      filters.billingCycle.length > 0 ||
+      filters.currency.length > 0 ||
+      filters.active.length > 0;
+
+    if (!hasFilters) return data;
+
+    return data.filter((item) => {
+      const row = item as Record<string, unknown>;
+
+      if (
+        filters.billingCycle.length > 0 &&
+        !filters.billingCycle.includes(row.billingCycle as "monthly" | "yearly")
+      ) {
+        return false;
+      }
+
+      if (
+        filters.currency.length > 0 &&
+        !filters.currency.includes(
+          row.currency as (typeof filters.currency)[number],
+        )
+      ) {
+        return false;
+      }
+
+      if (filters.active.length > 0) {
+        const isActive = row.active !== false;
+        const matchesActive =
+          (filters.active.includes("active") && isActive) ||
+          (filters.active.includes("inactive") && !isActive);
+        if (!matchesActive) return false;
+      }
+
+      return true;
+    });
+  }, [data, filters]);
 
   // TanStack Table isn't compatible with React Compiler memoization.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -96,35 +143,80 @@ export function DataTable<TData, TValue>({
     [table],
   );
 
+  const activeFilterCount =
+    filters.billingCycle.length +
+    filters.currency.length +
+    filters.active.length;
+
   return (
     <div className="space-y-4">
-      <div className="grid items-end gap-4 py-4 md:grid-cols-[minmax(0,1fr)_auto]">
-        <Field className="w-full min-w-0 md:max-w-sm">
-          <FieldLabel htmlFor="input-group-url">Buscar suscripción</FieldLabel>
-          <InputGroup>
-            <InputGroupAddon align="inline-start">
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              id="input-group-url"
-              placeholder="Filtra subscripciones..."
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={handleFilterChange}
-            />
-          </InputGroup>
-        </Field>
+      {/* Toolbar */}
+      <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-end sm:justify-between">
+        {/* Left: Search + Filter */}
+        <div className="flex items-end gap-2">
+          <Field className="min-w-0 flex-1 sm:w-64 sm:flex-none">
+            <FieldLabel htmlFor="input-group-url">
+              Buscar suscripción
+            </FieldLabel>
+            <InputGroup>
+              <InputGroupAddon align="inline-start">
+                <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupInput
+                id="input-group-url"
+                placeholder="Buscar..."
+                value={
+                  (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                }
+                onChange={handleFilterChange}
+              />
+            </InputGroup>
+          </Field>
+          <FilterSubscriptions
+            onlyIcon
+            triggerProps={{
+              variant: activeFilterCount > 0 ? "default" : "outline",
+              size: "icon",
+              className: "shrink-0",
+            }}
+          />
+        </div>
 
-        <div className="flex flex-wrap items-center gap-2 md:justify-end">
+        {/* Right: Secondary actions (icon-only) + Primary CTA */}
+        <div className="flex items-center gap-1.5">
           <RefetchButton />
           <ExportData />
-          <AiChatButton />
-          <div className="w-full sm:w-auto">
-            <AddSubscription />
-          </div>
+          <AiChatButton triggerClassName="text-primary hover:text-white hover:bg-primary hover:shadow-md hover:shadow-primary/50" />
+          <Separator
+            orientation="vertical"
+            className="mx-1 hidden h-6 w-px sm:block"
+          />
+          <AddSubscription />
         </div>
       </div>
+
+      {/* Active filters indicator */}
+      {activeFilterCount > 0 && (
+        <div className="flex items-center gap-2">
+          <p className="text-muted-foreground text-xs">
+            {table.getFilteredRowModel().rows.length} resultado
+            {table.getFilteredRowModel().rows.length !== 1 ? "s" : ""}
+          </p>
+          <button
+            onClick={() =>
+              setFilters({
+                billingCycle: [],
+                currency: [],
+                active: [],
+              })
+            }
+            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+          >
+            <XIcon className="size-3" />
+            Limpiar filtros
+          </button>
+        </div>
+      )}
       {/* Tabla - FIX: Removido overflow-hidden, agregado rounded-md */}
       <div className="border-border bg-card/50 rounded-md border backdrop-blur-sm">
         <Table>

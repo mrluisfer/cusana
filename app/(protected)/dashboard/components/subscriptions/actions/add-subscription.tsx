@@ -24,9 +24,6 @@ import {
   type SubscriptionFormValues,
 } from "../subscription-form";
 
-// ============================================
-// Valores por defecto
-// ============================================
 const defaultValues: SubscriptionFormValues = {
   name: "",
   platform: AllowedPlatforms.NETFLIX,
@@ -49,9 +46,13 @@ type SubscriptionPayload = {
 
 type AddSubscriptionProps = {
   triggerProps?: React.ComponentPropsWithoutRef<typeof Button>;
+  label?: string;
 };
 
-export const AddSubscription = ({ triggerProps }: AddSubscriptionProps) => {
+export const AddSubscription = ({
+  triggerProps,
+  label,
+}: AddSubscriptionProps) => {
   const formId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,9 +112,15 @@ export const AddSubscription = ({ triggerProps }: AddSubscriptionProps) => {
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger render={<Button {...triggerProps} />}>
-        <PlusIcon className="mr-2 size-4" />
-        <span className="hidden sm:inline">Agregar suscripción</span>
-        <span className="sm:hidden">Agregar</span>
+        <PlusIcon />
+        {label?.length ? (
+          label
+        ) : (
+          <>
+            <span className="hidden sm:inline">Agregar suscripción</span>
+            <span className="sm:hidden">Agregar</span>
+          </>
+        )}
       </SheetTrigger>
 
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">

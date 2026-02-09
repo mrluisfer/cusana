@@ -52,19 +52,15 @@ export function ExportData() {
   );
 
   const triggerButton = (
-    <Button
-      variant="outline"
-      className="w-full sm:w-auto"
-      disabled={isDisabled}
-    >
+    <Button variant="ghost" size="icon" disabled={isDisabled}>
       {isPending ? (
-        <Loader2Icon className="mr-2 size-4 animate-spin" />
+        <Loader2Icon className="size-4 animate-spin" />
       ) : isError ? (
-        <AlertCircleIcon className="mr-2 size-4" />
+        <AlertCircleIcon className="size-4" />
       ) : (
-        <DownloadIcon className="mr-2 size-4" />
+        <DownloadIcon className="size-4" />
       )}
-      Exportar
+      <span className="sr-only">Exportar</span>
     </Button>
   );
 
@@ -72,9 +68,7 @@ export function ExportData() {
   if (isError) {
     return (
       <Tooltip>
-        <TooltipTrigger className="w-full sm:w-auto">
-          {triggerButton}
-        </TooltipTrigger>
+        <TooltipTrigger>{triggerButton}</TooltipTrigger>
         <TooltipContent>No se pudieron cargar los datos</TooltipContent>
       </Tooltip>
     );
@@ -82,7 +76,12 @@ export function ExportData() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={triggerButton} />
+      <Tooltip>
+        <TooltipTrigger
+          render={<DropdownMenuTrigger render={triggerButton} />}
+        />
+        <TooltipContent>Exportar datos</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuGroup>
           <DropdownMenuLabel>

@@ -273,7 +273,7 @@ export function SpendingDistribution() {
                   >
                     <ItemMedia variant="icon">
                       <div
-                        className="flex h-8 w-8 items-center justify-center"
+                        className="flex h-8 w-8 items-center justify-center rounded-md"
                         style={{ backgroundColor: `${color}1F` }}
                       >
                         {service ? (
