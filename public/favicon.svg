@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Gradiente índigo sutil -->
+    <linearGradient id="indigoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5"/>
+      <stop offset="100%" style="stop-color:#3730A3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Círculo de fondo -->
+  <circle cx="50" cy="50" r="48" fill="url(#indigoGradient)"/>
+
+  <!-- Flor de 5 pétalos - elipses más redondeadas -->
+  <!-- Pétalo superior -->
+  <ellipse cx="50" cy="32" rx="10" ry="14" fill="white" opacity="0.95"/>
+
+  <!-- Pétalo superior derecho -->
+  <ellipse cx="50" cy="32" rx="10" ry="14" fill="white" opacity="0.9" transform="rotate(72 50 50)"/>
+
+  <!-- Pétalo inferior derecho -->
+  <ellipse cx="50" cy="32" rx="10" ry="14" fill="white" opacity="0.85" transform="rotate(144 50 50)"/>
+
+  <!-- Pétalo inferior izquierdo -->
+  <ellipse cx="50" cy="32" rx="10" ry="14" fill="white" opacity="0.85" transform="rotate(216 50 50)"/>
+
+  <!-- Pétalo superior izquierdo -->
+  <ellipse cx="50" cy="32" rx="10" ry="14" fill="white" opacity="0.9" transform="rotate(288 50 50)"/>
+
+  <!-- Centro de la flor -->
+  <circle cx="50" cy="50" r="11" fill="white"/>
+
+  <!-- Punto central índigo -->
+  <circle cx="50" cy="50" r="5" fill="url(#indigoGradient)"/>
+</svg>

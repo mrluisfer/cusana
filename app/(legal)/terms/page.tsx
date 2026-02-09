@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
-  title: "Términos de Servicio — Cusana",
+  title: "Términos de Servicio",
   description:
     "Términos y condiciones de uso de la plataforma Cusana para el seguimiento de suscripciones.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 function Section({

@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad — Cusana",
+  title: "Política de Privacidad",
   description:
     "Política de privacidad de Cusana. Conoce cómo recopilamos, usamos y protegemos tus datos.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 function Section({
