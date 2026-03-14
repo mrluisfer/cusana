@@ -1,47 +1,24 @@
 "use client";
 
-import { CardHeaderIcon } from "@/components/card-header-icon";
-import { Badge } from "@/components/ui/badge";
+import { ServiceIcon } from "@/components/dashboard/service-icon";
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { billingCycleLabels } from "@/constants/billing-cycle";
 import { currencySymbols } from "@/constants/currency";
+import { serviceIcons, type ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import {
-  CalendarDaysIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CircleAlertIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
-const WEEK_DAYS = ["D", "L", "M", "Mi", "J", "V", "S"] as const;
-const WEEK_DAYS_FULL = [
-  "Domingo",
-  "Lunes",
-  "Martes",
-  "Miércoles",
-  "Jueves",
-  "Viernes",
-  "Sábado",
-] as const;
+const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -55,67 +32,91 @@ async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
 function CalendarSkeleton() {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
         {Array.from({ length: 7 }).map((_, i) => (
-          <Skeleton key={`header-${i}`} className="h-6 w-full" />
+          <Skeleton key={`h-${i}`} className="h-8 w-full rounded-lg" />
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
         {Array.from({ length: 35 }).map((_, i) => (
-          <Skeleton key={`day-${i}`} className="h-9 w-full" />
+          <Skeleton key={`d-${i}`} className="aspect-square w-full rounded-2xl" />
         ))}
       </div>
     </div>
   );
 }
 
-function DayTooltipContent({
+function DayPopoverContent({
   day,
   payments,
-  isToday,
+  monthName,
+  dayOfWeek,
 }: {
   day: number;
   payments: Subscription[];
-  isToday: boolean;
+  monthName: string;
+  dayOfWeek: string;
 }) {
+  const total = payments.reduce(
+    (sum, p) => sum + (Number.parseFloat(String(p.price)) || 0),
+    0,
+  );
+
   return (
-    <div className="max-w-56 space-y-2">
-      <div className="flex items-center justify-between gap-2">
-        <p className="font-medium">
-          Día {day}
-          {isToday && (
-            <span className="ml-1.5 text-[10px] font-normal text-white">
-              (hoy)
-            </span>
-          )}
-        </p>
-        <Badge variant="destructive" className="h-4 px-1 text-[10px]">
-          {payments.length} cobro{payments.length > 1 ? "s" : ""}
-        </Badge>
-      </div>
-      <Separator />
-      <ul className="space-y-1.5">
+    <div className="w-full space-y-2.5 p-0.5">
+      <p className="text-sm">
+        <span className="font-semibold capitalize">
+          {monthName} {day},
+        </span>{" "}
+        <span className="text-muted-foreground capitalize">{dayOfWeek}</span>
+      </p>
+
+      <div className="space-y-0.5">
         {payments.map((payment) => {
           const price = Number.parseFloat(String(payment.price)) || 0;
           const symbol = currencySymbols[payment.currency] ?? "$";
+          const platform = payment.platform as ServiceKey;
 
           return (
-            <li key={payment.id} className="flex items-center gap-2 capitalize">
-              <span className="flex-1 truncate text-xs">{payment.name}</span>
-              <span className="font-mono text-xs font-medium tabular-nums">
+            <div
+              key={payment.id}
+              className="flex items-center gap-3 rounded-lg p-1.5"
+            >
+              <ServiceIcon service={platform} size="xs" className="shrink-0" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium capitalize">
+                  {payment.name}
+                </p>
+                <p className="text-muted-foreground text-[11px]">
+                  {billingCycleLabels[payment.billingCycle]}
+                </p>
+              </div>
+              <span className="font-mono text-sm font-semibold tabular-nums">
                 {symbol}
                 {price.toLocaleString("es-MX", {
-                  minimumFractionDigits: 0,
+                  minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
-                <span className="ms-0.5 font-mono text-xs">
-                  {payment.currency}
-                </span>
               </span>
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
+
+      {payments.length > 1 && (
+        <div className="border-border border-t border-dashed pt-2.5">
+          <div className="flex items-center justify-between px-1.5">
+            <span className="text-muted-foreground text-sm">Total:</span>
+            <span className="font-mono text-sm font-bold tabular-nums">
+              $
+              {total.toLocaleString("es-MX", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -125,9 +126,18 @@ type CalendarDayProps = {
   isToday: boolean;
   isPast: boolean;
   payments: Subscription[];
+  monthName: string;
+  dayOfWeek: string;
 };
 
-function CalendarDay({ day, isToday, isPast, payments }: CalendarDayProps) {
+function CalendarDay({
+  day,
+  isToday,
+  isPast,
+  payments,
+  monthName,
+  dayOfWeek,
+}: CalendarDayProps) {
   const hasPayments = payments.length > 0;
 
   const dayElement = (
@@ -136,29 +146,38 @@ function CalendarDay({ day, isToday, isPast, payments }: CalendarDayProps) {
       aria-label={`Día ${day}${isToday ? ", hoy" : ""}${hasPayments ? `, ${payments.length} cobro${payments.length > 1 ? "s" : ""}` : ""}`}
       aria-current={isToday ? "date" : undefined}
       className={cn(
-        "relative flex h-9 items-center justify-center text-xs tabular-nums transition-colors select-none",
-        isToday && "bg-primary text-primary-foreground font-bold",
-        !isToday &&
-          hasPayments &&
-          "bg-destructive/10 text-destructive cursor-pointer font-medium",
-        !isToday && !hasPayments && isPast && "text-muted-foreground/40",
-        !isToday && !hasPayments && !isPast && "text-foreground",
-        hasPayments && !isToday && "hover:bg-destructive/15",
+        "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
+        isToday && "ring-primary text-primary ring-2 font-bold",
+        !isToday && hasPayments && "bg-muted/50 cursor-pointer hover:bg-muted",
+        !isToday && !hasPayments && isPast && "text-muted-foreground/30",
+        !isToday && !hasPayments && !isPast && "text-muted-foreground/60",
       )}
     >
-      {day}
-      {hasPayments && (
-        <span
-          className={cn(
-            "absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center text-[8px] font-bold",
-            isToday
-              ? "bg-primary-foreground text-primary"
-              : "bg-destructive text-destructive-foreground",
+      {hasPayments && !isToday ? (
+        <>
+          <div className="flex items-center justify-center gap-0.5">
+            {payments.slice(0, 3).map((payment) => {
+              const platform = payment.platform as ServiceKey;
+              const config = serviceIcons[platform];
+              if (!config) return null;
+              return (
+                <config.icon
+                  key={payment.id}
+                  className="size-3.5 sm:size-4"
+                  style={{ color: config.color }}
+                />
+              );
+            })}
+          </div>
+          <span className="text-foreground/70 mt-0.5 text-[10px] tabular-nums">
+            {day}
+          </span>
+          {payments.some((p) => p.billingCycle === "monthly") && (
+            <span className="bg-foreground/40 absolute bottom-1.5 h-1 w-1 rounded-full" />
           )}
-          aria-hidden="true"
-        >
-          {payments.length}
-        </span>
+        </>
+      ) : (
+        <span className="tabular-nums">{day}</span>
       )}
     </div>
   );
@@ -166,12 +185,17 @@ function CalendarDay({ day, isToday, isPast, payments }: CalendarDayProps) {
   if (!hasPayments) return dayElement;
 
   return (
-    <Tooltip>
-      <TooltipTrigger className="outline-none">{dayElement}</TooltipTrigger>
-      <TooltipContent side="top" sideOffset={6}>
-        <DayTooltipContent day={day} payments={payments} isToday={isToday} />
-      </TooltipContent>
-    </Tooltip>
+    <Popover>
+      <PopoverTrigger className="outline-none">{dayElement}</PopoverTrigger>
+      <PopoverContent side="bottom" sideOffset={6} className="w-72">
+        <DayPopoverContent
+          day={day}
+          payments={payments}
+          monthName={monthName}
+          dayOfWeek={dayOfWeek}
+        />
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -188,8 +212,7 @@ export function BillingCalendar() {
 
   const now = useMemo(() => new Date(), []);
   const viewDate = useMemo(() => {
-    const d = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
-    return d;
+    return new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
   }, [now, monthOffset]);
 
   const isCurrentMonth = monthOffset === 0;
@@ -201,22 +224,19 @@ export function BillingCalendar() {
     0,
   ).getDate();
 
-  const firstDayOfMonth = viewDate.getDay();
+  const firstDayOfMonth = (viewDate.getDay() + 6) % 7;
 
-  const monthLabel = viewDate.toLocaleDateString("es-MX", {
-    month: "long",
-    year: "numeric",
-  });
+  const monthName = viewDate.toLocaleDateString("es-MX", { month: "long" });
+  const yearLabel = viewDate.getFullYear();
 
   const billingDays = useMemo(() => {
     const map = new Map<number, Subscription[]>();
     const viewMonth = viewDate.getMonth();
 
     subscriptions?.forEach((sub) => {
-      // For yearly subscriptions, only show in the correct month
       if (sub.billingCycle === "yearly") {
         const resolvedMonth = sub.billingMonth
-          ? sub.billingMonth - 1 // Convert 1-12 to 0-11
+          ? sub.billingMonth - 1
           : new Date(sub.createdAt).getMonth();
         if (resolvedMonth !== viewMonth) return;
       }
@@ -228,160 +248,107 @@ export function BillingCalendar() {
     return map;
   }, [subscriptions, daysInMonth, viewDate]);
 
-  const totalPaymentsThisMonth = useMemo(() => {
-    let total = 0;
-    for (const payments of billingDays.values()) {
-      total += payments.length;
-    }
-    return total;
-  }, [billingDays]);
+  const getDayOfWeek = (day: number) => {
+    const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
+    return date.toLocaleDateString("es-MX", { weekday: "long" });
+  };
 
-  const nextPaymentDay = useMemo(() => {
-    if (!isCurrentMonth) return null;
-    const todayDate = now.getDate();
-    let closest: number | null = null;
-
-    for (const day of billingDays.keys()) {
-      if (day > todayDate) {
-        if (closest === null || day < closest) {
-          closest = day;
-        }
-      }
-    }
-    return closest;
-  }, [billingDays, isCurrentMonth, now]);
+  const currentDayOfWeekIndex = ((now.getDay() + 6) % 7);
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CardHeaderIcon icon={CalendarDaysIcon} />
-          Calendario de Cobros
-        </CardTitle>
-        <CardDescription>
-          {isPending ? (
-            <Skeleton className="h-3 w-32" />
-          ) : nextPaymentDay && isCurrentMonth ? (
-            <span className="flex items-center gap-1">
-              <CircleAlertIcon className="text-destructive h-3 w-3" />
-              Próximo cobro el día {nextPaymentDay}
-            </span>
-          ) : (
-            "Visualiza tus cobros programados"
-          )}
-        </CardDescription>
-        <CardAction>
-          <Badge variant="outline" className="text-xs tabular-nums">
-            {totalPaymentsThisMonth} cobro
-            {totalPaymentsThisMonth !== 1 ? "s" : ""}
-          </Badge>
-        </CardAction>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
-        {/* Navegación de mes */}
-        <div className="flex items-center justify-between">
+    <div className="space-y-4">
+      {/* Navigation */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setMonthOffset((prev) => prev - 1)}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-7 w-7 items-center justify-center transition-colors"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-xl transition-colors"
             aria-label="Mes anterior"
           >
             <ChevronLeftIcon className="h-4 w-4" />
           </button>
-          <span className="text-sm font-medium capitalize">{monthLabel}</span>
+          <h2 className="text-lg font-semibold tracking-tight">
+            <span className="capitalize">{monthName}</span>{" "}
+            <span className="text-muted-foreground font-normal">
+              {yearLabel}
+            </span>
+          </h2>
           <button
             type="button"
             onClick={() => setMonthOffset((prev) => prev + 1)}
             disabled={monthOffset >= 2}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-7 w-7 items-center justify-center transition-colors disabled:pointer-events-none disabled:opacity-30"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-xl transition-colors disabled:pointer-events-none disabled:opacity-30"
             aria-label="Mes siguiente"
           >
             <ChevronRightIcon className="h-4 w-4" />
           </button>
         </div>
 
-        {isPending ? (
-          <CalendarSkeleton />
-        ) : (
-          <TooltipProvider delay={150}>
-            <div
-              className="space-y-1"
-              role="grid"
-              aria-label="Calendario de cobros"
-            >
-              {/* Header de días */}
-              <div className="grid grid-cols-7 gap-1" role="row">
-                {WEEK_DAYS.map((day, i) => (
-                  <div
-                    key={day}
-                    role="columnheader"
-                    aria-label={WEEK_DAYS_FULL[i]}
-                    className="text-muted-foreground flex h-7 items-center justify-center text-[11px] font-medium"
-                  >
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              {/* Grilla de días */}
-              <div className="grid grid-cols-7 gap-1" role="row">
-                {/* Celdas vacías */}
-                {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                  <div key={`empty-${i}`} role="gridcell" className="h-9" />
-                ))}
-
-                {/* Días del mes */}
-                {Array.from({ length: daysInMonth }).map((_, i) => {
-                  const day = i + 1;
-                  const payments = billingDays.get(day) ?? [];
-                  const isToday = day === today;
-                  const isPast = isCurrentMonth && day < today;
-
-                  return (
-                    <CalendarDay
-                      key={day}
-                      day={day}
-                      isToday={isToday}
-                      isPast={isPast}
-                      payments={payments}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </TooltipProvider>
+        {!isCurrentMonth && (
+          <button
+            type="button"
+            onClick={() => setMonthOffset(0)}
+            className="text-primary text-xs font-medium hover:underline"
+          >
+            Hoy
+          </button>
         )}
+      </div>
 
-        {/* Leyenda */}
-        <Separator />
+      {isPending ? (
+        <CalendarSkeleton />
+      ) : (
         <div
-          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs"
-          aria-label="Leyenda del calendario"
+          className="space-y-1.5"
+          role="grid"
+          aria-label="Calendario de cobros"
         >
-          <div className="flex items-center gap-1.5">
-            <span
-              className="bg-primary inline-block h-2.5 w-2.5"
-              aria-hidden="true"
-            />
-            <span className="text-muted-foreground">Hoy</span>
+          {/* Day headers */}
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="row">
+            {WEEK_DAYS.map((day, i) => (
+              <div
+                key={day}
+                role="columnheader"
+                className={cn(
+                  "flex h-8 items-center justify-center text-xs font-medium",
+                  isCurrentMonth && i === currentDayOfWeekIndex
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground",
+                )}
+              >
+                {day}
+              </div>
+            ))}
           </div>
-          <div className="flex items-center gap-1.5">
-            <span
-              className="bg-destructive/20 inline-block h-2.5 w-2.5"
-              aria-hidden="true"
-            />
-            <span className="text-muted-foreground">Cobro programado</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span
-              className="bg-muted inline-block h-2.5 w-2.5"
-              aria-hidden="true"
-            />
-            <span className="text-muted-foreground">Día pasado</span>
+
+          {/* Day grid */}
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="row">
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+              <div key={`e-${i}`} role="gridcell" className="aspect-square" />
+            ))}
+
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const payments = billingDays.get(day) ?? [];
+              const isToday = day === today;
+              const isPast = isCurrentMonth && day < today;
+
+              return (
+                <CalendarDay
+                  key={day}
+                  day={day}
+                  isToday={isToday}
+                  isPast={isPast}
+                  payments={payments}
+                  monthName={monthName}
+                  dayOfWeek={getDayOfWeek(day)}
+                />
+              );
+            })}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 }

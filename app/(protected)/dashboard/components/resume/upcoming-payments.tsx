@@ -100,43 +100,39 @@ export function UpcomingPayments() {
 
   return (
     <Card className="h-full">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <CardHeaderIcon icon={CalendarIcon} />
-              Próximos Pagos
-            </CardTitle>
-            <CardDescription className="mt-1">
-              Tus próximos cobros programados
-            </CardDescription>
-          </div>
-          <Badge variant="outline" className="text-xs">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <CardHeaderIcon icon={CalendarIcon} />
+            Próximos Pagos
+          </CardTitle>
+          <Badge variant="outline" className="text-[10px]">
             <ClockIcon className="mr-1 h-3 w-3" />
-            {sortedSubscriptions?.length ?? 0} pendientes
+            {sortedSubscriptions?.length ?? 0}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-1">
+      <CardContent className="space-y-0.5">
         {isPending ? (
           <>
             <UpcomingPaymentSkeleton />
-            <Separator />
             <UpcomingPaymentSkeleton />
-            <Separator />
             <UpcomingPaymentSkeleton />
           </>
         ) : sortedSubscriptions && sortedSubscriptions.length > 0 ? (
           sortedSubscriptions.map((subscription, index) => (
             <div key={subscription.id}>
-              <div className="flex items-center justify-between py-3">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between py-2.5">
+                <div className="flex items-center gap-2.5">
                   <ServiceIcon
                     service={subscription.platform as keyof typeof serviceIcons}
+                    size="xs"
                   />
-                  <div>
-                    <p className="text-sm font-medium">{subscription.name}</p>
-                    <p className="text-muted-foreground text-xs">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">
+                      {subscription.name}
+                    </p>
+                    <p className="text-muted-foreground text-[11px]">
                       {getNextBillingDate({
                         billingDay: subscription.billingDay,
                         billingCycle: subscription.billingCycle,
@@ -146,23 +142,20 @@ export function UpcomingPayments() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant={getUrgencyColor(subscription)}>
-                    {currencySymbols[subscription.currency]}
-                    {(
-                      parseFloat(String(subscription.price)) || 0
-                    ).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
-                  </Badge>
-                </div>
+                <span className="text-foreground font-mono text-sm font-semibold tabular-nums">
+                  {currencySymbols[subscription.currency]}
+                  {(
+                    parseFloat(String(subscription.price)) || 0
+                  ).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
+                </span>
               </div>
               {index < sortedSubscriptions.length - 1 && <Separator />}
             </div>
           ))
         ) : (
-          <div className="text-muted-foreground py-8 text-center">
-            <CalendarIcon className="mx-auto mb-2 h-8 w-8 opacity-50" />
-            <p className="text-sm">No hay pagos próximos</p>
-            <p className="text-xs">Agrega tu primera suscripción</p>
+          <div className="text-muted-foreground py-6 text-center">
+            <CalendarIcon className="mx-auto mb-2 h-6 w-6 opacity-40" />
+            <p className="text-xs">No hay pagos próximos</p>
           </div>
         )}
       </CardContent>

@@ -1,12 +1,9 @@
 "use client";
 
 import { currencyAtom, defaultFilters, filtersAtom } from "@/atoms";
-import { CardHeaderIcon } from "@/components/card-header-icon";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,7 +15,6 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { Kbd } from "@/components/ui/kbd";
 import {
   Select,
   SelectContent,
@@ -28,17 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
-import {
-  ChartLineIcon,
-  ClockIcon,
-  DollarSignIcon,
-  FilterIcon,
-  SettingsIcon,
-  XIcon,
-} from "lucide-react";
+import { DollarSignIcon, FilterIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
 import { FilterSubscriptions } from "../subscriptions/actions/filter-subscriptions";
 
@@ -66,32 +54,17 @@ export function QuickActions() {
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <CardHeaderIcon icon={SettingsIcon} />
-              Acciones Rápidas
-            </CardTitle>
-            <CardDescription className="mt-1">
-              Controles y configuración
-            </CardDescription>
-          </div>
-        </div>
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm">Configuración</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        {/* Selector de moneda */}
-        <Item variant="muted" className="p-3">
+      <CardContent className="space-y-2">
+        <Item variant="muted" className="p-2.5">
           <ItemMedia variant="icon">
-            <DollarSignIcon className="text-primary" />
+            <DollarSignIcon className="text-primary size-4" />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle>Moneda de visualización</ItemTitle>
-            <ItemDescription className="text-xs">
-              Tipos de cambio via{" "}
-              <Kbd className="text-[10px]">api.frankfurter.dev</Kbd>
-            </ItemDescription>
+            <ItemTitle className="text-xs">Moneda</ItemTitle>
           </ItemContent>
           <ItemActions>
             <Select
@@ -99,7 +72,7 @@ export function QuickActions() {
               value={currency}
               onValueChange={onCurrencyChange}
             >
-              <SelectTrigger className="w-25">
+              <SelectTrigger className="h-8 w-24 text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -116,18 +89,17 @@ export function QuickActions() {
           </ItemActions>
         </Item>
 
-        {/* Filtros activos */}
-        <Item variant="muted" className="p-3">
+        <Item variant="muted" className="p-2.5">
           <ItemMedia variant="icon">
-            <FilterIcon className="text-primary" />
+            <FilterIcon className="text-primary size-4" />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle>Filtros</ItemTitle>
-            <ItemDescription className="text-xs">
-              {activeFilterCount > 0
-                ? `${activeFilterCount} filtro${activeFilterCount > 1 ? "s" : ""} activo${activeFilterCount > 1 ? "s" : ""}`
-                : "Sin filtros aplicados"}
-            </ItemDescription>
+            <ItemTitle className="text-xs">Filtros</ItemTitle>
+            {activeFilterCount > 0 && (
+              <ItemDescription className="text-[11px]">
+                {activeFilterCount} activo{activeFilterCount > 1 ? "s" : ""}
+              </ItemDescription>
+            )}
           </ItemContent>
           <ItemActions className="gap-1">
             {activeFilterCount > 0 && (
@@ -136,7 +108,7 @@ export function QuickActions() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Limpiar filtros"
               >
-                <XIcon className="size-4" />
+                <XIcon className="size-3.5" />
               </button>
             )}
             <FilterSubscriptions
@@ -147,23 +119,6 @@ export function QuickActions() {
             />
           </ItemActions>
         </Item>
-
-        <Separator />
-
-        {/* Info adicional */}
-        <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Información
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="text-xs">
-              <ClockIcon /> Actualizado hace 5 min
-            </Badge>
-            <Badge variant="secondary" className="text-xs">
-              <ChartLineIcon /> Datos en tiempo real
-            </Badge>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

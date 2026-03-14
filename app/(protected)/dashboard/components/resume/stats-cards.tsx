@@ -1,15 +1,7 @@
 "use client";
 
 import { currencyAtom } from "@/atoms";
-import { CardHeaderIcon } from "@/components/card-header-icon";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -30,7 +22,6 @@ interface StatsData {
   subscriptionCount: number;
 }
 
-// Función de fetch extraída para evitar closures
 async function fetchStats(
   userId: string,
   currency: string,
@@ -44,13 +35,15 @@ async function fetchStats(
 
 function StatsCardSkeleton() {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <Skeleton className="h-4 w-24" />
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="mb-2 h-8 w-32" />
-        <Skeleton className="h-3 w-20" />
+    <Card className="border-0 shadow-sm">
+      <CardContent className="p-4 sm:p-5">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-9 w-9 rounded-xl" />
+          <div className="space-y-1.5">
+            <Skeleton className="h-3 w-16" />
+            <Skeleton className="h-5 w-24" />
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
@@ -70,7 +63,7 @@ export function StatsCards() {
 
   if (isPending) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatsCardSkeleton />
         <StatsCardSkeleton />
         <StatsCardSkeleton />
@@ -84,83 +77,60 @@ export function StatsCards() {
   const yearlyProjection = Number(data?.yearlyProjection) || total * 12;
   const subscriptionCount = Number(data?.subscriptionCount) || 0;
 
+  const cards = [
+    {
+      title: "Gasto Mensual",
+      value: `${total.toLocaleString("es-MX")} ${currency}`,
+      icon: WalletIcon,
+      accent: "text-primary",
+      bgAccent: "bg-primary/10",
+    },
+    {
+      title: "Promedio Mensual",
+      value: `${monthlyAvg.toLocaleString("es-MX")} ${currency}`,
+      icon: TrendingUpIcon,
+      accent: "text-emerald-500",
+      bgAccent: "bg-emerald-500/10",
+    },
+    {
+      title: "Proyección Anual",
+      value: `${yearlyProjection.toLocaleString("es-MX")} ${currency}`,
+      icon: TrendingDownIcon,
+      accent: "text-orange-500",
+      bgAccent: "bg-orange-500/10",
+    },
+    {
+      title: "Suscripciones Activas",
+      value: `${subscriptionCount}`,
+      icon: CalendarClockIcon,
+      accent: "text-cyan-500",
+      bgAccent: "bg-cyan-500/10",
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-muted-foreground text-sm font-medium">
-            Gasto Mensual
-          </CardTitle>
-          {/* <WalletIcon className="text-muted-foreground h-4 w-4" /> */}
-          <CardHeaderIcon icon={WalletIcon} />
-        </CardHeader>
-        <CardContent>
-          <div className="font-mono text-2xl font-bold">
-            {total.toLocaleString("es-MX")} {currency}
-          </div>
-          <CardDescription className="mt-1 flex items-center gap-1">
-            <Badge variant="secondary" className="text-xs">
-              Total actual
-            </Badge>
-          </CardDescription>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-muted-foreground text-sm font-medium">
-            Promedio Mensual
-          </CardTitle>
-          <CardHeaderIcon icon={TrendingUpIcon} />
-        </CardHeader>
-        <CardContent>
-          <div className="font-mono text-2xl font-bold">
-            {monthlyAvg.toLocaleString("es-MX")} {currency}
-          </div>
-          <CardDescription className="mt-1 flex items-center gap-1">
-            <TrendingUpIcon className="h-3 w-3 text-emerald-500" />
-            <span className="text-xs text-emerald-500">Estable</span>
-          </CardDescription>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-muted-foreground text-sm font-medium">
-            Proyección Anual
-          </CardTitle>
-          <CardHeaderIcon icon={TrendingDownIcon} />
-        </CardHeader>
-        <CardContent>
-          <div className="font-mono text-2xl font-bold">
-            {yearlyProjection.toLocaleString("es-MX")} {currency}
-          </div>
-          <CardDescription className="mt-1 flex items-center gap-1">
-            <Badge variant="outline" className="text-xs">
-              12 meses
-            </Badge>
-          </CardDescription>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-muted-foreground text-sm font-medium">
-            Suscripciones
-          </CardTitle>
-          <CardHeaderIcon icon={CalendarClockIcon} />
-        </CardHeader>
-        <CardContent>
-          <div className="font-mono text-2xl font-bold">
-            {subscriptionCount}
-          </div>
-          <CardDescription className="mt-1 flex items-center gap-1">
-            <Badge variant="default" className="text-xs">
-              Activas
-            </Badge>
-          </CardDescription>
-        </CardContent>
-      </Card>
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {cards.map((card) => (
+        <Card key={card.title} className="border-0 shadow-sm">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${card.bgAccent}`}
+              >
+                <card.icon className={`h-4 w-4 ${card.accent}`} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-muted-foreground truncate text-[11px] font-medium">
+                  {card.title}
+                </p>
+                <p className="truncate font-mono text-lg font-bold tracking-tight">
+                  {card.value}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }

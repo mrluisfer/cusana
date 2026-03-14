@@ -3,17 +3,19 @@ import { cn } from "@/lib/utils";
 
 interface ServiceIconProps {
   service: ServiceKey;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
 }
 
 const sizeClasses = {
+  xs: "size-8 rounded-md",
   sm: "size-10 rounded-lg",
   md: "size-12 rounded-xl",
   lg: "size-14 rounded-2xl",
 };
 
 const iconSizeClasses = {
+  xs: "size-4",
   sm: "size-5",
   md: "size-6",
   lg: "size-7",

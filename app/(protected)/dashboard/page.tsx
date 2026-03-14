@@ -16,8 +16,8 @@ export default async function DashboardPage() {
   return (
     <Container>
       <Header />
-      <SubscriptionTable />
       <SubscriptionResume />
+      <SubscriptionTable />
     </Container>
   );
 }
