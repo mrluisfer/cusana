@@ -95,6 +95,7 @@ type BarProps = {
   month: string;
   amount: number;
   maxAmount: number;
+  averageAmount: number;
   isCurrent: boolean;
   subscriptionCount: number;
   currencySymbol: string;
@@ -105,6 +106,7 @@ function TrendBar({
   month,
   amount,
   maxAmount,
+  averageAmount,
   isCurrent,
   subscriptionCount,
   currencySymbol,
@@ -112,6 +114,8 @@ function TrendBar({
 }: BarProps) {
   const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
   const showInnerLabel = percentage > 35;
+  const isAboveAverage = amount > averageAmount * 1.1;
+  const isZero = amount === 0;
 
   const formattedAmount = amount.toLocaleString("es-MX", {
     maximumFractionDigits: 0,
@@ -136,9 +140,15 @@ function TrendBar({
         <div
           className={cn(
             "flex h-full items-center justify-end pr-2 transition-all duration-500",
-            isCurrent ? "bg-primary" : "bg-primary/40",
+            isZero
+              ? "bg-muted"
+              : isCurrent
+                ? "bg-primary"
+                : isAboveAverage
+                  ? "bg-primary/60"
+                  : "bg-primary/40",
           )}
-          style={{ width: `${Math.max(percentage, 3)}%` }}
+          style={{ width: isZero ? "3%" : `${Math.max(percentage, 3)}%` }}
           role="meter"
           aria-valuenow={amount}
           aria-valuemin={0}
@@ -155,8 +165,7 @@ function TrendBar({
       </div>
       {!showInnerLabel && (
         <span className="text-muted-foreground min-w-12 font-mono text-xs tabular-nums">
-          {currencySymbol}
-          {formattedAmount}
+          {isZero ? "—" : `${currencySymbol}${formattedAmount}`}
         </span>
       )}
     </div>
@@ -175,13 +184,26 @@ function TrendBar({
               </span>
             )}
           </p>
-          <p className="font-mono text-xs tabular-nums">
-            {currencySymbol}
-            {amount.toLocaleString("es-MX", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
+          {isZero ? (
+            <p className="text-muted-foreground text-xs">
+              Sin cobros este mes
+            </p>
+          ) : (
+            <>
+              <p className="font-mono text-xs tabular-nums">
+                {currencySymbol}
+                {amount.toLocaleString("es-MX", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+              {isAboveAverage && (
+                <p className="text-xs text-amber-500">
+                  Por encima del promedio
+                </p>
+              )}
+            </>
+          )}
           <p className="text-muted-foreground text-[10px]">
             {subscriptionCount} suscripción
             {subscriptionCount !== 1 ? "es" : ""} activa
@@ -228,9 +250,10 @@ export function MonthlyTrend() {
   const trend = data?.trend ?? [];
   const maxAmount = Math.max(...trend.map((d) => d.amount), 1);
   const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
+  const average = data?.average ?? 0;
 
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CardHeaderIcon icon={BarChart3Icon} />
@@ -240,7 +263,7 @@ export function MonthlyTrend() {
           {isPending ? (
             <Skeleton className="h-3 w-28" />
           ) : hasData ? (
-            `Últimos ${trend.length} meses en ${selectedCurrency}`
+            `Gasto real por mes en ${selectedCurrency}`
           ) : (
             "Historial de gastos mensuales"
           )}
@@ -269,6 +292,7 @@ export function MonthlyTrend() {
                     month={item.month}
                     amount={item.amount}
                     maxAmount={maxAmount}
+                    averageAmount={average}
                     isCurrent={item.isCurrent}
                     subscriptionCount={item.subscriptionCount}
                     currencySymbol={currencySymbol}

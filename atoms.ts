@@ -3,6 +3,9 @@ import { Currency } from "./constants/currency";
 
 export const currencyAtom = atom<Currency>(Currency.MXN);
 
+// AI Chat panel visibility
+export const aiChatOpenAtom = atom(false);
+
 // Filtros de suscripciones
 export type SubscriptionFilters = {
   billingCycle: ("monthly" | "yearly")[];

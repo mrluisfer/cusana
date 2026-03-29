@@ -17,9 +17,12 @@ import {
 interface StatsData {
   total: number;
   currency: string;
-  monthlyAvg: number;
+  monthlyTotal: number;
+  yearlyTotal: number;
   yearlyProjection: number;
   subscriptionCount: number;
+  monthlySubs: number;
+  yearlySubs: number;
 }
 
 async function fetchStats(
@@ -73,8 +76,8 @@ export function StatsCards() {
   }
 
   const total = Number(data?.total) || 0;
-  const monthlyAvg = Number(data?.monthlyAvg) || total;
-  const yearlyProjection = Number(data?.yearlyProjection) || total * 12;
+  const monthlyTotal = Number(data?.monthlyTotal) || 0;
+  const yearlyProjection = Number(data?.yearlyProjection) || 0;
   const subscriptionCount = Number(data?.subscriptionCount) || 0;
 
   const cards = [
@@ -86,8 +89,8 @@ export function StatsCards() {
       bgAccent: "bg-primary/10",
     },
     {
-      title: "Promedio Mensual",
-      value: `${monthlyAvg.toLocaleString("es-MX")} ${currency}`,
+      title: "Subs. Mensuales",
+      value: `${monthlyTotal.toLocaleString("es-MX")} ${currency}`,
       icon: TrendingUpIcon,
       accent: "text-emerald-500",
       bgAccent: "bg-emerald-500/10",

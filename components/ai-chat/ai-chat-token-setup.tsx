@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { KeyIcon, ShieldCheckIcon } from "lucide-react";
+import { KeyIcon, SaveIcon, ShieldCheckIcon } from "lucide-react";
 import { useState } from "react";
 
 type AiChatTokenSetupProps = {
-  onSaveToken: (token: string) => void;
+  onSaveTokenAction: (token: string) => void;
 };
 
-export function AiChatTokenSetup({ onSaveToken }: AiChatTokenSetupProps) {
+export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
 
@@ -28,7 +28,7 @@ export function AiChatTokenSetup({ onSaveToken }: AiChatTokenSetupProps) {
     }
 
     setError("");
-    onSaveToken(trimmed);
+    onSaveTokenAction(trimmed);
   }
 
   return (
@@ -63,6 +63,7 @@ export function AiChatTokenSetup({ onSaveToken }: AiChatTokenSetupProps) {
         />
         {error && <p className="text-destructive text-xs">{error}</p>}
         <Button type="submit" className="w-full">
+          <SaveIcon />
           Guardar clave
         </Button>
       </form>

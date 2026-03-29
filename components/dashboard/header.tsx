@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "@/lib/auth-client";
 import { Logo } from "../logo";
+import { ThemeToggle } from "../theme-toggle";
 import { UserMenu } from "./user-menu";
 
 export default function Header() {
@@ -25,7 +26,10 @@ export default function Header() {
           </span>
         </p>
       </div>
-      <UserMenu />
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <UserMenu />
+      </div>
     </header>
   );
 }
