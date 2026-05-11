@@ -22,6 +22,23 @@ export enum AllowedPlatforms {
   AMAZON = "amazon",
   HBO = "hbo",
   DISCORD = "discord",
+  ADOBE = "adobe",
+  HULU = "hulu",
+  KICK = "kick",
+  PHOTOSHOP_EXPRESS = "photoshop_express",
+  GEMINI = "gemini",
+  YOUTUBE_MUSIC = "youtube_music",
+  VERCEL = "vercel",
+  DROPBOX = "dropbox",
+  ONEDRIVE = "onedrive",
+  AZURE = "azure",
+  SOUNDCLOUD = "soundcloud",
+  PAYPAL = "paypal",
+  POLAR = "polar",
+  INSTAGRAM = "instagram",
+  LINKEDIN = "linkedin",
+  FACEBOOK = "facebook",
+  MS_OFFICE = "ms_office",
 }
 
 export const allowedPlatformsArray = Object.values(AllowedPlatforms);

@@ -11,4 +11,15 @@ const TIDAL = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export { TIDAL };
+const DarkTIDAL = (props: SVGProps<SVGSVGElement>) => (
+  <svg {...props} version="1.0" viewBox="0 0 1001.000000 667.000000">
+    <g
+      transform="translate(0.000000,667.000000) scale(0.100000,-0.100000)"
+      fill="#ffffff"
+    >
+      <path d="M840 5835 l-835 -835 830 -830 c456 -456 834 -830 840 -830 5 0 383 374 840 830 l830 830 830 -830 830 -830 -835 -835 -835 -835 835 -835 835 -835 835 835 835 835 -833 833 -832 832 833 833 832 832 833 -832 832 -833 835 835 835 835 -835 835 -835 835 -835 -835 -835 -835 -833 833 -832 832 -833 -832 -832 -833 -833 833 -832 832 -835 -835z" />
+    </g>
+  </svg>
+);
+
+export { DarkTIDAL, TIDAL };

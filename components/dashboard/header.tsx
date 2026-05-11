@@ -27,7 +27,7 @@ export default function Header() {
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <ThemeToggle />
+        <ThemeToggle variant="outline" />
         <UserMenu />
       </div>
     </header>

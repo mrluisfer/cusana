@@ -22,22 +22,22 @@ export function AiChatButton({
       <TooltipTrigger
         render={
           <Button
-            variant="ghost"
-            size="icon"
+            variant="default"
+            size="icon-lg"
             onClick={() => setOpen((prev) => !prev)}
-            aria-label={open ? "Cerrar asistente Cusana" : "Abrir asistente Cusana"}
+            aria-label={
+              open ? "Cerrar asistente Cusana" : "Abrir asistente Cusana"
+            }
             className={triggerClassName}
           />
         }
       >
-        {open ? (
-          <XIcon className="size-4" />
-        ) : (
-          <MessageCircleIcon className="size-4" />
-        )}
+        {open ? <XIcon /> : <MessageCircleIcon />}
         <span className="sr-only">CusanaAI</span>
       </TooltipTrigger>
-      <TooltipContent>{open ? "Cerrar CusanaAI" : "Pregunta a CusanaAI"}</TooltipContent>
+      <TooltipContent>
+        {open ? "Cerrar CusanaAI" : "Pregunta a CusanaAI"}
+      </TooltipContent>
     </Tooltip>
   );
 }

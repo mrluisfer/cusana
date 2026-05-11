@@ -15,7 +15,11 @@ function useMounted() {
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({
+  variant = "ghost",
+}: {
+  variant?: "ghost" | "outline";
+}) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
 
@@ -31,7 +35,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="ghost"
+      variant={variant}
       size="icon"
       className="relative"
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}

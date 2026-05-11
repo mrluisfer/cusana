@@ -26,8 +26,8 @@ export const RefetchButton = () => {
       <TooltipTrigger
         render={
           <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="icon-lg"
             onClick={handleRefetch}
             disabled={isFetching}
           />

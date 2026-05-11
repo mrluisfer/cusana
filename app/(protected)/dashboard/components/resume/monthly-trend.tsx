@@ -21,6 +21,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { currencySymbols } from "@/constants/currency";
+import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -238,7 +239,9 @@ export function MonthlyTrend() {
   const selectedCurrency = useAtomValue(currencyAtom);
 
   const { data, isPending } = useQuery<MonthlyTrendResponse>({
-    queryKey: ["monthly-trend", selectedCurrency],
+    // Prefijo `SUBSCRIPTIONS` para que las mutaciones (add/edit/delete) la
+    // invaliden por cascada — sino la tendencia queda stale hasta recargar.
+    queryKey: [QueryKeys.SUBSCRIPTIONS, "monthly-trend", selectedCurrency],
     queryFn: () => fetchMonthlyTrend(session!.user.id, selectedCurrency),
     enabled: !!session?.user.id,
     staleTime: 1000 * 60 * 10,

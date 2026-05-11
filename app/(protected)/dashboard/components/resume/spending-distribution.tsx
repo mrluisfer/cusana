@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ServiceIcon } from "@/components/dashboard/service-icon";
 import {
   Item,
   ItemActions,
@@ -235,7 +236,9 @@ export function SpendingDistribution() {
                         />
                         <TooltipContent side="top">
                           <div className="space-y-1">
-                            <p className="font-medium capitalize">{platform}</p>
+                            <p className="font-medium">
+                              {service?.label ?? platform}
+                            </p>
                             <p className="text-xs">
                               {currencySymbol}
                               {data.convertedTotal.toLocaleString("es-MX", {
@@ -263,8 +266,8 @@ export function SpendingDistribution() {
                     ? (data.convertedTotal / totalSpending) * 100
                     : 0;
                 const isTopSpender = index === 0;
-                const service = getPlatformIcon(platform);
-                const color = service?.color ?? "#64748B";
+                const label =
+                  serviceIcons[platform as ServiceKey]?.label ?? platform;
 
                 return (
                   <Item
@@ -272,25 +275,14 @@ export function SpendingDistribution() {
                     variant={isTopSpender ? "muted" : "default"}
                   >
                     <ItemMedia variant="icon">
-                      <div
-                        className="flex h-8 w-8 items-center justify-center rounded-md"
-                        style={{ backgroundColor: `${color}1F` }}
-                      >
-                        {service ? (
-                          <service.icon className="h-5 w-5" />
-                        ) : (
-                          <span
-                            className="text-xs font-bold uppercase"
-                            style={{ color }}
-                          >
-                            {platform.slice(0, 2)}
-                          </span>
-                        )}
-                      </div>
+                      <ServiceIcon
+                        service={platform as ServiceKey}
+                        size="xs"
+                      />
                     </ItemMedia>
                     <ItemContent>
                       <ItemTitle>
-                        <span className="capitalize">{platform}</span>
+                        <span>{label}</span>
                         {isTopSpender && (
                           <Badge
                             variant="secondary"

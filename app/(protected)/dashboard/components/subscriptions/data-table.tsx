@@ -1,6 +1,6 @@
 "use client";
 
-import { defaultFilters, filtersAtom } from "@/atoms";
+import { filtersAtom } from "@/atoms";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -27,7 +27,6 @@ import {
 
 import { AiChatButton } from "@/components/ai-chat/ai-chat-button";
 import { RefetchButton } from "@/components/dashboard/refetch-button";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
@@ -35,19 +34,18 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  FilterIcon,
   SearchIcon,
   XIcon,
 } from "lucide-react";
 import { AddSubscription } from "./actions/add-subscription";
 import { ExportData } from "./actions/export-data";
 import { FilterSubscriptions } from "./actions/filter-subscriptions";
-import { Separator } from "@/components/ui/separator";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -186,10 +184,10 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center gap-1.5">
           <RefetchButton />
           <ExportData />
-          <AiChatButton triggerClassName="text-primary hover:text-white hover:bg-primary hover:shadow-md hover:shadow-primary/50" />
+          <AiChatButton />
           <Separator
             orientation="vertical"
-            className="mx-1 hidden h-6 w-px sm:block"
+            className="mx-1 hidden h-9 w-px sm:block"
           />
           <AddSubscription />
         </div>

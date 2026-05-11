@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__shadcn__view_items_in_registries",
+      "mcp__shadcn__search_items_in_registries",
+      "Bash(pnpm dlx *)",
+      "Bash(mv hulu.tsx ../../../assets/icons/hulu.tsx)",
+      "Bash(mv huluDark.tsx ../../../assets/icons/hulu-dark.tsx)",
+      "Bash(mv kickLight.tsx ../../../assets/icons/kick.tsx)",
+      "Bash(mv kickDark.tsx ../../../assets/icons/kick-dark.tsx)",
+      "Bash(mv photoshopExpress.tsx ../../../assets/icons/photoshop-express.tsx)",
+      "Bash(pnpm type-check *)",
+      "Bash(grep -oE 'id=\"[a-z0-9_-]{1,6}\"' azure.tsx instagram.tsx microsoft-office.tsx microsoft-onedrive.tsx)",
+      "Bash(pnpm icons:check)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "playwright"
+  ]
+}

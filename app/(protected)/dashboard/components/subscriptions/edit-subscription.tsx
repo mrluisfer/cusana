@@ -12,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, SaveIcon } from "lucide-react";
@@ -72,7 +73,7 @@ export function EditSubscription({
     mutationFn: (payload: { id: string } & Record<string, unknown>) =>
       updateSubscriptionApi(session!.user.id, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
       onOpenChangeAction(false);
     },
   });

@@ -8,6 +8,7 @@ import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
+import { AddSubscription } from "../subscriptions/actions/add-subscription";
 
 async function fetchStats(
   userId: string,
@@ -67,7 +68,9 @@ export function HeroSummary() {
             <span className="ml-1 text-xs">
               ({monthlySubs} mensual{monthlySubs !== 1 ? "es" : ""}
               {yearlySubs > 0 && (
-                <>, {yearlySubs} anual{yearlySubs !== 1 ? "es" : ""}</>
+                <>
+                  , {yearlySubs} anual{yearlySubs !== 1 ? "es" : ""}
+                </>
               )}
               )
             </span>
@@ -76,6 +79,7 @@ export function HeroSummary() {
       </div>
 
       <div className="flex items-center gap-6">
+        <AddSubscription triggerProps={{ size: "lg" }} />
         <div className="sm:text-right">
           <p className="text-muted-foreground text-[11px] font-medium">
             Proyección anual

@@ -1,6 +1,7 @@
 "use client";
 
 import { ServiceIcon } from "@/components/dashboard/service-icon";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -9,7 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { billingCycleLabels } from "@/constants/billing-cycle";
 import { currencySymbols } from "@/constants/currency";
-import { serviceIcons, type ServiceKey } from "@/constants/icons";
+import { type ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import type { Subscription } from "@/lib/schema";
@@ -39,7 +40,10 @@ function CalendarSkeleton() {
       </div>
       <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
         {Array.from({ length: 35 }).map((_, i) => (
-          <Skeleton key={`d-${i}`} className="aspect-square w-full rounded-2xl" />
+          <Skeleton
+            key={`d-${i}`}
+            className="aspect-square w-full rounded-2xl"
+          />
         ))}
       </div>
     </div>
@@ -147,8 +151,8 @@ function CalendarDay({
       aria-current={isToday ? "date" : undefined}
       className={cn(
         "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
-        isToday && "ring-primary text-primary ring-2 font-bold",
-        !isToday && hasPayments && "bg-muted/50 cursor-pointer hover:bg-muted",
+        isToday && "ring-primary text-primary font-bold ring-2",
+        !isToday && hasPayments && "bg-muted/50 hover:bg-muted cursor-pointer",
         !isToday && !hasPayments && isPast && "text-muted-foreground/30",
         !isToday && !hasPayments && !isPast && "text-muted-foreground/60",
       )}
@@ -156,18 +160,18 @@ function CalendarDay({
       {hasPayments && !isToday ? (
         <>
           <div className="flex items-center justify-center gap-0.5">
-            {payments.slice(0, 3).map((payment) => {
-              const platform = payment.platform as ServiceKey;
-              const config = serviceIcons[platform];
-              if (!config) return null;
-              return (
-                <config.icon
-                  key={payment.id}
-                  className="size-3.5 sm:size-4"
-                  style={{ color: config.color }}
-                />
-              );
-            })}
+            {payments.slice(0, 2).map((payment) => (
+              <ServiceIcon
+                key={payment.id}
+                service={payment.platform as ServiceKey}
+                size="2xs"
+              />
+            ))}
+            {payments.length > 2 && (
+              <span className="text-muted-foreground text-[10px] font-medium tabular-nums">
+                +{payments.length - 2}
+              </span>
+            )}
           </div>
           <span className="text-foreground/70 mt-0.5 text-[10px] tabular-nums">
             {day}
@@ -253,7 +257,7 @@ export function BillingCalendar() {
     return date.toLocaleDateString("es-MX", { weekday: "long" });
   };
 
-  const currentDayOfWeekIndex = ((now.getDay() + 6) % 7);
+  const currentDayOfWeekIndex = (now.getDay() + 6) % 7;
 
   return (
     <div className="space-y-4">
@@ -286,13 +290,14 @@ export function BillingCalendar() {
         </div>
 
         {!isCurrentMonth && (
-          <button
+          <Button
             type="button"
             onClick={() => setMonthOffset(0)}
-            className="text-primary text-xs font-medium hover:underline"
+            variant={"secondary"}
+            size={"lg"}
           >
             Hoy
-          </button>
+          </Button>
         )}
       </div>
 

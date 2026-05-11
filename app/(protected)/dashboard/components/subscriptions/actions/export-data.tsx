@@ -52,7 +52,7 @@ export function ExportData() {
   );
 
   const triggerButton = (
-    <Button variant="ghost" size="icon" disabled={isDisabled}>
+    <Button variant="outline" size="icon-lg" disabled={isDisabled}>
       {isPending ? (
         <Loader2Icon className="size-4 animate-spin" />
       ) : isError ? (

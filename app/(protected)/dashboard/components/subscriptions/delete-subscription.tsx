@@ -12,6 +12,7 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Trash2Icon } from "lucide-react";
@@ -47,7 +48,7 @@ export function DeleteSubscription({
   const mutation = useMutation({
     mutationFn: () => deleteSubscriptionApi(session!.user.id, subscription.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
       onOpenChangeAction(false);
     },
   });

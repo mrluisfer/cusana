@@ -1,19 +1,22 @@
 import { siteConfig, siteKeywords } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter, Montserrat } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-import { cn } from "@/lib/utils";
 
-const geistMonoHeading = Geist_Mono({subsets:['latin'],variable:'--font-heading'});
+const geistMonoHeading = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const montserrat = Montserrat({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const metadataBase = new URL(siteConfig.url);
 
@@ -91,9 +94,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={cn("overflow-x-hidden", "font-sans", montserrat.variable, geistMonoHeading.variable)} suppressHydrationWarning>
+    <html
+      lang="es"
+      className={cn(
+        "overflow-x-hidden",
+        "font-sans",
+        geist.variable,
+        geistMonoHeading.variable,
+      )}
+      suppressHydrationWarning
+    >
       <body
-        className={`${geistMono.variable} ${montserrat.variable} overflow-x-hidden antialiased`}
+        className={`${geistMono.variable} ${geist.variable} overflow-x-hidden antialiased`}
       >
         <Providers>{children}</Providers>
       </body>

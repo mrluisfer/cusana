@@ -13,12 +13,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Spinner } from "@/components/ui/spinner";
 import { AllowedPlatforms } from "@/constants/allowed-platforms";
 import { BillingCycle } from "@/constants/billing-cycle";
 import { Currency } from "@/constants/currency";
+import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2, PlusIcon, SaveIcon } from "lucide-react";
+import { PlusIcon, SaveIcon, SparklesIcon } from "lucide-react";
+import { toast } from "sonner";
 import {
   SubscriptionForm,
   type SubscriptionFormValues,
@@ -33,7 +36,6 @@ const defaultValues: SubscriptionFormValues = {
   billingDay: "1",
 };
 
-// Tipo para enviar a la API (con números)
 type SubscriptionPayload = {
   name: string;
   platform: AllowedPlatforms;
@@ -55,7 +57,6 @@ export const AddSubscription = ({
 }: AddSubscriptionProps) => {
   const formId = useId();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: session } = useSession();
   const queryClient = useQueryClient();
@@ -66,7 +67,7 @@ export const AddSubscription = ({
         throw new Error("User ID is required");
       }
 
-      const response = await fetch(`/api/${session?.user.id}/subscription`, {
+      const response = await fetch(`/api/${session.user.id}/subscription`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -78,39 +79,40 @@ export const AddSubscription = ({
 
       return response.json();
     },
+    onSuccess: (_, payload) => {
+      toast.success("Suscripción agregada", {
+        description: `${payload.name} se guardó correctamente.`,
+      });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error("No se pudo guardar", {
+        description:
+          error instanceof Error
+            ? error.message
+            : "Algo salió mal. Intenta de nuevo.",
+      });
+    },
   });
 
-  const onSubmit = async (data: SubscriptionFormValues) => {
-    try {
-      setIsSubmitting(true);
-
-      const payload: SubscriptionPayload = {
-        name: data.name.trim(),
-        platform: data.platform,
-        price: Number(data.price),
-        currency: data.currency,
-        billingCycle: data.billingCycle,
-        billingDay: Number(data.billingDay),
-        ...(data.billingMonth && { billingMonth: Number(data.billingMonth) }),
-      };
-
-      await mutation.mutateAsync(payload);
-      setIsOpen(false);
-
-      queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
-    } catch (error) {
-      console.error("Error al guardar:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (data: SubscriptionFormValues) => {
+    const payload: SubscriptionPayload = {
+      name: data.name.trim(),
+      platform: data.platform,
+      price: Number(data.price),
+      currency: data.currency,
+      billingCycle: data.billingCycle,
+      billingDay: Number(data.billingDay),
+      ...(data.billingMonth && { billingMonth: Number(data.billingMonth) }),
+    };
+    mutation.mutate(payload);
   };
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-  };
+  const isSubmitting = mutation.isPending;
 
   return (
-    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger render={<Button {...triggerProps} />}>
         <PlusIcon />
         {label?.length ? (
@@ -124,12 +126,18 @@ export const AddSubscription = ({
       </SheetTrigger>
 
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">
-        <SheetHeader className="border-b px-6 py-4">
-          <SheetTitle>Nueva suscripción</SheetTitle>
-          <SheetDescription>
-            Agrega los detalles de tu suscripción para llevar un mejor control
-            de tus gastos.
-          </SheetDescription>
+        <SheetHeader className="border-border/60 border-b px-6 py-5">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary/10 text-primary ring-primary/20 flex size-10 shrink-0 items-center justify-center rounded-xl ring-1">
+              <SparklesIcon className="size-5" aria-hidden="true" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <SheetTitle className="text-base">Nueva suscripción</SheetTitle>
+              <SheetDescription className="text-xs">
+                Agrega los detalles para llevar mejor control de tus gastos.
+              </SheetDescription>
+            </div>
+          </div>
         </SheetHeader>
 
         <SubscriptionForm
@@ -139,7 +147,7 @@ export const AddSubscription = ({
           resetKey={isOpen}
         />
 
-        <SheetFooter className="border-t px-6 py-4">
+        <SheetFooter className="border-border/60 bg-background/80 supports-[backdrop-filter]:bg-background/60 border-t px-6 py-4 backdrop-blur-xl">
           <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <SheetClose
               render={
@@ -156,16 +164,16 @@ export const AddSubscription = ({
               type="submit"
               form={formId}
               disabled={isSubmitting}
-              className="min-w-30"
+              className="min-w-32"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Guardando...
+                  <Spinner aria-hidden="true" />
+                  Guardando…
                 </>
               ) : (
                 <>
-                  <SaveIcon className="mr-2 size-4" />
+                  <SaveIcon className="size-4" aria-hidden="true" />
                   Guardar
                 </>
               )}
