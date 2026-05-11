@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "pnpm icons:check",
+    "prebuild": "pnpm icons:check && pnpm type-check",
     "build": "next build",
     "start": "next start",
     "icons:fix": "node scripts/namespace-svg-ids.mjs",
