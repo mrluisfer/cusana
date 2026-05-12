@@ -34,11 +34,11 @@ export default function PhoneMockup() {
       {/* Phone frame (titanium-like gradient) */}
       <div className="relative w-[280px] rounded-[3rem] bg-linear-to-b from-zinc-700 via-zinc-900 to-zinc-800 p-[3px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.06)_inset] md:w-[320px] dark:from-zinc-600 dark:via-zinc-800 dark:to-zinc-700">
         {/* Inner bezel */}
-        <div className="relative overflow-hidden rounded-[2.85rem] bg-black p-[3px]">
+        <div className="relative overflow-hidden rounded-[2.85rem] bg-zinc-950 p-[3px]">
           {/* Screen */}
-          <div className="relative overflow-hidden rounded-[2.65rem] bg-linear-to-b from-slate-50 to-white dark:from-zinc-950 dark:to-zinc-900">
+          <div className="relative overflow-hidden rounded-[2.65rem] bg-linear-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
             {/* Status bar */}
-            <div className="relative flex items-center justify-between px-7 pt-3 pb-2 text-[11px] font-semibold text-slate-900 dark:text-zinc-100">
+            <div className="relative flex items-center justify-between px-7 pt-3 pb-2 text-[11px] font-semibold text-zinc-900 dark:text-zinc-100">
               <span className="tabular-nums">9:41</span>
               <div className="flex items-center gap-1">
                 <SignalHigh className="size-3" aria-hidden="true" />
@@ -56,7 +56,7 @@ export default function PhoneMockup() {
             {/* Dynamic Island */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute top-2 left-1/2 z-20 h-7 w-[6.5rem] -translate-x-1/2 rounded-full bg-black ring-1 ring-zinc-800"
+              className="pointer-events-none absolute top-2 left-1/2 z-20 h-7 w-[6.5rem] -translate-x-1/2 rounded-full bg-zinc-950 ring-1 ring-zinc-800"
             >
               <span className="absolute top-1/2 right-3 size-1.5 -translate-y-1/2 rounded-full bg-zinc-700" />
               <span className="absolute top-1/2 right-3 size-[3px] -translate-y-1/2 rounded-full bg-sky-900/80" />
@@ -114,7 +114,7 @@ export default function PhoneMockup() {
               {/* Subscriptions list */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase dark:text-zinc-400">
+                  <p className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400">
                     Suscripciones activas
                   </p>
                   <p className="text-primary text-[10px] font-medium">
@@ -125,20 +125,20 @@ export default function PhoneMockup() {
                 {mockSubscriptions.map((sub) => (
                   <div
                     key={sub.name}
-                    className="flex items-center justify-between rounded-xl border border-slate-200/70 bg-white/80 p-2.5 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80"
+                    className="flex items-center justify-between rounded-xl border border-zinc-200/70 bg-white/80 p-2.5 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80"
                   >
                     <div className="flex items-center gap-2.5">
                       <ServiceIcon service={sub.name} size="sm" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-semibold text-slate-900 capitalize dark:text-zinc-100">
+                        <span className="text-xs font-semibold text-zinc-900 capitalize dark:text-zinc-100">
                           {sub.name}
                         </span>
-                        <span className="text-[10px] text-slate-500 dark:text-zinc-400">
+                        <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
                           Mensual
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-slate-700 tabular-nums dark:text-zinc-200">
+                    <span className="text-xs font-semibold text-zinc-700 tabular-nums dark:text-zinc-200">
                       {sub.price}
                     </span>
                   </div>
@@ -149,7 +149,7 @@ export default function PhoneMockup() {
             {/* Home indicator */}
             <div
               aria-hidden="true"
-              className="absolute bottom-1.5 left-1/2 h-1 w-[35%] -translate-x-1/2 rounded-full bg-slate-900/80 dark:bg-zinc-100/80"
+              className="absolute bottom-1.5 left-1/2 h-1 w-[35%] -translate-x-1/2 rounded-full bg-zinc-900/80 dark:bg-zinc-100/80"
             />
 
             {/* Screen reflection */}

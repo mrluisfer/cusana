@@ -120,7 +120,7 @@ function ErrorState({
 }) {
   return (
     <Alert variant="destructive">
-      <AlertCircle className="h-4 w-4" />
+      <AlertCircle className="size-4" />
       <AlertTitle>Error al cargar suscripciones</AlertTitle>
       <AlertDescription className="flex items-center justify-between">
         <span>{message}</span>
@@ -131,9 +131,9 @@ function ErrorState({
           disabled={isRetrying}
         >
           {isRetrying ? (
-            <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+            <RefreshCw className="mr-2 size-4 animate-spin" />
           ) : (
-            <RefreshCw className="mr-2 h-4 w-4" />
+            <RefreshCw className="mr-2 size-4" />
           )}
           Reintentar
         </Button>
@@ -147,7 +147,7 @@ function EmptyState() {
     <Card className="border-dashed">
       <CardHeader className="pb-2 text-center">
         <div className="bg-muted mx-auto mb-2 w-fit rounded-full p-3">
-          <Inbox className="text-muted-foreground h-6 w-6" />
+          <Inbox className="text-muted-foreground size-6" />
         </div>
         <CardTitle className="text-lg">Sin suscripciones</CardTitle>
         <CardDescription>

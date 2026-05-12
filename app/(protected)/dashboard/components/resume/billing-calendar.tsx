@@ -177,7 +177,7 @@ function CalendarDay({
             {day}
           </span>
           {payments.some((p) => p.billingCycle === "monthly") && (
-            <span className="bg-foreground/40 absolute bottom-1.5 h-1 w-1 rounded-full" />
+            <span className="bg-foreground/40 absolute bottom-1.5 size-1 rounded-full" />
           )}
         </>
       ) : (
@@ -267,10 +267,10 @@ export function BillingCalendar() {
           <button
             type="button"
             onClick={() => setMonthOffset((prev) => prev - 1)}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-xl transition-colors"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted flex size-8 items-center justify-center rounded-xl transition-colors"
             aria-label="Mes anterior"
           >
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronLeftIcon className="size-4" />
           </button>
           <h2 className="text-lg font-semibold tracking-tight">
             <span className="capitalize">{monthName}</span>{" "}
@@ -282,10 +282,10 @@ export function BillingCalendar() {
             type="button"
             onClick={() => setMonthOffset((prev) => prev + 1)}
             disabled={monthOffset >= 2}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-xl transition-colors disabled:pointer-events-none disabled:opacity-30"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted flex size-8 items-center justify-center rounded-xl transition-colors disabled:pointer-events-none disabled:opacity-30"
             aria-label="Mes siguiente"
           >
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="size-4" />
           </button>
         </div>
 

@@ -195,7 +195,6 @@ export function SubscriptionForm({
                 type="text"
                 placeholder="Ej: Netflix Premium"
                 autoComplete="off"
-                autoFocus
               />
               {fieldState.error && (
                 <FieldError>{fieldState.error.message}</FieldError>

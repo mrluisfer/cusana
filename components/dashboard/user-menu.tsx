@@ -32,15 +32,15 @@ import {
 import { ProfileDialog } from "./profile-dialog";
 
 export const UserMenu = () => {
-  const router = useRouter();
+  const { push } = useRouter();
   const { data, isPending, error } = useSession();
   const { theme, setTheme } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const handleSignOut = useCallback(async () => {
     await signOut();
-    router.push("/login");
-  }, [router]);
+    push("/login");
+  }, [push]);
 
   const openProfile = useCallback(() => setProfileOpen(true), []);
 

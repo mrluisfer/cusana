@@ -11,7 +11,10 @@
       "Bash(mv photoshopExpress.tsx ../../../assets/icons/photoshop-express.tsx)",
       "Bash(pnpm type-check *)",
       "Bash(grep -oE 'id=\"[a-z0-9_-]{1,6}\"' azure.tsx instagram.tsx microsoft-office.tsx microsoft-onedrive.tsx)",
-      "Bash(pnpm icons:check)"
+      "Bash(pnpm icons:check)",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(pnpm lint *)"
     ]
   },
   "enabledMcpjsonServers": [

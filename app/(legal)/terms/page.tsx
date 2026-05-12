@@ -39,7 +39,7 @@ export default function TermsPage() {
     <article className="space-y-10">
       {/* Header */}
       <header className="space-y-4 pt-8">
-        <h1 className="text-foreground text-3xl font-bold tracking-tight md:text-4xl">
+        <h1 className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
           Términos de Servicio
         </h1>
         <p className="text-muted-foreground text-sm">

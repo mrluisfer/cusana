@@ -38,7 +38,7 @@ function UpcomingPaymentSkeleton() {
   return (
     <div className="flex items-center justify-between py-3">
       <div className="flex items-center gap-3">
-        <Skeleton className="h-10 w-10 rounded-full" />
+        <Skeleton className="size-10 rounded-full" />
         <div className="space-y-1">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-3 w-16" />
@@ -107,7 +107,7 @@ export function UpcomingPayments() {
             Próximos Pagos
           </CardTitle>
           <Badge variant="outline" className="text-[10px]">
-            <ClockIcon className="mr-1 h-3 w-3" />
+            <ClockIcon className="mr-1 size-3" />
             {sortedSubscriptions?.length ?? 0}
           </Badge>
         </div>
@@ -154,7 +154,7 @@ export function UpcomingPayments() {
           ))
         ) : (
           <div className="text-muted-foreground py-6 text-center">
-            <CalendarIcon className="mx-auto mb-2 h-6 w-6 opacity-40" />
+            <CalendarIcon className="mx-auto mb-2 size-6 opacity-40" />
             <p className="text-xs">No hay pagos próximos</p>
           </div>
         )}

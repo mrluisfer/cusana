@@ -59,7 +59,6 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
           onChange={(e) => setToken(e.target.value)}
           placeholder="sk-..."
           autoComplete="off"
-          autoFocus
         />
         {error && <p className="text-destructive text-xs">{error}</p>}
         <Button type="submit" className="w-full">

@@ -71,9 +71,9 @@ function TrendSkeleton() {
 }
 
 function TrendIcon({ change }: { change: number }) {
-  if (change > 0.5) return <TrendingUpIcon className="h-3 w-3" />;
-  if (change < -0.5) return <TrendingDownIcon className="h-3 w-3" />;
-  return <MinusIcon className="h-3 w-3" />;
+  if (change > 0.5) return <TrendingUpIcon className="size-3" />;
+  if (change < -0.5) return <TrendingDownIcon className="size-3" />;
+  return <MinusIcon className="size-3" />;
 }
 
 function TrendBadge({ change }: { change: number }) {
@@ -329,8 +329,8 @@ export function MonthlyTrend() {
           </TooltipProvider>
         ) : (
           <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex h-16 w-16 items-center justify-center">
-              <BarChart3Icon className="h-8 w-8 opacity-40" />
+            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
+              <BarChart3Icon className="size-8 opacity-40" />
             </div>
             <p className="text-sm font-medium">Sin datos de tendencia</p>
             <p className="mt-1 text-xs opacity-70">

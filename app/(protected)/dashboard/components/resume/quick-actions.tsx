@@ -27,20 +27,16 @@ import {
 import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
 import { DollarSignIcon, FilterIcon, XIcon } from "lucide-react";
-import { useMemo } from "react";
 import { FilterSubscriptions } from "../subscriptions/actions/filter-subscriptions";
 
 export function QuickActions() {
   const [currency, setCurrency] = useAtom(currencyAtom);
   const [filters, setFilters] = useAtom(filtersAtom);
 
-  const activeFilterCount = useMemo(
-    () =>
-      filters.billingCycle.length +
-      filters.currency.length +
-      filters.active.length,
-    [filters],
-  );
+  const activeFilterCount =
+    filters.billingCycle.length +
+    filters.currency.length +
+    filters.active.length;
 
   const currenciesItems = currencyArray.map((curr) => ({
     label: curr,

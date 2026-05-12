@@ -9,7 +9,6 @@ export function AuthHeader() {
   return (
     <header
       className="border-border/60 bg-background/60 supports-[backdrop-filter]:bg-background/40 sticky top-4 z-40 flex w-full items-center justify-between rounded-2xl border px-4 py-2.5 shadow-sm backdrop-blur-xl"
-      role="banner"
     >
       <Link href="/">
         <Logo />

@@ -226,9 +226,9 @@ export default function LandingPage() {
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       >
-        <div className="bg-primary/30 absolute top-[-10%] left-[10%] h-[40rem] w-[40rem] rounded-full blur-[120px] motion-safe:animate-pulse" />
-        <div className="absolute top-[20%] right-[-10%] h-[35rem] w-[35rem] rounded-full bg-fuchsia-500/20 blur-[120px] [animation-delay:1.5s] motion-safe:animate-pulse" />
-        <div className="absolute bottom-[10%] left-[-5%] h-[30rem] w-[30rem] rounded-full bg-sky-500/20 blur-[120px] [animation-delay:3s] motion-safe:animate-pulse" />
+        <div className="bg-primary/30 absolute top-[-10%] left-[10%] size-[40rem] rounded-full blur-[120px] motion-safe:animate-pulse" />
+        <div className="absolute top-[20%] right-[-10%] size-[35rem] rounded-full bg-fuchsia-500/20 blur-[120px] [animation-delay:1.5s] motion-safe:animate-pulse" />
+        <div className="absolute bottom-[10%] left-[-5%] size-[30rem] rounded-full bg-sky-500/20 blur-[120px] [animation-delay:3s] motion-safe:animate-pulse" />
 
         <div
           className="absolute inset-0 opacity-[0.15] dark:opacity-[0.08]"
@@ -250,7 +250,6 @@ export default function LandingPage() {
         {/* Header */}
         <header
           className="border-border/60 bg-background/60 supports-[backdrop-filter]:bg-background/40 sticky top-4 z-40 mt-4 flex items-center justify-between rounded-2xl border px-4 py-2.5 shadow-sm backdrop-blur-xl"
-          role="banner"
         >
           <Logo />
 
@@ -296,7 +295,7 @@ export default function LandingPage() {
 
               <h1
                 id="hero-heading"
-                className="text-foreground text-5xl leading-[1.05] font-bold tracking-tight text-balance md:text-6xl lg:text-7xl"
+                className="text-foreground text-5xl leading-[1.05] font-semibold tracking-tight text-balance md:text-6xl lg:text-7xl"
               >
                 Tus suscripciones,{" "}
                 <span className="from-primary relative inline-block bg-linear-to-br via-fuchsia-500 to-sky-500 bg-clip-text text-transparent">
@@ -426,7 +425,7 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="features-heading"
-              className="text-foreground mb-4 text-3xl font-bold text-balance md:text-4xl lg:text-5xl"
+              className="text-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl lg:text-5xl"
             >
               Hecho para que dejes de{" "}
               <span className="from-primary bg-linear-to-r to-fuchsia-500 bg-clip-text text-transparent">
@@ -475,7 +474,7 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="services-heading"
-              className="text-foreground text-2xl font-bold text-balance md:text-3xl"
+              className="text-foreground text-2xl font-semibold text-balance md:text-3xl"
             >
               Identificamos automáticamente los servicios que ya conoces
             </h2>
@@ -512,7 +511,7 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="roadmap-heading"
-              className="text-foreground mb-4 text-3xl font-bold text-balance md:text-4xl"
+              className="text-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl"
             >
               Construyéndose{" "}
               <span className="from-primary bg-linear-to-r to-fuchsia-500 bg-clip-text text-transparent">
@@ -521,7 +520,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-muted-foreground mx-auto max-w-2xl text-pretty">
               Esto es lo que hay hoy, lo que viene y a dónde queremos llegar.
-              Sin promesas vacías —solo lo que estamos construyendo.
+              Sin promesas vacías, solo lo que estamos construyendo.
             </p>
           </div>
 
@@ -586,7 +585,7 @@ export default function LandingPage() {
               </Badge>
               <h2
                 id="faq-heading"
-                className="text-foreground text-3xl font-bold text-balance md:text-4xl"
+                className="text-foreground text-3xl font-semibold text-balance md:text-4xl"
               >
                 Preguntas frecuentes
               </h2>
@@ -625,11 +624,11 @@ export default function LandingPage() {
           <div className="from-primary via-primary/95 to-primary/80 shadow-primary/20 relative overflow-hidden rounded-3xl bg-linear-to-br p-8 text-center shadow-2xl md:p-14">
             <div
               aria-hidden="true"
-              className="absolute top-0 left-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-3xl motion-safe:animate-pulse"
+              className="absolute top-0 left-0 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-3xl motion-safe:animate-pulse"
             />
             <div
               aria-hidden="true"
-              className="absolute right-0 bottom-0 h-72 w-72 translate-x-1/2 translate-y-1/2 rounded-full bg-fuchsia-400/30 blur-3xl [animation-delay:1.5s] motion-safe:animate-pulse"
+              className="absolute right-0 bottom-0 size-72 translate-x-1/2 translate-y-1/2 rounded-full bg-fuchsia-400/30 blur-3xl [animation-delay:1.5s] motion-safe:animate-pulse"
             />
             <div
               aria-hidden="true"
@@ -639,7 +638,7 @@ export default function LandingPage() {
             <div className="relative z-10 mx-auto max-w-2xl">
               <h2
                 id="cta-heading"
-                className="text-primary-foreground mb-4 text-3xl font-bold text-balance md:text-4xl lg:text-5xl"
+                className="text-primary-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl lg:text-5xl"
               >
                 Empieza a ver tus suscripciones de una vez.
               </h2>

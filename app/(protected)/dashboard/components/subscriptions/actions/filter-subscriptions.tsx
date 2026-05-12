@@ -17,7 +17,7 @@ import { currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
 import { FilterIcon, XIcon } from "lucide-react";
 import { on } from "node:stream";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 function toggleFilterValue<K extends keyof SubscriptionFilters>(
   filters: SubscriptionFilters,
@@ -42,13 +42,10 @@ export function FilterSubscriptions({
 }: FilterSubscriptionsProps) {
   const [filters, setFilters] = useAtom(filtersAtom);
 
-  const activeFilterCount = useMemo(
-    () =>
-      filters.billingCycle.length +
-      filters.currency.length +
-      filters.active.length,
-    [filters],
-  );
+  const activeFilterCount =
+    filters.billingCycle.length +
+    filters.currency.length +
+    filters.active.length;
 
   const onToggleFilter = useCallback(
     <K extends keyof SubscriptionFilters>(

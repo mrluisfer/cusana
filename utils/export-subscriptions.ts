@@ -29,12 +29,23 @@ function getPlatformLabel(platform: ServiceKey): string {
   return service?.label ?? platform;
 }
 
+const priceFormatterCache = new Map<string, Intl.NumberFormat>();
+
+function getPriceFormatter(currency: string) {
+  let f = priceFormatterCache.get(currency);
+  if (!f) {
+    f = new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+    });
+    priceFormatterCache.set(currency, f);
+  }
+  return f;
+}
+
 function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-  }).format(price || 0);
+  return getPriceFormatter(currency).format(price || 0);
 }
 
 function toExportRows(subscriptions: ExportableSubscription[]): ExportRow[] {

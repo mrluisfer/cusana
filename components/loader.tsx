@@ -22,7 +22,7 @@ export const Loader: React.FC<LoaderProps> = ({ className = "", message }) => {
       role="status"
     >
       <HugeiconsIcon icon={Loading03Icon} className="animate-spin" />
-      {message && <span className="text-sm text-gray-500">{message}</span>}
+      {message && <span className="text-sm text-zinc-500">{message}</span>}
     </div>
   );
 };

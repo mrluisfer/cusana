@@ -13,9 +13,9 @@ export default function DashboardLayout({
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       >
-        <div className="bg-primary/20 absolute top-[-15%] left-[5%] h-[40rem] w-[40rem] rounded-full blur-[120px] motion-safe:animate-pulse" />
-        <div className="absolute top-[30%] right-[-10%] h-[35rem] w-[35rem] rounded-full bg-fuchsia-500/15 blur-[120px] [animation-delay:1.5s] motion-safe:animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[20%] h-[30rem] w-[30rem] rounded-full bg-sky-500/15 blur-[120px] [animation-delay:3s] motion-safe:animate-pulse" />
+        <div className="bg-primary/20 absolute top-[-15%] left-[5%] size-[40rem] rounded-full blur-[120px] motion-safe:animate-pulse" />
+        <div className="absolute top-[30%] right-[-10%] size-[35rem] rounded-full bg-fuchsia-500/15 blur-[120px] [animation-delay:1.5s] motion-safe:animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[20%] size-[30rem] rounded-full bg-sky-500/15 blur-[120px] [animation-delay:3s] motion-safe:animate-pulse" />
         <div
           className="absolute inset-0 opacity-[0.12] dark:opacity-[0.06]"
           style={{

@@ -20,7 +20,7 @@ const providers: Provider[] = [
 function OAuthButton({ provider }: { provider: Provider }) {
   const [isPending, setIsPending] = useState(false);
 
-  const handleClick = useCallback(() => {
+  const signInWithProvider = useCallback(() => {
     setIsPending(true);
     signIn.social({ provider: provider.id, callbackURL: "/dashboard" });
   }, [provider.id]);
@@ -29,7 +29,7 @@ function OAuthButton({ provider }: { provider: Provider }) {
     <Button
       type="button"
       variant="outline"
-      onClick={handleClick}
+      onClick={signInWithProvider}
       disabled={isPending}
       className="bg-background/40 backdrop-blur transition-colors"
       aria-label={`Continuar con ${provider.label}`}

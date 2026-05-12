@@ -53,7 +53,7 @@ function DistributionSkeleton() {
       <div className="space-y-2">
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-3 px-3 py-2.5">
-            <Skeleton className="h-8 w-8" />
+            <Skeleton className="size-8" />
             <div className="flex-1 space-y-1">
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-3 w-16" />
@@ -288,7 +288,7 @@ export function SpendingDistribution() {
                             variant="secondary"
                             className="h-5 gap-1 bg-amber-500/10 px-1.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
                           >
-                            <TrendingUpIcon className="h-3 w-3" />
+                            <TrendingUpIcon className="size-3" />
                             Top
                           </Badge>
                         )}
@@ -326,8 +326,8 @@ export function SpendingDistribution() {
           </div>
         ) : (
           <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex h-16 w-16 items-center justify-center">
-              <PieChartIcon className="h-8 w-8 opacity-40" />
+            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
+              <PieChartIcon className="size-8 opacity-40" />
             </div>
             <p className="text-sm font-medium">Sin datos disponibles</p>
             <p className="mt-1 text-xs opacity-70">

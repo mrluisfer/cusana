@@ -39,7 +39,7 @@ export default function PrivacyPage() {
     <article className="space-y-10">
       {/* Header */}
       <header className="space-y-4 pt-8">
-        <h1 className="text-foreground text-3xl font-bold tracking-tight md:text-4xl">
+        <h1 className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
           Política de Privacidad
         </h1>
         <p className="text-muted-foreground text-sm">
@@ -233,17 +233,17 @@ export default function PrivacyPage() {
         </p>
         <ul className="list-inside list-disc space-y-1 pl-4">
           <li>
-            <strong>Neon</strong> — Almacenamiento de base de datos
+            <strong>Neon</strong>: Almacenamiento de base de datos
           </li>
           <li>
-            <strong>Vercel</strong> — Hosting y despliegue de la aplicación
+            <strong>Vercel</strong>: Hosting y despliegue de la aplicación
           </li>
           <li>
-            <strong>Frankfurter API</strong> — Conversión de divisas (no se
+            <strong>Frankfurter API</strong>: Conversión de divisas (no se
             envían datos personales, solo códigos de divisa)
           </li>
           <li>
-            <strong>Google / GitHub</strong> — Solo si eliges autenticarte con
+            <strong>Google / GitHub</strong>: Solo si eliges autenticarte con
             estos proveedores
           </li>
         </ul>

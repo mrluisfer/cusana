@@ -16,16 +16,19 @@ export async function GET(
 
   const rawSubscriptions = await getSubscriptionsByUser(userid);
 
-  const subscriptions = rawSubscriptions
-    .filter((sub) =>
-      allowedPlatformsArray.includes(
-        sub.platform as (typeof allowedPlatformsArray)[number],
-      ),
-    )
-    .map((sub) => ({
-      ...sub,
-      platform: sub.platform as (typeof allowedPlatformsArray)[number],
-    }));
+  const subscriptions = rawSubscriptions.reduce<
+    Array<
+      Omit<(typeof rawSubscriptions)[number], "platform"> & {
+        platform: (typeof allowedPlatformsArray)[number];
+      }
+    >
+  >((acc, sub) => {
+    const platform = sub.platform as (typeof allowedPlatformsArray)[number];
+    if (allowedPlatformsArray.includes(platform)) {
+      acc.push({ ...sub, platform });
+    }
+    return acc;
+  }, []);
 
   return Response.json({ subscriptions }, { status: 200 });
 }

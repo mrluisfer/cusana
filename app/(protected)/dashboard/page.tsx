@@ -68,7 +68,7 @@ function SectionHeader({
       </p>
       <h2
         id={id}
-        className="text-foreground text-xl font-bold tracking-tight text-balance md:text-2xl"
+        className="text-foreground text-xl font-semibold tracking-tight text-balance md:text-2xl"
       >
         {title}
       </h2>
