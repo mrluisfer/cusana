@@ -1,5 +1,7 @@
 # Cusana
 
+[![React Doctor](https://www.react.doctor/share/badge?p=cusana&s=81&w=143&f=91)](https://www.react.doctor/share?p=cusana&s=81&w=143&f=91)
+
 A modern subscription tracker built with Next.js 16, designed to help you monitor, manage, and analyze all your recurring expenses in one place.
 
 ## Features
