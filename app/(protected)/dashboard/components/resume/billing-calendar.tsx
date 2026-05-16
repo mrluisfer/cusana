@@ -152,12 +152,12 @@ function CalendarDay({
       className={cn(
         "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
         isToday && "ring-primary text-primary font-bold ring-2",
-        !isToday && hasPayments && "bg-muted/50 hover:bg-muted cursor-pointer",
+        hasPayments && "bg-muted/50 hover:bg-muted cursor-pointer",
         !isToday && !hasPayments && isPast && "text-muted-foreground/30",
         !isToday && !hasPayments && !isPast && "text-muted-foreground/60",
       )}
     >
-      {hasPayments && !isToday ? (
+      {hasPayments ? (
         <>
           <div className="flex items-center justify-center gap-0.5">
             {payments.slice(0, 2).map((payment) => (
