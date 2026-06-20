@@ -105,11 +105,11 @@ export function BillingCalendar() {
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <h2 className="group hover:text-primary text-lg font-semibold tracking-tight transition">
-          <span className="capitalize">{monthName}</span>{" "}
-          <span className="text-muted-foreground font-normal transition group-hover:text-white">
-            {yearLabel}
-          </span>
+        <h2 className="text-lg font-semibold tracking-tight">
+          <span className="hover:text-primary capitalize transition">
+            {monthName}
+          </span>{" "}
+          <span className="text-muted-foreground font-normal">{yearLabel}</span>
         </h2>
         <div className="flex items-center gap-1.5 select-none">
           <Button
