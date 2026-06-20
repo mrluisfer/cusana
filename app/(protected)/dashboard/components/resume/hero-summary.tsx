@@ -6,8 +6,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
 import { AddSubscription } from "../subscriptions/actions/add-subscription";
 
 async function fetchStats(
@@ -22,6 +25,8 @@ async function fetchStats(
 }
 
 export function HeroSummary() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { data: session } = useSession();
   const userId = session?.user.id;
   const currency = useAtomValue(currencyAtom);
@@ -41,7 +46,7 @@ export function HeroSummary() {
   const yearlySubs = Number(stats?.yearlySubs) || 0;
 
   const formatAmount = (amount: number, decimals = 2) =>
-    amount.toLocaleString("es-MX", {
+    amount.toLocaleString(toIntlLocale(language), {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
@@ -50,7 +55,7 @@ export function HeroSummary() {
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          Gasto mensual efectivo
+          {t("dashboard.hero.monthlySpend")}
         </p>
         {isPending ? (
           <Skeleton className="mt-2 h-10 w-44" />
@@ -61,16 +66,12 @@ export function HeroSummary() {
           </p>
         )}
         <p className="text-muted-foreground mt-1 text-sm">
-          {subscriptionCount} suscripción
-          {subscriptionCount !== 1 ? "es" : ""} activa
-          {subscriptionCount !== 1 ? "s" : ""}
+          {t("dashboard.hero.activeSubscriptions", { count: subscriptionCount })}
           {subscriptionCount > 0 && (
             <span className="ml-1 text-xs">
-              ({monthlySubs} mensual{monthlySubs !== 1 ? "es" : ""}
+              ({t("dashboard.hero.monthly", { count: monthlySubs })}
               {yearlySubs > 0 && (
-                <>
-                  , {yearlySubs} anual{yearlySubs !== 1 ? "es" : ""}
-                </>
+                <>, {t("dashboard.hero.yearly", { count: yearlySubs })}</>
               )}
               )
             </span>
@@ -82,7 +83,7 @@ export function HeroSummary() {
         <AddSubscription triggerProps={{ size: "lg" }} />
         <div className="sm:text-right">
           <p className="text-muted-foreground text-[11px] font-medium">
-            Proyección anual
+            {t("dashboard.hero.yearlyProjection")}
           </p>
           {isPending ? (
             <Skeleton className="mt-1 h-5 w-20" />
@@ -95,7 +96,7 @@ export function HeroSummary() {
         </div>
         <div className="sm:text-right">
           <p className="text-muted-foreground text-[11px] font-medium">
-            Moneda
+            {t("dashboard.hero.currency")}
           </p>
           <p className="font-mono text-lg font-semibold">{currency}</p>
         </div>

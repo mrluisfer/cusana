@@ -1,0 +1,340 @@
+{
+  "common": {
+    "appName": "Cusana",
+    "loading": "Loading…",
+    "error": "Something went wrong"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English"
+  },
+  "theme": {
+    "label": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "change": "Toggle theme"
+  },
+  "legal": {
+    "home": "Home",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "nav": {
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "back": "Back",
+    "greetingMorning": "Good morning",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening"
+  },
+  "userMenu": {
+    "myAccount": "My account",
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "appearance": "Appearance",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "signOut": "Sign out",
+    "loadUserError": "Failed to load user",
+    "loadingUser": "Loading user information"
+  },
+  "dashboard": {
+    "userIdMissing": "User ID is missing",
+    "resume": {
+      "eyebrow": "Overview",
+      "title": "Your month at a glance",
+      "description": "Actual spending, upcoming charges and distribution by service."
+    },
+    "detail": {
+      "eyebrow": "Details",
+      "title": "All your subscriptions",
+      "description": "Manage, edit and filter every recurring service."
+    },
+    "hero": {
+      "monthlySpend": "Effective monthly spend",
+      "activeSubscriptions_one": "{{count}} active subscription",
+      "activeSubscriptions_other": "{{count}} active subscriptions",
+      "monthly_one": "{{count}} monthly",
+      "monthly_other": "{{count}} monthly",
+      "yearly_one": "{{count}} yearly",
+      "yearly_other": "{{count}} yearly",
+      "yearlyProjection": "Yearly projection",
+      "currency": "Currency"
+    },
+    "quickActions": {
+      "title": "Settings",
+      "currency": "Currency",
+      "filters": "Filters",
+      "active_one": "{{count}} active",
+      "active_other": "{{count}} active",
+      "clearFilters": "Clear filters"
+    },
+    "upcoming": {
+      "title": "Upcoming Payments",
+      "empty": "No upcoming payments"
+    },
+    "trend": {
+      "title": "Monthly Trend",
+      "realByMonth": "Actual spend per month in {{currency}}",
+      "history": "Monthly spending history",
+      "current": "current",
+      "noCharges": "No charges this month",
+      "aboveAverage": "Above average",
+      "activeSubscriptions_one": "{{count}} active subscription",
+      "activeSubscriptions_other": "{{count}} active subscriptions",
+      "average": "Average",
+      "max": "Max",
+      "min": "Min",
+      "emptyTitle": "No trend data",
+      "emptyHint": "Add subscriptions to see statistics",
+      "chartLabel": "Monthly spending trend",
+      "statsLabel": "Trend statistics"
+    },
+    "distribution": {
+      "title": "Spending Distribution",
+      "byPlatform": "Monthly spend per platform in {{currency}}",
+      "totalMonthly": "Monthly total",
+      "distribution": "Distribution",
+      "platforms_one": "{{count}} platform",
+      "platforms_other": "{{count}} platforms",
+      "perMonth": "/mo",
+      "ofTotal": "{{percent}}% of total",
+      "top": "Top",
+      "subscriptions_one": "{{count}} subscription",
+      "subscriptions_other": "{{count}} subscriptions",
+      "emptyTitle": "No data available",
+      "emptyHint": "Add subscriptions to see the distribution"
+    },
+    "calendar": {
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "today": "Today",
+      "gridLabel": "Billing calendar",
+      "total": "Total:",
+      "charges_one": "{{count}} charge",
+      "charges_other": "{{count}} charges"
+    },
+    "billing": {
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "inDays": "In {{count}} days",
+      "perMonthShort": "/mo",
+      "perYearShort": "/yr",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "columns": {
+      "service": "Service",
+      "price": "Price",
+      "cycle": "Cycle",
+      "nextCharge": "Next charge",
+      "actions": "Actions"
+    },
+    "columnHeader": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Hide"
+    },
+    "rowActions": {
+      "openMenu": "Open menu",
+      "actions": "Actions",
+      "edit": "Edit",
+      "openSite": "Open website",
+      "delete": "Delete"
+    },
+    "table": {
+      "searchLabel": "Search subscription",
+      "searchPlaceholder": "Search...",
+      "results_one": "{{count}} result",
+      "results_other": "{{count}} results",
+      "clearFilters": "Clear filters",
+      "emptyTitle": "No subscriptions",
+      "emptyHint": "Add your first subscription to get started",
+      "showing": "Showing {{from}} to {{to}} of {{total}} subscriptions",
+      "page": "Page",
+      "of": "of",
+      "firstPage": "First page",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "lastPage": "Last page",
+      "errorTitle": "Failed to load subscriptions",
+      "retry": "Retry",
+      "noneTitle": "No subscriptions",
+      "noneDescription": "You don't have any subscriptions registered yet."
+    },
+    "refetch": "Refresh data",
+    "export": {
+      "sr": "Export",
+      "loadError": "Could not load the data",
+      "tooltip": "Export data",
+      "formatLabel": "Export format",
+      "excelDesc": "Works with Excel, Sheets",
+      "csvDesc": "Universal, any editor",
+      "jsonDesc": "For developers"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to see your subscriptions.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "error": "Failed to sign in",
+      "noAccount": "Don't have an account?",
+      "registerCta": "Sign up for free"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Start tracking your subscriptions in under a minute.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "passwordHint": "At least 8 characters.",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "error": "Failed to create account",
+      "perksLabel": "Benefits of creating an account",
+      "perks": {
+        "noCard": "No credit card",
+        "noBank": "No bank connection",
+        "cancelAnytime": "Cancel anytime"
+      },
+      "termsLead": "By creating your account, you agree to our",
+      "termsLink": "Terms",
+      "and": "and",
+      "privacyLink": "Privacy",
+      "haveAccount": "Already have an account?",
+      "loginCta": "Sign in"
+    },
+    "oauth": {
+      "divider": "Or continue with",
+      "continueWith": "Continue with {{provider}}"
+    }
+  },
+  "landing": {
+    "header": {
+      "signIn": "Sign in",
+      "createAccount": "Create account"
+    },
+    "hero": {
+      "badge": "Open beta",
+      "badgeLink": "See what we're building",
+      "titleLead": "Your subscriptions,",
+      "titleHighlight": "under control",
+      "subtitle": "A simple tracker so you know what you pay each month, when it renews and with which card. No bank connection, no hassle.",
+      "ctaPrimary": "Try it free",
+      "ctaSecondary": "View roadmap",
+      "benefitsLabel": "Key benefits"
+    },
+    "benefits": {
+      "noCard": "No credit card",
+      "noBank": "No bank connection",
+      "cancelAnytime": "Cancel anytime"
+    },
+    "principlesLabel": "Product principles",
+    "principles": {
+      "noBank": { "value": "No bank", "label": "We never ask for banking credentials" },
+      "private": { "value": "Private", "label": "Your data is never sold or shared" },
+      "free": { "value": "Free", "label": "Early access while we're in beta" },
+      "openBeta": { "value": "Open beta", "label": "Built in public, week by week" }
+    },
+    "features": {
+      "badge": "The essentials",
+      "titleLead": "Built so you stop",
+      "titleHighlight": "forgetting",
+      "subtitle": "No bloated dashboards or charts you'll never use. Just what you really need to know what you pay each month.",
+      "addInSeconds": {
+        "title": "Add in seconds",
+        "description": "Add your subscriptions with recognized services like Netflix, Spotify or Disney+ —without typing anything extra."
+      },
+      "reminders": {
+        "title": "Reminders",
+        "description": "Know when each service renews before you're charged."
+      },
+      "summary": {
+        "title": "Clear summary",
+        "description": "See your total monthly spend and what share each subscription represents."
+      },
+      "cards": {
+        "title": "Multiple cards",
+        "description": "Assign a payment method to each service so you know which card is charged each month."
+      }
+    },
+    "services": {
+      "badge": "Recognized services",
+      "title": "We automatically identify the services you already know",
+      "subtitle": "And if one is missing, you add it manually in seconds."
+    },
+    "roadmap": {
+      "badge": "Public roadmap",
+      "titleLead": "Built",
+      "titleHighlight": "in public",
+      "subtitle": "Here's what exists today, what's coming and where we want to go. No empty promises, just what we're building.",
+      "status": {
+        "available": "Available",
+        "soon": "Coming soon",
+        "planned": "Planned"
+      },
+      "available": {
+        "title": "Available today",
+        "items": {
+          "manual": { "title": "Manual subscription tracking", "description": "Add any recurring service with its price, currency and billing date." },
+          "catalog": { "title": "Service catalog", "description": "Visual recognition for the most common streaming, music and software services." },
+          "summary": { "title": "Monthly summary", "description": "Consolidated monthly total and per-service breakdown to make decisions." },
+          "themes": { "title": "Light and dark mode", "description": "Responsive interface with a theme synced to your system." }
+        }
+      },
+      "soon": {
+        "title": "On the way",
+        "items": {
+          "excel": { "title": "Export to Excel", "description": "Download your full history as .xlsx for your personal accounting." },
+          "categories": { "title": "Custom categories", "description": "Group services by category (entertainment, productivity, home…)." },
+          "alerts": { "title": "Pre-charge alerts", "description": "Configurable reminders before each renewal." },
+          "ai": { "title": "AI assistant", "description": "Chat with your data: 'which subscriptions can I cancel?'" }
+        }
+      },
+      "planned": {
+        "title": "On the horizon",
+        "items": {
+          "family": { "title": "Family / shared mode", "description": "Share subscriptions with your partner or family and split costs." },
+          "email": { "title": "Detection from email", "description": "Optionally import receipts from Gmail or Outlook with your permission." },
+          "mobile": { "title": "Native mobile app", "description": "Installable version with push notifications and a spending widget." },
+          "currency": { "title": "Multi-currency and conversion", "description": "For those who pay for services in USD but live with another currency." }
+        }
+      }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Frequently asked questions",
+      "contactLead": "Can't find what you're looking for?",
+      "contactCta": "Write to us",
+      "items": {
+        "bank": { "q": "Does Cusana connect to my bank?", "a": "No. Cusana works with manual tracking: you decide which subscriptions to add. We never ask for banking credentials or your bank's tokens." },
+        "price": { "q": "How much does it cost?", "a": "While we're in open beta, access is free. When we leave beta we'll have a free plan and a paid one with advanced features." },
+        "stable": { "q": "How stable is it?", "a": "Cusana is an actively developed project. Features listed on the roadmap as 'Available today' are operational; the rest are not yet." },
+        "devices": { "q": "What devices does it work on?", "a": "On any modern browser —desktop, tablet or mobile— with a fully responsive experience and dark mode." }
+      }
+    },
+    "cta": {
+      "title": "Start seeing your subscriptions for good.",
+      "subtitle": "Creating an account takes less than a minute. You don't need a card or a bank connection.",
+      "primary": "Create a free account",
+      "secondary": "See what's coming"
+    },
+    "footer": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "contact": "Contact",
+      "legalLabel": "Legal"
+    }
+  }
+}

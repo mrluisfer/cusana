@@ -10,8 +10,10 @@ import { signIn } from "@/lib/auth-client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
 
@@ -32,7 +34,7 @@ export default function LoginPage() {
           window.location.href = "/dashboard";
         },
         onError: (ctx) => {
-          setError(ctx.error.message ?? "Error al iniciar sesión");
+          setError(ctx.error.message ?? t("auth.login.error"));
           setIsPending(false);
         },
       },
@@ -41,13 +43,13 @@ export default function LoginPage() {
 
   return (
     <AuthLayout
-      title="Bienvenido de vuelta"
-      subtitle="Inicia sesión para ver tus suscripciones."
+      title={t("auth.login.title")}
+      subtitle={t("auth.login.subtitle")}
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <AuthError message={error} />
         <AuthInput
-          label="Email"
+          label={t("auth.login.emailLabel")}
           id="email"
           name="email"
           type="email"
@@ -57,7 +59,7 @@ export default function LoginPage() {
           required
         />
         <AuthInput
-          label="Contraseña"
+          label={t("auth.login.passwordLabel")}
           id="password"
           name="password"
           type="password"
@@ -69,7 +71,7 @@ export default function LoginPage() {
               href="/forgot-password"
               className="text-muted-foreground hover:text-primary text-xs underline-offset-4 transition-colors hover:underline"
             >
-              ¿Olvidaste tu contraseña?
+              {t("auth.login.forgotPassword")}
             </Link>
           }
         />
@@ -81,11 +83,11 @@ export default function LoginPage() {
           {isPending ? (
             <>
               <Spinner aria-hidden="true" />
-              Iniciando sesión…
+              {t("auth.login.submitting")}
             </>
           ) : (
             <>
-              Iniciar sesión
+              {t("auth.login.submit")}
               <ArrowRight
                 className="size-4 transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
@@ -98,12 +100,12 @@ export default function LoginPage() {
       <OAuthButtons />
 
       <p className="text-muted-foreground mt-6 text-center text-sm">
-        ¿No tienes cuenta?{" "}
+        {t("auth.login.noAccount")}{" "}
         <Link
           href="/register"
           className="text-foreground hover:text-primary font-medium underline-offset-4 transition-colors hover:underline"
         >
-          Regístrate gratis
+          {t("auth.login.registerCta")}
         </Link>
       </p>
     </AuthLayout>

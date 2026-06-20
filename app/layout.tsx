@@ -1,8 +1,14 @@
+import {
+  defaultLocale,
+  isLocale,
+  languageStorageKey,
+} from "@/lib/i18n/settings";
 import { siteConfig, siteKeywords } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import Providers from "./providers";
 
@@ -88,14 +94,18 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const storedLang = cookieStore.get(languageStorageKey)?.value;
+  const initialLanguage = isLocale(storedLang) ? storedLang : defaultLocale;
+
   return (
     <html
-      lang="es"
+      lang={initialLanguage}
       className={cn(
         "overflow-x-hidden",
         "font-sans",
@@ -107,7 +117,7 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${geist.variable} overflow-x-hidden antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers initialLanguage={initialLanguage}>{children}</Providers>
       </body>
       <Analytics />
     </html>

@@ -3,6 +3,7 @@
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 
 const emptySubscribe = () => () => {};
@@ -22,10 +23,16 @@ export function ThemeToggle({
 }) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
+  const { t } = useTranslation();
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" aria-label="Cambiar tema" disabled>
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label={t("theme.change")}
+        disabled
+      >
         <SunIcon className="size-4" />
       </Button>
     );
@@ -38,7 +45,7 @@ export function ThemeToggle({
       variant={variant}
       size="icon"
       className="relative"
-      aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+      aria-label={isDark ? t("theme.switchToLight") : t("theme.switchToDark")}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
       <SunIcon className="size-4 scale-100 rotate-0 transition-transform dark:scale-0 dark:-rotate-90" />

@@ -1,6 +1,7 @@
 "use client";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import PhoneMockup from "@/components/landing/phone-mockup";
+import { LanguageToggle } from "@/components/language-toggle";
 import { FlowerIcon, Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -30,192 +31,93 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const features = [
+// Visual metadata kept static; text comes from translations keyed by `id`.
+const featureMeta = [
   {
+    id: "addInSeconds",
     icon: Plus,
-    title: "Agrega en segundos",
-    description:
-      "Registra tus suscripciones con servicios reconocidos como Netflix, Spotify o Disney+ —sin escribir nada extra.",
     span: "md:col-span-2",
     accent: "from-violet-500/20 via-fuchsia-500/10 to-transparent",
   },
   {
+    id: "reminders",
     icon: Bell,
-    title: "Recordatorios",
-    description: "Sabe cuándo se renueva cada servicio antes del cargo.",
     span: "md:col-span-1",
     accent: "from-sky-500/20 via-cyan-500/10 to-transparent",
   },
   {
+    id: "summary",
     icon: PieChart,
-    title: "Resumen claro",
-    description:
-      "Visualiza el gasto total mensual y qué porcentaje aporta cada suscripción.",
     span: "md:col-span-1",
     accent: "from-emerald-500/20 via-teal-500/10 to-transparent",
   },
   {
+    id: "cards",
     icon: CreditCard,
-    title: "Múltiples tarjetas",
-    description:
-      "Asigna un método de pago a cada servicio para saber qué tarjeta se cobra cada mes.",
     span: "md:col-span-2",
     accent: "from-amber-500/20 via-orange-500/10 to-transparent",
   },
-];
+] as const;
 
 // Hechos verificables sobre el producto — no métricas inventadas.
-const principles = [
-  {
-    icon: Lock,
-    value: "Sin banco",
-    label: "Nunca pedimos credenciales bancarias",
-  },
-  {
-    icon: Eye,
-    value: "Privado",
-    label: "Tus datos no se venden ni comparten",
-  },
-  {
-    icon: Sparkles,
-    value: "Gratis",
-    label: "Acceso anticipado mientras estamos en beta",
-  },
-  {
-    icon: Zap,
-    value: "Open beta",
-    label: "Construyéndose en público, semana a semana",
-  },
-];
+const principleMeta = [
+  { id: "noBank", icon: Lock },
+  { id: "private", icon: Eye },
+  { id: "free", icon: Sparkles },
+  { id: "openBeta", icon: Zap },
+] as const;
 
-const benefits = [
-  "Sin tarjeta de crédito",
-  "Sin conexión bancaria",
-  "Cancela cuando quieras",
-];
+const benefitIds = ["noCard", "noBank", "cancelAnytime"] as const;
 
 type RoadmapStatus = "available" | "soon" | "planned";
-const roadmap: Record<
-  RoadmapStatus,
-  { title: string; items: { title: string; description: string }[] }
-> = {
-  available: {
-    title: "Disponible hoy",
-    items: [
-      {
-        title: "Registro manual de suscripciones",
-        description:
-          "Agrega cualquier servicio recurrente con precio, moneda y fecha de cobro.",
-      },
-      {
-        title: "Catálogo de servicios",
-        description:
-          "Reconocimiento visual para los servicios más comunes en streaming, música y software.",
-      },
-      {
-        title: "Resumen mensual",
-        description:
-          "Total mensual consolidado y desglose por servicio para tomar decisiones.",
-      },
-      {
-        title: "Modo claro y oscuro",
-        description: "Interfaz responsive con tema sincronizado al sistema.",
-      },
-    ],
-  },
-  soon: {
-    title: "En camino",
-    items: [
-      {
-        title: "Exportar a Excel",
-        description:
-          "Descarga el historial completo en .xlsx para tu contabilidad personal.",
-      },
-      {
-        title: "Categorías personalizadas",
-        description:
-          "Agrupa servicios por categoría (entretenimiento, productividad, hogar…).",
-      },
-      {
-        title: "Alertas previas al cobro",
-        description: "Recordatorios configurables antes de cada renovación.",
-      },
-      {
-        title: "Asistente con IA",
-        description:
-          "Conversa con tus datos: '¿qué suscripciones puedo cancelar?'",
-      },
-    ],
-  },
-  planned: {
-    title: "En el horizonte",
-    items: [
-      {
-        title: "Modo familiar / compartido",
-        description:
-          "Comparte suscripciones con tu pareja o familia y divide gastos.",
-      },
-      {
-        title: "Detección desde el correo",
-        description:
-          "Importa recibos opcionalmente desde Gmail o Outlook con tu permiso.",
-      },
-      {
-        title: "App móvil nativa",
-        description:
-          "Versión instalable con notificaciones push y widget de gasto.",
-      },
-      {
-        title: "Multi-moneda y conversión",
-        description:
-          "Para quienes pagan servicios en USD pero viven con otra moneda.",
-      },
-    ],
-  },
-};
 
-const faqs = [
-  {
-    q: "¿Cusana se conecta con mi banco?",
-    a: "No. Cusana funciona con registro manual: tú decides qué suscripciones agregar. Nunca pedimos credenciales bancarias ni tokens de tu banco.",
-  },
-  {
-    q: "¿Cuánto cuesta?",
-    a: "Mientras estamos en beta abierta, el acceso es gratuito. Cuando salgamos de beta tendremos un plan gratuito y uno de pago con funciones avanzadas.",
-  },
-  {
-    q: "¿Qué tan estable es?",
-    a: "Cusana es un proyecto activo en desarrollo. Las funciones publicadas en el roadmap como 'Disponible hoy' están operativas; el resto aún no.",
-  },
-  {
-    q: "¿En qué dispositivos funciona?",
-    a: "En cualquier navegador moderno —desktop, tablet o móvil— con una experiencia totalmente responsive y modo oscuro.",
-  },
-];
+// Full base keys (including status) so `${base}.title` only resolves to keys
+// that actually exist — avoids invalid status × item cross-products.
+const roadmapItemKeys = {
+  available: [
+    "landing.roadmap.available.items.manual",
+    "landing.roadmap.available.items.catalog",
+    "landing.roadmap.available.items.summary",
+    "landing.roadmap.available.items.themes",
+  ],
+  soon: [
+    "landing.roadmap.soon.items.excel",
+    "landing.roadmap.soon.items.categories",
+    "landing.roadmap.soon.items.alerts",
+    "landing.roadmap.soon.items.ai",
+  ],
+  planned: [
+    "landing.roadmap.planned.items.family",
+    "landing.roadmap.planned.items.email",
+    "landing.roadmap.planned.items.mobile",
+    "landing.roadmap.planned.items.currency",
+  ],
+} as const;
+
+const faqIds = ["bank", "price", "stable", "devices"] as const;
 
 const statusMeta: Record<
   RoadmapStatus,
-  { label: string; icon: typeof Check; className: string }
+  { icon: typeof Check; className: string }
 > = {
   available: {
-    label: "Disponible",
     icon: Check,
     className: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
   },
   soon: {
-    label: "Próximamente",
     icon: CircleDot,
     className: "bg-primary/15 text-primary",
   },
   planned: {
-    label: "Planeado",
     icon: CircleDashed,
     className: "bg-muted text-muted-foreground",
   },
 };
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const [activeRoadmap, setActiveRoadmap] =
     useState<RoadmapStatus>("available");
 
@@ -248,22 +150,21 @@ export default function LandingPage() {
 
       <div className="container mx-auto max-w-6xl px-4">
         {/* Header */}
-        <header
-          className="border-border/60 bg-background/60 supports-[backdrop-filter]:bg-background/40 sticky top-4 z-40 mt-4 flex items-center justify-between rounded-2xl border px-4 py-2.5 shadow-sm backdrop-blur-xl"
-        >
+        <header className="border-border/60 bg-background/60 supports-[backdrop-filter]:bg-background/40 sticky top-4 z-40 mt-4 flex items-center justify-between rounded-2xl border px-4 py-2.5 shadow-sm backdrop-blur-xl">
           <Logo />
 
           <div className="flex items-center justify-end gap-2">
+            <LanguageToggle />
             <ThemeToggle />
             <Button
               variant="ghost"
               className="hidden sm:inline-flex"
               render={<Link href="/login" />}
             >
-              Iniciar sesión
+              {t("landing.header.signIn")}
             </Button>
             <Button render={<Link href="/register" />}>
-              Crear cuenta
+              {t("landing.header.createAccount")}
               <ArrowRight className="ml-1 size-4" aria-hidden="true" />
             </Button>
           </div>
@@ -280,12 +181,12 @@ export default function LandingPage() {
                 href="#roadmap"
                 className="group border-border/70 bg-card/50 hover:bg-card focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border py-1.5 pr-3 pl-1.5 text-sm shadow-sm backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
-                <span className="bg-primary/15 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold">
+                <Badge>
                   <Sparkles className="size-3" aria-hidden="true" />
-                  Beta abierta
-                </span>
+                  {t("landing.hero.badge")}
+                </Badge>
                 <span className="text-muted-foreground">
-                  Mira lo que estamos construyendo
+                  {t("landing.hero.badgeLink")}
                 </span>
                 <ArrowRight
                   className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5"
@@ -297,9 +198,9 @@ export default function LandingPage() {
                 id="hero-heading"
                 className="text-foreground text-5xl leading-[1.05] font-semibold tracking-tight text-balance md:text-6xl lg:text-7xl"
               >
-                Tus suscripciones,{" "}
+                {t("landing.hero.titleLead")}{" "}
                 <span className="from-primary relative inline-block bg-linear-to-br via-fuchsia-500 to-sky-500 bg-clip-text text-transparent">
-                  bajo control
+                  {t("landing.hero.titleHighlight")}
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 200 12"
@@ -319,9 +220,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-muted-foreground max-w-lg text-lg leading-relaxed text-pretty">
-                Un rastreador simple para saber qué pagas cada mes, cuándo se
-                renueva y con qué tarjeta. Sin conectar tu banco, sin
-                complicaciones.
+                {t("landing.hero.subtitle")}
               </p>
 
               <div className="flex flex-col gap-3 pt-1 sm:flex-row">
@@ -330,7 +229,7 @@ export default function LandingPage() {
                   className="group shadow-primary/25 relative px-6 text-base shadow-lg"
                   render={<Link href="/register" />}
                 >
-                  Probar gratis
+                  {t("landing.hero.ctaPrimary")}
                   <ArrowRight
                     className="ml-2 size-4 transition-transform group-hover:translate-x-0.5"
                     aria-hidden="true"
@@ -342,15 +241,15 @@ export default function LandingPage() {
                   className="px-6 text-base backdrop-blur"
                   render={<Link href="#roadmap" />}
                 >
-                  Ver roadmap
+                  {t("landing.hero.ctaSecondary")}
                 </Button>
               </div>
 
               <ul
                 className="flex flex-wrap gap-x-5 gap-y-2 pt-1"
-                aria-label="Beneficios principales"
+                aria-label={t("landing.hero.benefitsLabel")}
               >
-                {benefits.map((benefit) => (
+                {benefitIds.map((benefit) => (
                   <li
                     key={benefit}
                     className="text-muted-foreground flex items-center gap-1.5 text-sm"
@@ -358,7 +257,7 @@ export default function LandingPage() {
                     <span className="bg-primary/15 text-primary inline-flex size-4 items-center justify-center rounded-full">
                       <Check className="size-3" aria-hidden="true" />
                     </span>
-                    {benefit}
+                    {t(`landing.benefits.${benefit}` as const)}
                   </li>
                 ))}
               </ul>
@@ -383,31 +282,35 @@ export default function LandingPage() {
         </section>
 
         {/* Principles — verifiable product facts (replaces fake stats) */}
-        <section className="py-12" aria-label="Principios del producto">
+        <section className="py-12" aria-label={t("landing.principlesLabel")}>
           <div className="border-border/60 bg-card/40 relative overflow-hidden rounded-3xl border p-8 backdrop-blur-xl md:p-10">
             <div className="from-primary/5 absolute inset-0 bg-linear-to-br via-transparent to-fuchsia-500/5" />
             <dl className="relative grid grid-cols-2 gap-y-8 md:grid-cols-4">
-              {principles.map((item, index) => (
-                <div
-                  key={item.value}
-                  className={`px-4 text-center ${
-                    index < principles.length - 1
-                      ? "md:border-border/60 md:border-r"
-                      : ""
-                  }`}
-                >
-                  <div className="bg-primary/10 text-primary ring-primary/20 mx-auto mb-3 flex size-10 items-center justify-center rounded-xl ring-1">
-                    <item.icon className="size-4" aria-hidden="true" />
+              {principleMeta.map((item, index) => {
+                const value = t(`landing.principles.${item.id}.value` as const);
+                const label = t(`landing.principles.${item.id}.label` as const);
+                return (
+                  <div
+                    key={item.id}
+                    className={`px-4 text-center ${
+                      index < principleMeta.length - 1
+                        ? "md:border-border/60 md:border-r"
+                        : ""
+                    }`}
+                  >
+                    <div className="bg-primary/10 text-primary ring-primary/20 mx-auto mb-3 flex size-10 items-center justify-center rounded-xl ring-1">
+                      <item.icon className="size-4" aria-hidden="true" />
+                    </div>
+                    <dt className="sr-only">{label}</dt>
+                    <dd className="from-foreground to-foreground/60 bg-linear-to-br bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+                      {value}
+                    </dd>
+                    <p className="text-muted-foreground mt-1 text-sm text-balance">
+                      {label}
+                    </p>
                   </div>
-                  <dt className="sr-only">{item.label}</dt>
-                  <dd className="from-foreground to-foreground/60 bg-linear-to-br bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
-                    {item.value}
-                  </dd>
-                  <p className="text-muted-foreground mt-1 text-sm text-balance">
-                    {item.label}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </dl>
           </div>
         </section>
@@ -421,27 +324,26 @@ export default function LandingPage() {
           <div className="mb-14 text-center">
             <Badge variant="default" className="mb-4 backdrop-blur">
               <Zap className="mr-1 size-3" aria-hidden="true" />
-              Lo esencial
+              {t("landing.features.badge")}
             </Badge>
             <h2
               id="features-heading"
               className="text-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl lg:text-5xl"
             >
-              Hecho para que dejes de{" "}
+              {t("landing.features.titleLead")}{" "}
               <span className="from-primary bg-linear-to-r to-fuchsia-500 bg-clip-text text-transparent">
-                olvidar
+                {t("landing.features.titleHighlight")}
               </span>
             </h2>
             <p className="text-muted-foreground mx-auto max-w-2xl text-lg text-pretty">
-              Sin dashboards inflados ni gráficas que no usas. Solo lo que de
-              verdad necesitas para saber qué pagas cada mes.
+              {t("landing.features.subtitle")}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {features.map((feature) => (
+            {featureMeta.map((feature) => (
               <Card
-                key={feature.title}
+                key={feature.id}
                 className={`group hover:border-primary/30 hover:shadow-primary/10 border-border/60 bg-card/40 relative overflow-hidden p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${feature.span}`}
               >
                 <div
@@ -454,10 +356,10 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h3 className="text-foreground mb-1.5 text-lg font-semibold">
-                      {feature.title}
+                      {t(`landing.features.${feature.id}.title` as const)}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed text-pretty">
-                      {feature.description}
+                      {t(`landing.features.${feature.id}.description` as const)}
                     </p>
                   </div>
                 </div>
@@ -470,16 +372,16 @@ export default function LandingPage() {
         <section className="py-16" aria-labelledby="services-heading">
           <div className="mb-8 text-center">
             <Badge variant="default" className="mb-4 backdrop-blur">
-              Servicios reconocidos
+              {t("landing.services.badge")}
             </Badge>
             <h2
               id="services-heading"
               className="text-foreground text-2xl font-semibold text-balance md:text-3xl"
             >
-              Identificamos automáticamente los servicios que ya conoces
+              {t("landing.services.title")}
             </h2>
             <p className="text-muted-foreground mt-3 text-sm">
-              Y si falta alguno, lo agregas manualmente en segundos.
+              {t("landing.services.subtitle")}
             </p>
           </div>
           <div className="group relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
@@ -507,20 +409,19 @@ export default function LandingPage() {
         >
           <div className="mb-12 text-center">
             <Badge variant="default" className="mb-4 backdrop-blur">
-              Roadmap público
+              {t("landing.roadmap.badge")}
             </Badge>
             <h2
               id="roadmap-heading"
               className="text-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl"
             >
-              Construyéndose{" "}
+              {t("landing.roadmap.titleLead")}{" "}
               <span className="from-primary bg-linear-to-r to-fuchsia-500 bg-clip-text text-transparent">
-                en público
+                {t("landing.roadmap.titleHighlight")}
               </span>
             </h2>
             <p className="text-muted-foreground mx-auto max-w-2xl text-pretty">
-              Esto es lo que hay hoy, lo que viene y a dónde queremos llegar.
-              Sin promesas vacías, solo lo que estamos construyendo.
+              {t("landing.roadmap.subtitle")}
             </p>
           </div>
 
@@ -530,25 +431,25 @@ export default function LandingPage() {
             className="space-y-8"
           >
             <TabsList className="bg-card/40 border-border/60 mx-auto w-fit border backdrop-blur-xl">
-              {(Object.keys(roadmap) as RoadmapStatus[]).map((status) => {
+              {(Object.keys(statusMeta) as RoadmapStatus[]).map((status) => {
                 const meta = statusMeta[status];
                 return (
                   <TabsTrigger key={status} value={status} className="gap-2">
                     <meta.icon className="size-3.5" aria-hidden="true" />
-                    {meta.label}
+                    {t(`landing.roadmap.status.${status}` as const)}
                   </TabsTrigger>
                 );
               })}
             </TabsList>
 
-            {(Object.keys(roadmap) as RoadmapStatus[]).map((status) => {
+            {(Object.keys(statusMeta) as RoadmapStatus[]).map((status) => {
               const meta = statusMeta[status];
               return (
                 <TabsContent key={status} value={status}>
                   <div className="grid gap-4 md:grid-cols-2">
-                    {roadmap[status].items.map((item) => (
+                    {roadmapItemKeys[status].map((baseKey) => (
                       <Card
-                        key={item.title}
+                        key={baseKey}
                         className="group border-border/60 bg-card/40 hover:border-primary/30 relative overflow-hidden p-5 backdrop-blur-xl transition-all hover:-translate-y-0.5"
                       >
                         <div className="flex items-start gap-3">
@@ -560,10 +461,10 @@ export default function LandingPage() {
                           </span>
                           <div>
                             <h3 className="text-foreground font-semibold">
-                              {item.title}
+                              {t(`${baseKey}.title` as const)}
                             </h3>
                             <p className="text-muted-foreground mt-1 text-sm leading-relaxed text-pretty">
-                              {item.description}
+                              {t(`${baseKey}.description` as const)}
                             </p>
                           </div>
                         </div>
@@ -581,37 +482,37 @@ export default function LandingPage() {
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
               <Badge variant="default" className="mb-4 backdrop-blur">
-                FAQ
+                {t("landing.faq.badge")}
               </Badge>
               <h2
                 id="faq-heading"
                 className="text-foreground text-3xl font-semibold text-balance md:text-4xl"
               >
-                Preguntas frecuentes
+                {t("landing.faq.title")}
               </h2>
               <p className="text-muted-foreground mt-4 text-pretty">
-                ¿No encuentras lo que buscas?{" "}
+                {t("landing.faq.contactLead")}{" "}
                 <Link
                   href="mailto:lolesuncrak@gmail.com"
                   className="text-primary underline-offset-4 hover:underline"
                 >
-                  Escríbenos
+                  {t("landing.faq.contactCta")}
                 </Link>
                 .
               </p>
             </div>
             <Accordion className="border-border/60 divide-border/60 bg-card/40 rounded-2xl border px-2 backdrop-blur-xl">
-              {faqs.map((faq) => (
+              {faqIds.map((faqId) => (
                 <AccordionItem
-                  key={faq.q}
-                  value={faq.q}
+                  key={faqId}
+                  value={faqId}
                   className="border-border/60 px-3"
                 >
                   <AccordionTrigger className="text-left text-base font-medium">
-                    {faq.q}
+                    {t(`landing.faq.items.${faqId}.q` as const)}
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed text-pretty">
-                    {faq.a}
+                    {t(`landing.faq.items.${faqId}.a` as const)}
                   </AccordionContent>
                 </AccordionItem>
               ))}
@@ -640,11 +541,10 @@ export default function LandingPage() {
                 id="cta-heading"
                 className="text-primary-foreground mb-4 text-3xl font-semibold text-balance md:text-4xl lg:text-5xl"
               >
-                Empieza a ver tus suscripciones de una vez.
+                {t("landing.cta.title")}
               </h2>
               <p className="text-primary-foreground/85 mb-8 text-lg text-pretty">
-                Crear cuenta toma menos de un minuto. No necesitas tarjeta ni
-                conectar tu banco.
+                {t("landing.cta.subtitle")}
               </p>
               <div className="flex flex-col justify-center gap-3 sm:flex-row">
                 <Button
@@ -652,7 +552,7 @@ export default function LandingPage() {
                   variant="secondary"
                   render={<Link href="/register" />}
                 >
-                  Crear cuenta gratis
+                  {t("landing.cta.primary")}
                   <ArrowRight
                     className="ml-2 size-4 transition-transform group-hover:translate-x-0.5"
                     aria-hidden="true"
@@ -663,7 +563,7 @@ export default function LandingPage() {
                   variant="secondary"
                   render={<Link href="#roadmap" />}
                 >
-                  Ver qué viene
+                  {t("landing.cta.secondary")}
                 </Button>
               </div>
             </div>
@@ -680,25 +580,25 @@ export default function LandingPage() {
 
             <nav
               className="text-muted-foreground flex items-center gap-6 text-sm"
-              aria-label="Legal"
+              aria-label={t("landing.footer.legalLabel")}
             >
               <Link
                 href="/privacy"
                 className="hover:text-foreground focus-visible:ring-ring rounded transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
-                Privacidad
+                {t("landing.footer.privacy")}
               </Link>
               <Link
                 href="/terms"
                 className="hover:text-foreground focus-visible:ring-ring rounded transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
-                Términos
+                {t("landing.footer.terms")}
               </Link>
               <Link
                 href="mailto:lolesuncrak@gmail.com"
                 className="hover:text-foreground focus-visible:ring-ring rounded transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
-                Contacto
+                {t("landing.footer.contact")}
               </Link>
             </nav>
 

@@ -13,13 +13,14 @@ import { currencySymbols } from "@/constants/currency";
 import { type ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-
-const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+import { useTranslation } from "react-i18next";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -61,6 +62,8 @@ function DayPopoverContent({
   monthName: string;
   dayOfWeek: string;
 }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const total = payments.reduce(
     (sum, p) => sum + (Number.parseFloat(String(p.price)) || 0),
     0,
@@ -97,7 +100,7 @@ function DayPopoverContent({
               </div>
               <span className="font-mono text-sm font-semibold tabular-nums">
                 {symbol}
-                {price.toLocaleString("es-MX", {
+                {price.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
@@ -110,10 +113,12 @@ function DayPopoverContent({
       {payments.length > 1 && (
         <div className="border-border border-t border-dashed pt-2.5">
           <div className="flex items-center justify-between px-1.5">
-            <span className="text-muted-foreground text-sm">Total:</span>
+            <span className="text-muted-foreground text-sm">
+              {t("dashboard.calendar.total")}
+            </span>
             <span className="font-mono text-sm font-bold tabular-nums">
               $
-              {total.toLocaleString("es-MX", {
+              {total.toLocaleString(toIntlLocale(language), {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -142,12 +147,13 @@ function CalendarDay({
   monthName,
   dayOfWeek,
 }: CalendarDayProps) {
+  const { t } = useTranslation();
   const hasPayments = payments.length > 0;
 
   const dayElement = (
     <div
       role="gridcell"
-      aria-label={`Día ${day}${isToday ? ", hoy" : ""}${hasPayments ? `, ${payments.length} cobro${payments.length > 1 ? "s" : ""}` : ""}`}
+      aria-label={`${day}${isToday ? `, ${t("dashboard.calendar.today")}` : ""}${hasPayments ? `, ${t("dashboard.calendar.charges", { count: payments.length })}` : ""}`}
       aria-current={isToday ? "date" : undefined}
       className={cn(
         "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
@@ -204,8 +210,18 @@ function CalendarDay({
 }
 
 export function BillingCalendar() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { data: session } = useSession();
   const [monthOffset, setMonthOffset] = useState(0);
+
+  const weekDays = useMemo(() => {
+    const fmt = new Intl.DateTimeFormat(toIntlLocale(language), {
+      weekday: "short",
+    });
+    // 2024-01-01 is a Monday — build a Monday-first week.
+    return Array.from({ length: 7 }, (_, i) => fmt.format(new Date(2024, 0, 1 + i)));
+  }, [language]);
 
   const { data: subscriptions, isPending } = useQuery<Subscription[]>({
     queryKey: [QueryKeys.SUBSCRIPTIONS, "list"],
@@ -230,7 +246,9 @@ export function BillingCalendar() {
 
   const firstDayOfMonth = (viewDate.getDay() + 6) % 7;
 
-  const monthName = viewDate.toLocaleDateString("es-MX", { month: "long" });
+  const monthName = viewDate.toLocaleDateString(toIntlLocale(language), {
+    month: "long",
+  });
   const yearLabel = viewDate.getFullYear();
 
   const billingDays = useMemo(() => {
@@ -254,7 +272,7 @@ export function BillingCalendar() {
 
   const getDayOfWeek = (day: number) => {
     const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    return date.toLocaleDateString("es-MX", { weekday: "long" });
+    return date.toLocaleDateString(toIntlLocale(language), { weekday: "long" });
   };
 
   const currentDayOfWeekIndex = (now.getDay() + 6) % 7;
@@ -268,7 +286,7 @@ export function BillingCalendar() {
             type="button"
             onClick={() => setMonthOffset((prev) => prev - 1)}
             className="text-muted-foreground hover:text-foreground hover:bg-muted flex size-8 items-center justify-center rounded-xl transition-colors"
-            aria-label="Mes anterior"
+            aria-label={t("dashboard.calendar.prevMonth")}
           >
             <ChevronLeftIcon className="size-4" />
           </button>
@@ -283,7 +301,7 @@ export function BillingCalendar() {
             onClick={() => setMonthOffset((prev) => prev + 1)}
             disabled={monthOffset >= 2}
             className="text-muted-foreground hover:text-foreground hover:bg-muted flex size-8 items-center justify-center rounded-xl transition-colors disabled:pointer-events-none disabled:opacity-30"
-            aria-label="Mes siguiente"
+            aria-label={t("dashboard.calendar.nextMonth")}
           >
             <ChevronRightIcon className="size-4" />
           </button>
@@ -296,7 +314,7 @@ export function BillingCalendar() {
             variant={"secondary"}
             size={"lg"}
           >
-            Hoy
+            {t("dashboard.calendar.today")}
           </Button>
         )}
       </div>
@@ -307,11 +325,11 @@ export function BillingCalendar() {
         <div
           className="space-y-1.5"
           role="grid"
-          aria-label="Calendario de cobros"
+          aria-label={t("dashboard.calendar.gridLabel")}
         >
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="row">
-            {WEEK_DAYS.map((day, i) => (
+            {weekDays.map((day, i) => (
               <div
                 key={day}
                 role="columnheader"

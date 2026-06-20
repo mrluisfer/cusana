@@ -23,6 +23,8 @@ import {
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -32,6 +34,7 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const MONTHS_TO_SHOW = 6;
 
@@ -113,12 +116,14 @@ function TrendBar({
   currencySymbol,
   year,
 }: BarProps) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
   const showInnerLabel = percentage > 35;
   const isAboveAverage = amount > averageAmount * 1.1;
   const isZero = amount === 0;
 
-  const formattedAmount = amount.toLocaleString("es-MX", {
+  const formattedAmount = amount.toLocaleString(toIntlLocale(language), {
     maximumFractionDigits: 0,
   });
 
@@ -126,7 +131,7 @@ function TrendBar({
     <div
       className="flex items-center gap-3"
       role="row"
-      aria-label={`${month} ${year}: ${currencySymbol}${formattedAmount}, ${subscriptionCount} suscripciones`}
+      aria-label={`${month} ${year}: ${currencySymbol}${formattedAmount}, ${t("dashboard.trend.activeSubscriptions", { count: subscriptionCount })}`}
     >
       <span
         className={cn(
@@ -181,34 +186,34 @@ function TrendBar({
             {month} {year}
             {isCurrent && (
               <span className="text-primary ml-1 text-[10px] font-normal">
-                (actual)
+                ({t("dashboard.trend.current")})
               </span>
             )}
           </p>
           {isZero ? (
             <p className="text-muted-foreground text-xs">
-              Sin cobros este mes
+              {t("dashboard.trend.noCharges")}
             </p>
           ) : (
             <>
               <p className="font-mono text-xs tabular-nums">
                 {currencySymbol}
-                {amount.toLocaleString("es-MX", {
+                {amount.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </p>
               {isAboveAverage && (
                 <p className="text-xs text-amber-500">
-                  Por encima del promedio
+                  {t("dashboard.trend.aboveAverage")}
                 </p>
               )}
             </>
           )}
           <p className="text-muted-foreground text-[10px]">
-            {subscriptionCount} suscripción
-            {subscriptionCount !== 1 ? "es" : ""} activa
-            {subscriptionCount !== 1 ? "s" : ""}
+            {t("dashboard.trend.activeSubscriptions", {
+              count: subscriptionCount,
+            })}
           </p>
         </div>
       </TooltipContent>
@@ -235,6 +240,8 @@ function StatItem({ label, value }: StatItemProps) {
 }
 
 export function MonthlyTrend() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { data: session } = useSession();
   const selectedCurrency = useAtomValue(currencyAtom);
 
@@ -260,15 +267,15 @@ export function MonthlyTrend() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CardHeaderIcon icon={BarChart3Icon} />
-          Tendencia Mensual
+          {t("dashboard.trend.title")}
         </CardTitle>
         <CardDescription>
           {isPending ? (
             <Skeleton className="h-3 w-28" />
           ) : hasData ? (
-            `Gasto real por mes en ${selectedCurrency}`
+            t("dashboard.trend.realByMonth", { currency: selectedCurrency })
           ) : (
-            "Historial de gastos mensuales"
+            t("dashboard.trend.history")
           )}
         </CardDescription>
         {!isPending && hasData && (
@@ -287,7 +294,7 @@ export function MonthlyTrend() {
               <div
                 className="space-y-2"
                 role="table"
-                aria-label="Tendencia de gastos mensuales"
+                aria-label={t("dashboard.trend.chartLabel")}
               >
                 {trend.map((item) => (
                   <TrendBar
@@ -308,21 +315,21 @@ export function MonthlyTrend() {
 
               <div
                 className="flex items-center gap-2"
-                aria-label="Estadísticas de tendencia"
+                aria-label={t("dashboard.trend.statsLabel")}
               >
                 <StatItem
-                  label="Promedio"
-                  value={`${currencySymbol}${(data?.average ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                  label={t("dashboard.trend.average")}
+                  value={`${currencySymbol}${(data?.average ?? 0).toLocaleString(toIntlLocale(language), { maximumFractionDigits: 0 })}`}
                 />
                 <Separator orientation="vertical" className="h-8" />
                 <StatItem
-                  label="Máximo"
-                  value={`${currencySymbol}${(data?.max ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                  label={t("dashboard.trend.max")}
+                  value={`${currencySymbol}${(data?.max ?? 0).toLocaleString(toIntlLocale(language), { maximumFractionDigits: 0 })}`}
                 />
                 <Separator orientation="vertical" className="h-8" />
                 <StatItem
-                  label="Mínimo"
-                  value={`${currencySymbol}${(data?.min ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}`}
+                  label={t("dashboard.trend.min")}
+                  value={`${currencySymbol}${(data?.min ?? 0).toLocaleString(toIntlLocale(language), { maximumFractionDigits: 0 })}`}
                 />
               </div>
             </div>
@@ -332,9 +339,11 @@ export function MonthlyTrend() {
             <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
               <BarChart3Icon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">Sin datos de tendencia</p>
+            <p className="text-sm font-medium">
+              {t("dashboard.trend.emptyTitle")}
+            </p>
             <p className="mt-1 text-xs opacity-70">
-              Agrega suscripciones para ver estadísticas
+              {t("dashboard.trend.emptyHint")}
             </p>
           </div>
         )}

@@ -1,17 +1,19 @@
 "use client";
 import { useSession } from "@/lib/auth-client";
+import { useTranslation } from "react-i18next";
 import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { UserMenu } from "./user-menu";
 
 export default function Header() {
   const { data: session } = useSession();
+  const { t } = useTranslation();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Buenos días";
-    if (hour < 18) return "Buenas tardes";
-    return "Buenas noches";
+    if (hour < 12) return t("nav.greetingMorning");
+    if (hour < 18) return t("nav.greetingAfternoon");
+    return t("nav.greetingEvening");
   };
 
   return (

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
 import { Github } from "lucide-react";
 import { useCallback, useState, type ComponentType, type SVGProps } from "react";
+import { useTranslation } from "react-i18next";
 
 type Provider = {
   id: "google" | "github";
@@ -18,6 +19,7 @@ const providers: Provider[] = [
 ];
 
 function OAuthButton({ provider }: { provider: Provider }) {
+  const { t } = useTranslation();
   const [isPending, setIsPending] = useState(false);
 
   const signInWithProvider = useCallback(() => {
@@ -32,7 +34,7 @@ function OAuthButton({ provider }: { provider: Provider }) {
       onClick={signInWithProvider}
       disabled={isPending}
       className="bg-background/40 backdrop-blur transition-colors"
-      aria-label={`Continuar con ${provider.label}`}
+      aria-label={t("auth.oauth.continueWith", { provider: provider.label })}
     >
       <provider.Icon aria-hidden="true" className="size-4" />
       <span>{provider.label}</span>
@@ -41,6 +43,7 @@ function OAuthButton({ provider }: { provider: Provider }) {
 }
 
 export function OAuthButtons() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="relative my-5">
@@ -49,7 +52,7 @@ export function OAuthButtons() {
         </div>
         <div className="relative flex justify-center text-xs">
           <span className="bg-card/60 supports-[backdrop-filter]:bg-card/40 text-muted-foreground rounded-full px-3 py-0.5 backdrop-blur font-medium tracking-wide uppercase">
-            O continúa con
+            {t("auth.oauth.divider")}
           </span>
         </div>
       </div>

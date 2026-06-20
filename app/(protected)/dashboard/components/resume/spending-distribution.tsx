@@ -32,6 +32,8 @@ import { currencySymbols } from "@/constants/currency";
 import { serviceIcons, type ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
@@ -39,6 +41,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { PieChartIcon, TrendingUpIcon } from "lucide-react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 function DistributionSkeleton() {
   return (
@@ -101,6 +104,8 @@ function getPlatformIcon(platform: string) {
 }
 
 export function SpendingDistribution() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { data: session } = useSession();
   const selectedCurrency = useAtomValue(currencyAtom);
 
@@ -182,18 +187,22 @@ export function SpendingDistribution() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CardHeaderIcon icon={PieChartIcon} />
-          Distribución de Gastos
+          {t("dashboard.distribution.title")}
         </CardTitle>
         <CardDescription>
-          Gasto mensual por plataforma en {selectedCurrency}
+          {t("dashboard.distribution.byPlatform", {
+            currency: selectedCurrency,
+          })}
         </CardDescription>
         {!isPending && sortedPlatforms.length > 0 && (
           <CardAction>
             <div className="text-right">
-              <p className="text-muted-foreground text-xs">Total mensual</p>
+              <p className="text-muted-foreground text-xs">
+                {t("dashboard.distribution.totalMonthly")}
+              </p>
               <p className="font-mono text-lg font-semibold tracking-tight">
                 {currencySymbol}
-                {totalSpending.toLocaleString("es-MX", {
+                {totalSpending.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 })}
@@ -210,10 +219,13 @@ export function SpendingDistribution() {
             <TooltipProvider delay={100}>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Distribución</span>
                   <span className="text-muted-foreground">
-                    {sortedPlatforms.length} plataforma
-                    {sortedPlatforms.length > 1 ? "s" : ""}
+                    {t("dashboard.distribution.distribution")}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {t("dashboard.distribution.platforms", {
+                      count: sortedPlatforms.length,
+                    })}
                   </span>
                 </div>
                 <div className="bg-muted/50 flex h-5 w-full gap-px overflow-hidden p-0.5">
@@ -241,14 +253,19 @@ export function SpendingDistribution() {
                             </p>
                             <p className="text-xs">
                               {currencySymbol}
-                              {data.convertedTotal.toLocaleString("es-MX", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })}{" "}
-                              /mes
+                              {data.convertedTotal.toLocaleString(
+                                toIntlLocale(language),
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                },
+                              )}{" "}
+                              {t("dashboard.distribution.perMonth")}
                             </p>
                             <p className="text-xs font-medium">
-                              {percentage.toFixed(1)}% del total
+                              {t("dashboard.distribution.ofTotal", {
+                                percent: percentage.toFixed(1),
+                              })}
                             </p>
                           </div>
                         </TooltipContent>
@@ -289,25 +306,30 @@ export function SpendingDistribution() {
                             className="h-5 gap-1 bg-amber-500/10 px-1.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
                           >
                             <TrendingUpIcon className="size-3" />
-                            Top
+                            {t("dashboard.distribution.top")}
                           </Badge>
                         )}
                       </ItemTitle>
                       <ItemDescription>
-                        {data.count} suscripción{data.count > 1 ? "es" : ""}
+                        {t("dashboard.distribution.subscriptions", {
+                          count: data.count,
+                        })}
                       </ItemDescription>
                     </ItemContent>
                     <ItemActions>
                       <div className="text-right">
                         <p className="font-mono text-sm font-semibold tabular-nums">
                           {currencySymbol}
-                          {data.convertedTotal.toLocaleString("es-MX", {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
+                          {data.convertedTotal.toLocaleString(
+                            toIntlLocale(language),
+                            {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            },
+                          )}
                         </p>
                         <p className="text-muted-foreground text-[10px]">
-                          /mes
+                          {t("dashboard.distribution.perMonth")}
                         </p>
                       </div>
                       <Badge
@@ -329,9 +351,11 @@ export function SpendingDistribution() {
             <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
               <PieChartIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">Sin datos disponibles</p>
+            <p className="text-sm font-medium">
+              {t("dashboard.distribution.emptyTitle")}
+            </p>
             <p className="mt-1 text-xs opacity-70">
-              Agrega suscripciones para ver la distribución
+              {t("dashboard.distribution.emptyHint")}
             </p>
           </div>
         )}

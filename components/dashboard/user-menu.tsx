@@ -2,17 +2,24 @@
 
 import { signOut, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
+import { locales, localeLabels } from "@/lib/i18n/settings";
+import { useLanguage } from "@/lib/i18n/use-language";
 import {
+  FileTextIcon,
+  LanguagesIcon,
   LogOutIcon,
   MonitorIcon,
   MoonIcon,
   PaletteIcon,
+  ShieldCheckIcon,
   SunIcon,
   UserIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
@@ -35,6 +42,8 @@ export const UserMenu = () => {
   const { push } = useRouter();
   const { data, isPending, error } = useSession();
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
+  const { language, setLanguage } = useLanguage();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const handleSignOut = useCallback(async () => {
@@ -45,11 +54,11 @@ export const UserMenu = () => {
   const openProfile = useCallback(() => setProfileOpen(true), []);
 
   if (error) {
-    return <ErrorStateInline message="Error al cargar el usuario" />;
+    return <ErrorStateInline message={t("userMenu.loadUserError")} />;
   }
 
   if (isPending) {
-    return <Loader message="Cargando información del usuario" />;
+    return <Loader message={t("userMenu.loadingUser")} />;
   }
 
   const user = data?.user;
@@ -86,37 +95,55 @@ export const UserMenu = () => {
 
           {/* Cuenta */}
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("userMenu.myAccount")}</DropdownMenuLabel>
             <DropdownMenuItem onClick={openProfile}>
               <UserIcon className="mr-2 size-4" />
-              Perfil
+              {t("userMenu.profile")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
 
-          {/* Apariencia - submenu funcional */}
+          {/* Preferencias - submenus funcionales */}
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Preferencias</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("userMenu.preferences")}</DropdownMenuLabel>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <PaletteIcon className="mr-2 size-4" />
-                Apariencia
+                {t("userMenu.appearance")}
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
                   <DropdownMenuRadioItem value="system">
                     <MonitorIcon className="mr-2 size-4" />
-                    Sistema
+                    {t("theme.system")}
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="light">
                     <SunIcon className="mr-2 size-4" />
-                    Claro
+                    {t("theme.light")}
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="dark">
                     <MoonIcon className="mr-2 size-4" />
-                    Oscuro
+                    {t("theme.dark")}
                   </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <LanguagesIcon className="mr-2 size-4" />
+                {t("language.label")}
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuRadioGroup
+                  value={language}
+                  onValueChange={(value) => setLanguage(value as typeof language)}
+                >
+                  {locales.map((locale) => (
+                    <DropdownMenuRadioItem key={locale} value={locale}>
+                      {localeLabels[locale]}
+                    </DropdownMenuRadioItem>
+                  ))}
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
@@ -124,10 +151,25 @@ export const UserMenu = () => {
 
           <DropdownMenuSeparator />
 
+          {/* Legal */}
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>{t("userMenu.legal")}</DropdownMenuLabel>
+            <DropdownMenuItem render={<Link href="/privacy" />}>
+              <ShieldCheckIcon className="mr-2 size-4" />
+              {t("userMenu.privacy")}
+            </DropdownMenuItem>
+            <DropdownMenuItem render={<Link href="/terms" />}>
+              <FileTextIcon className="mr-2 size-4" />
+              {t("userMenu.terms")}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
           {/* Cerrar sesión */}
           <DropdownMenuItem onClick={handleSignOut} variant="destructive">
             <LogOutIcon className="mr-2 size-4" />
-            Cerrar sesión
+            {t("userMenu.signOut")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

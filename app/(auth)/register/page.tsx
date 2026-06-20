@@ -10,14 +10,12 @@ import { signUp } from "@/lib/auth-client";
 import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const perks = [
-  "Sin tarjeta de crédito",
-  "Sin conexión bancaria",
-  "Cancela cuando quieras",
-];
+const perkIds = ["noCard", "noBank", "cancelAnytime"] as const;
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
 
@@ -39,7 +37,7 @@ export default function RegisterPage() {
           window.location.href = "/dashboard";
         },
         onError: (ctx) => {
-          setError(ctx.error.message ?? "Error al crear cuenta");
+          setError(ctx.error.message ?? t("auth.register.error"));
           setIsPending(false);
         },
       },
@@ -48,22 +46,22 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout
-      title="Crea tu cuenta"
-      subtitle="Empieza a controlar tus suscripciones en menos de un minuto."
+      title={t("auth.register.title")}
+      subtitle={t("auth.register.subtitle")}
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <AuthError message={error} />
         <AuthInput
-          label="Nombre"
+          label={t("auth.register.nameLabel")}
           id="name"
           name="name"
           type="text"
           autoComplete="name"
-          placeholder="Tu nombre"
+          placeholder={t("auth.register.namePlaceholder")}
           required
         />
         <AuthInput
-          label="Email"
+          label={t("auth.register.emailLabel")}
           id="email"
           name="email"
           type="email"
@@ -73,7 +71,7 @@ export default function RegisterPage() {
           required
         />
         <AuthInput
-          label="Contraseña"
+          label={t("auth.register.passwordLabel")}
           id="password"
           name="password"
           type="password"
@@ -81,7 +79,7 @@ export default function RegisterPage() {
           placeholder="••••••••"
           minLength={8}
           required
-          hint="Mínimo 8 caracteres."
+          hint={t("auth.register.passwordHint")}
         />
 
         <Button
@@ -92,11 +90,11 @@ export default function RegisterPage() {
           {isPending ? (
             <>
               <Spinner aria-hidden="true" />
-              Creando cuenta…
+              {t("auth.register.submitting")}
             </>
           ) : (
             <>
-              Crear cuenta
+              {t("auth.register.submit")}
               <ArrowRight
                 className="size-4 transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
@@ -107,9 +105,9 @@ export default function RegisterPage() {
 
         <ul
           className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 pt-1"
-          aria-label="Beneficios de crear una cuenta"
+          aria-label={t("auth.register.perksLabel")}
         >
-          {perks.map((perk) => (
+          {perkIds.map((perk) => (
             <li
               key={perk}
               className="text-muted-foreground flex items-center gap-1 text-xs"
@@ -117,25 +115,25 @@ export default function RegisterPage() {
               <span className="bg-primary/15 text-primary inline-flex size-3.5 items-center justify-center rounded-full">
                 <Check className="size-2.5" aria-hidden="true" />
               </span>
-              {perk}
+              {t(`auth.register.perks.${perk}` as const)}
             </li>
           ))}
         </ul>
 
         <p className="text-muted-foreground text-center text-xs leading-relaxed">
-          Al crear tu cuenta, aceptas nuestros{" "}
+          {t("auth.register.termsLead")}{" "}
           <Link
             href="/terms"
             className="text-foreground underline underline-offset-4"
           >
-            Términos
+            {t("auth.register.termsLink")}
           </Link>{" "}
-          y{" "}
+          {t("auth.register.and")}{" "}
           <Link
             href="/privacy"
             className="text-foreground underline underline-offset-4"
           >
-            Privacidad
+            {t("auth.register.privacyLink")}
           </Link>
           .
         </p>
@@ -144,12 +142,12 @@ export default function RegisterPage() {
       <OAuthButtons />
 
       <p className="text-muted-foreground mt-6 text-center text-sm">
-        ¿Ya tienes cuenta?{" "}
+        {t("auth.register.haveAccount")}{" "}
         <Link
           href="/login"
           className="text-foreground hover:text-primary font-medium underline-offset-4 transition-colors hover:underline"
         >
-          Inicia sesión
+          {t("auth.register.loginCta")}
         </Link>
       </p>
     </AuthLayout>

@@ -1,0 +1,340 @@
+{
+  "common": {
+    "appName": "Cusana",
+    "loading": "Cargando…",
+    "error": "Algo salió mal"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English"
+  },
+  "theme": {
+    "label": "Apariencia",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro",
+    "change": "Cambiar tema"
+  },
+  "legal": {
+    "home": "Inicio",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "nav": {
+    "signIn": "Iniciar sesión",
+    "createAccount": "Crear cuenta",
+    "back": "Regresar",
+    "greetingMorning": "Buenos días",
+    "greetingAfternoon": "Buenas tardes",
+    "greetingEvening": "Buenas noches"
+  },
+  "userMenu": {
+    "myAccount": "Mi cuenta",
+    "profile": "Perfil",
+    "preferences": "Preferencias",
+    "appearance": "Apariencia",
+    "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "signOut": "Cerrar sesión",
+    "loadUserError": "Error al cargar el usuario",
+    "loadingUser": "Cargando información del usuario"
+  },
+  "dashboard": {
+    "userIdMissing": "Falta el ID de usuario",
+    "resume": {
+      "eyebrow": "Resumen",
+      "title": "Tu mes en un vistazo",
+      "description": "Gasto efectivo, próximos cobros y distribución por servicio."
+    },
+    "detail": {
+      "eyebrow": "Detalle",
+      "title": "Todas tus suscripciones",
+      "description": "Administra, edita y filtra cada servicio recurrente."
+    },
+    "hero": {
+      "monthlySpend": "Gasto mensual efectivo",
+      "activeSubscriptions_one": "{{count}} suscripción activa",
+      "activeSubscriptions_other": "{{count}} suscripciones activas",
+      "monthly_one": "{{count}} mensual",
+      "monthly_other": "{{count}} mensuales",
+      "yearly_one": "{{count}} anual",
+      "yearly_other": "{{count}} anuales",
+      "yearlyProjection": "Proyección anual",
+      "currency": "Moneda"
+    },
+    "quickActions": {
+      "title": "Configuración",
+      "currency": "Moneda",
+      "filters": "Filtros",
+      "active_one": "{{count}} activo",
+      "active_other": "{{count}} activos",
+      "clearFilters": "Limpiar filtros"
+    },
+    "upcoming": {
+      "title": "Próximos Pagos",
+      "empty": "No hay pagos próximos"
+    },
+    "trend": {
+      "title": "Tendencia Mensual",
+      "realByMonth": "Gasto real por mes en {{currency}}",
+      "history": "Historial de gastos mensuales",
+      "current": "actual",
+      "noCharges": "Sin cobros este mes",
+      "aboveAverage": "Por encima del promedio",
+      "activeSubscriptions_one": "{{count}} suscripción activa",
+      "activeSubscriptions_other": "{{count}} suscripciones activas",
+      "average": "Promedio",
+      "max": "Máximo",
+      "min": "Mínimo",
+      "emptyTitle": "Sin datos de tendencia",
+      "emptyHint": "Agrega suscripciones para ver estadísticas",
+      "chartLabel": "Tendencia de gastos mensuales",
+      "statsLabel": "Estadísticas de tendencia"
+    },
+    "distribution": {
+      "title": "Distribución de Gastos",
+      "byPlatform": "Gasto mensual por plataforma en {{currency}}",
+      "totalMonthly": "Total mensual",
+      "distribution": "Distribución",
+      "platforms_one": "{{count}} plataforma",
+      "platforms_other": "{{count}} plataformas",
+      "perMonth": "/mes",
+      "ofTotal": "{{percent}}% del total",
+      "top": "Top",
+      "subscriptions_one": "{{count}} suscripción",
+      "subscriptions_other": "{{count}} suscripciones",
+      "emptyTitle": "Sin datos disponibles",
+      "emptyHint": "Agrega suscripciones para ver la distribución"
+    },
+    "calendar": {
+      "prevMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "today": "Hoy",
+      "gridLabel": "Calendario de cobros",
+      "total": "Total:",
+      "charges_one": "{{count}} cobro",
+      "charges_other": "{{count}} cobros"
+    },
+    "billing": {
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "inDays": "En {{count}} días",
+      "perMonthShort": "/mes",
+      "perYearShort": "/año",
+      "monthly": "Mensual",
+      "yearly": "Anual"
+    },
+    "columns": {
+      "service": "Servicio",
+      "price": "Precio",
+      "cycle": "Ciclo",
+      "nextCharge": "Próximo cobro",
+      "actions": "Acciones"
+    },
+    "columnHeader": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Ocultar"
+    },
+    "rowActions": {
+      "openMenu": "Abrir menú",
+      "actions": "Acciones",
+      "edit": "Editar",
+      "openSite": "Abrir sitio web",
+      "delete": "Eliminar"
+    },
+    "table": {
+      "searchLabel": "Buscar suscripción",
+      "searchPlaceholder": "Buscar...",
+      "results_one": "{{count}} resultado",
+      "results_other": "{{count}} resultados",
+      "clearFilters": "Limpiar filtros",
+      "emptyTitle": "No hay suscripciones",
+      "emptyHint": "Agrega tu primera suscripción para comenzar",
+      "showing": "Mostrando {{from}} a {{to}} de {{total}} suscripciones",
+      "page": "Página",
+      "of": "de",
+      "firstPage": "Primera página",
+      "prevPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "lastPage": "Última página",
+      "errorTitle": "Error al cargar suscripciones",
+      "retry": "Reintentar",
+      "noneTitle": "Sin suscripciones",
+      "noneDescription": "Aún no tienes ninguna suscripción registrada."
+    },
+    "refetch": "Refrescar datos",
+    "export": {
+      "sr": "Exportar",
+      "loadError": "No se pudieron cargar los datos",
+      "tooltip": "Exportar datos",
+      "formatLabel": "Formato de exportación",
+      "excelDesc": "Compatible con Excel, Sheets",
+      "csvDesc": "Universal, cualquier editor",
+      "jsonDesc": "Para desarrolladores"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de vuelta",
+      "subtitle": "Inicia sesión para ver tus suscripciones.",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión…",
+      "error": "Error al iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "registerCta": "Regístrate gratis"
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Empieza a controlar tus suscripciones en menos de un minuto.",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña",
+      "passwordHint": "Mínimo 8 caracteres.",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta…",
+      "error": "Error al crear cuenta",
+      "perksLabel": "Beneficios de crear una cuenta",
+      "perks": {
+        "noCard": "Sin tarjeta de crédito",
+        "noBank": "Sin conexión bancaria",
+        "cancelAnytime": "Cancela cuando quieras"
+      },
+      "termsLead": "Al crear tu cuenta, aceptas nuestros",
+      "termsLink": "Términos",
+      "and": "y",
+      "privacyLink": "Privacidad",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "loginCta": "Inicia sesión"
+    },
+    "oauth": {
+      "divider": "O continúa con",
+      "continueWith": "Continuar con {{provider}}"
+    }
+  },
+  "landing": {
+    "header": {
+      "signIn": "Iniciar sesión",
+      "createAccount": "Crear cuenta"
+    },
+    "hero": {
+      "badge": "Beta abierta",
+      "badgeLink": "Mira lo que estamos construyendo",
+      "titleLead": "Tus suscripciones,",
+      "titleHighlight": "bajo control",
+      "subtitle": "Un rastreador simple para saber qué pagas cada mes, cuándo se renueva y con qué tarjeta. Sin conectar tu banco, sin complicaciones.",
+      "ctaPrimary": "Probar gratis",
+      "ctaSecondary": "Ver roadmap",
+      "benefitsLabel": "Beneficios principales"
+    },
+    "benefits": {
+      "noCard": "Sin tarjeta de crédito",
+      "noBank": "Sin conexión bancaria",
+      "cancelAnytime": "Cancela cuando quieras"
+    },
+    "principlesLabel": "Principios del producto",
+    "principles": {
+      "noBank": { "value": "Sin banco", "label": "Nunca pedimos credenciales bancarias" },
+      "private": { "value": "Privado", "label": "Tus datos no se venden ni comparten" },
+      "free": { "value": "Gratis", "label": "Acceso anticipado mientras estamos en beta" },
+      "openBeta": { "value": "Open beta", "label": "Construyéndose en público, semana a semana" }
+    },
+    "features": {
+      "badge": "Lo esencial",
+      "titleLead": "Hecho para que dejes de",
+      "titleHighlight": "olvidar",
+      "subtitle": "Sin dashboards inflados ni gráficas que no usas. Solo lo que de verdad necesitas para saber qué pagas cada mes.",
+      "addInSeconds": {
+        "title": "Agrega en segundos",
+        "description": "Registra tus suscripciones con servicios reconocidos como Netflix, Spotify o Disney+ —sin escribir nada extra."
+      },
+      "reminders": {
+        "title": "Recordatorios",
+        "description": "Sabe cuándo se renueva cada servicio antes del cargo."
+      },
+      "summary": {
+        "title": "Resumen claro",
+        "description": "Visualiza el gasto total mensual y qué porcentaje aporta cada suscripción."
+      },
+      "cards": {
+        "title": "Múltiples tarjetas",
+        "description": "Asigna un método de pago a cada servicio para saber qué tarjeta se cobra cada mes."
+      }
+    },
+    "services": {
+      "badge": "Servicios reconocidos",
+      "title": "Identificamos automáticamente los servicios que ya conoces",
+      "subtitle": "Y si falta alguno, lo agregas manualmente en segundos."
+    },
+    "roadmap": {
+      "badge": "Roadmap público",
+      "titleLead": "Construyéndose",
+      "titleHighlight": "en público",
+      "subtitle": "Esto es lo que hay hoy, lo que viene y a dónde queremos llegar. Sin promesas vacías, solo lo que estamos construyendo.",
+      "status": {
+        "available": "Disponible",
+        "soon": "Próximamente",
+        "planned": "Planeado"
+      },
+      "available": {
+        "title": "Disponible hoy",
+        "items": {
+          "manual": { "title": "Registro manual de suscripciones", "description": "Agrega cualquier servicio recurrente con precio, moneda y fecha de cobro." },
+          "catalog": { "title": "Catálogo de servicios", "description": "Reconocimiento visual para los servicios más comunes en streaming, música y software." },
+          "summary": { "title": "Resumen mensual", "description": "Total mensual consolidado y desglose por servicio para tomar decisiones." },
+          "themes": { "title": "Modo claro y oscuro", "description": "Interfaz responsive con tema sincronizado al sistema." }
+        }
+      },
+      "soon": {
+        "title": "En camino",
+        "items": {
+          "excel": { "title": "Exportar a Excel", "description": "Descarga el historial completo en .xlsx para tu contabilidad personal." },
+          "categories": { "title": "Categorías personalizadas", "description": "Agrupa servicios por categoría (entretenimiento, productividad, hogar…)." },
+          "alerts": { "title": "Alertas previas al cobro", "description": "Recordatorios configurables antes de cada renovación." },
+          "ai": { "title": "Asistente con IA", "description": "Conversa con tus datos: '¿qué suscripciones puedo cancelar?'" }
+        }
+      },
+      "planned": {
+        "title": "En el horizonte",
+        "items": {
+          "family": { "title": "Modo familiar / compartido", "description": "Comparte suscripciones con tu pareja o familia y divide gastos." },
+          "email": { "title": "Detección desde el correo", "description": "Importa recibos opcionalmente desde Gmail o Outlook con tu permiso." },
+          "mobile": { "title": "App móvil nativa", "description": "Versión instalable con notificaciones push y widget de gasto." },
+          "currency": { "title": "Multi-moneda y conversión", "description": "Para quienes pagan servicios en USD pero viven con otra moneda." }
+        }
+      }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Preguntas frecuentes",
+      "contactLead": "¿No encuentras lo que buscas?",
+      "contactCta": "Escríbenos",
+      "items": {
+        "bank": { "q": "¿Cusana se conecta con mi banco?", "a": "No. Cusana funciona con registro manual: tú decides qué suscripciones agregar. Nunca pedimos credenciales bancarias ni tokens de tu banco." },
+        "price": { "q": "¿Cuánto cuesta?", "a": "Mientras estamos en beta abierta, el acceso es gratuito. Cuando salgamos de beta tendremos un plan gratuito y uno de pago con funciones avanzadas." },
+        "stable": { "q": "¿Qué tan estable es?", "a": "Cusana es un proyecto activo en desarrollo. Las funciones publicadas en el roadmap como 'Disponible hoy' están operativas; el resto aún no." },
+        "devices": { "q": "¿En qué dispositivos funciona?", "a": "En cualquier navegador moderno —desktop, tablet o móvil— con una experiencia totalmente responsive y modo oscuro." }
+      }
+    },
+    "cta": {
+      "title": "Empieza a ver tus suscripciones de una vez.",
+      "subtitle": "Crear cuenta toma menos de un minuto. No necesitas tarjeta ni conectar tu banco.",
+      "primary": "Crear cuenta gratis",
+      "secondary": "Ver qué viene"
+    },
+    "footer": {
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "contact": "Contacto",
+      "legalLabel": "Legal"
+    }
+  }
+}

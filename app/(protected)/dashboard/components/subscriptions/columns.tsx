@@ -14,8 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ServiceKey } from "@/constants/icons";
 import { PLATFORM_URLS } from "@/constants/platform-urls";
+import { useLanguage } from "@/lib/i18n/use-language";
 import { formatCurrency } from "@/utils/format-currency";
-import { getNextBillingDate } from "@/utils/get-next-billing-date";
+import {
+  getDaysUntilNextBilling,
+  getNextBillingDate,
+} from "@/utils/get-next-billing-date";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   Calendar,
@@ -24,7 +28,8 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DeleteSubscription } from "./delete-subscription";
 import { EditSubscription } from "./edit-subscription";
@@ -45,6 +50,7 @@ export type Subscription = {
 
 // Componente de acciones con modales integrados
 function SubscriptionActions({ subscription }: { subscription: Subscription }) {
+  const { t } = useTranslation();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -64,26 +70,28 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
         <DropdownMenuTrigger
           render={
             <Button variant="outline" className="size-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t("dashboard.rowActions.openMenu")}</span>
               <MoreHorizontal className="size-4" />
             </Button>
           }
         />
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t("dashboard.rowActions.actions")}
+            </DropdownMenuLabel>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem onClick={onEdit}>
             <Pencil className="mr-2 size-4" />
-            Editar
+            {t("dashboard.rowActions.edit")}
           </DropdownMenuItem>
           {hasSiteUrl && (
             <DropdownMenuItem onClick={onOpenSite}>
               <ExternalLink className="mr-2 size-4" />
-              Abrir sitio web
+              {t("dashboard.rowActions.openSite")}
             </DropdownMenuItem>
           )}
 
@@ -94,7 +102,7 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
             className="text-destructive focus:text-destructive"
           >
             <Trash2 className="mr-2 size-4" />
-            Eliminar
+            {t("dashboard.rowActions.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -113,109 +121,124 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
   );
 }
 
-export const subscriptionsColumns: ColumnDef<Subscription>[] = [
-  // Columna: Servicio (icono + nombre)
-  {
-    accessorKey: "name",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Servicio"
-        triggerClassName="ml-0"
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-3">
-        <ServiceIcon service={row.original.platform} />
-        <div className="flex flex-col">
-          <span className="text-foreground font-medium">
-            {row.original.name}
-          </span>
-          <span className="text-muted-foreground text-xs capitalize">
-            {row.original.platform}
-          </span>
-        </div>
-      </div>
-    ),
-  },
+export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
-  // Columna: Precio
-  {
-    accessorKey: "price",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Precio" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex flex-col gap-0.5">
-        <div className="flex items-center gap-1.5">
-          <span className="text-foreground font-semibold">
-            {formatCurrency(row.original.price, row.original.currency)}
-          </span>
+  return useMemo<ColumnDef<Subscription>[]>(
+    () => [
+      // Columna: Servicio (icono + nombre)
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t("dashboard.columns.service")}
+            triggerClassName="ml-0"
+          />
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <ServiceIcon service={row.original.platform} />
+            <div className="flex flex-col">
+              <span className="text-foreground font-medium">
+                {row.original.name}
+              </span>
+              <span className="text-muted-foreground text-xs capitalize">
+                {row.original.platform}
+              </span>
+            </div>
+          </div>
+        ),
+      },
+
+      // Columna: Precio
+      {
+        accessorKey: "price",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t("dashboard.columns.price")}
+          />
+        ),
+        cell: ({ row }) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="text-foreground font-semibold">
+                {formatCurrency(row.original.price, row.original.currency)}
+              </span>
+              <Badge
+                variant="outline"
+                className="text-muted-foreground px-1 py-0 font-mono text-[10px] leading-tight"
+              >
+                {row.original.currency}
+              </Badge>
+            </div>
+            <span className="text-muted-foreground text-xs">
+              {row.original.billingCycle === "monthly"
+                ? t("dashboard.billing.perMonthShort")
+                : t("dashboard.billing.perYearShort")}
+            </span>
+          </div>
+        ),
+      },
+
+      // Columna: Ciclo de facturación
+      {
+        accessorKey: "billingCycle",
+        header: t("dashboard.columns.cycle"),
+        cell: ({ row }) => (
           <Badge
-            variant="outline"
-            className="text-muted-foreground px-1 py-0 font-mono text-[10px] leading-tight"
+            variant={
+              row.original.billingCycle === "monthly" ? "default" : "outline"
+            }
+            className="capitalize"
           >
-            {row.original.currency}
+            {row.original.billingCycle === "monthly"
+              ? t("dashboard.billing.monthly")
+              : t("dashboard.billing.yearly")}
           </Badge>
-        </div>
-        <span className="text-muted-foreground text-xs">
-          {row.original.billingCycle === "monthly" ? "/mes" : "/año"}
-        </span>
-      </div>
-    ),
-  },
+        ),
+      },
 
-  // Columna: Ciclo de facturación
-  {
-    accessorKey: "billingCycle",
-    header: "Ciclo",
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.billingCycle === "monthly" ? "default" : "outline"
-        }
-        className="capitalize"
-      >
-        {row.original.billingCycle === "monthly" ? "Mensual" : "Anual"}
-      </Badge>
-    ),
-  },
+      // Columna: Próximo cobro
+      {
+        accessorKey: "billingDay",
+        header: () => (
+          <div className="flex items-center gap-1.5">
+            <Calendar className="size-4" />
+            <span>{t("dashboard.columns.nextCharge")}</span>
+          </div>
+        ),
+        cell: ({ row }) => {
+          const options = {
+            billingDay: row.original.billingDay,
+            billingCycle: row.original.billingCycle,
+            createdAt: row.original.createdAt,
+            billingMonth: row.original.billingMonth,
+          };
+          const nextBilling = getNextBillingDate(options, language);
+          const isUrgent = getDaysUntilNextBilling(options) <= 7;
 
-  // Columna: Próximo cobro
-  {
-    accessorKey: "billingDay",
-    header: () => (
-      <div className="flex items-center gap-1.5">
-        <Calendar className="size-4" />
-        <span>Próximo cobro</span>
-      </div>
-    ),
-    cell: ({ row }) => {
-      const nextBilling = getNextBillingDate({
-        billingDay: row.original.billingDay,
-        billingCycle: row.original.billingCycle,
-        createdAt: row.original.createdAt,
-        billingMonth: row.original.billingMonth,
-      });
-      const isUrgent =
-        nextBilling === "Hoy" ||
-        nextBilling === "Mañana" ||
-        nextBilling.includes("días");
+          return (
+            <span
+              className={`text-sm ${isUrgent ? "font-medium text-amber-600 dark:text-amber-500" : "text-muted-foreground"}`}
+            >
+              {nextBilling}
+            </span>
+          );
+        },
+      },
 
-      return (
-        <span
-          className={`text-sm ${isUrgent ? "font-medium text-amber-600 dark:text-amber-500" : "text-muted-foreground"}`}
-        >
-          {nextBilling}
-        </span>
-      );
-    },
-  },
-
-  // Columna: Acciones
-  {
-    id: "actions",
-    header: () => <span className="sr-only">Acciones</span>,
-    cell: ({ row }) => <SubscriptionActions subscription={row.original} />,
-  },
-];
+      // Columna: Acciones
+      {
+        id: "actions",
+        header: () => (
+          <span className="sr-only">{t("dashboard.columns.actions")}</span>
+        ),
+        cell: ({ row }) => <SubscriptionActions subscription={row.original} />,
+      },
+    ],
+    [t, language],
+  );
+}

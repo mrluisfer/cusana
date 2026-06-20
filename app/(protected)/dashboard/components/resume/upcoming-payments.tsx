@@ -21,8 +21,11 @@ import {
   getNextBillingDate,
   getNextBillingDateFull,
 } from "@/utils/get-next-billing-date";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon, ClockIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Función de fetch extraída para evitar closures
 async function fetchSubscriptionsList(userId: string): Promise<Subscription[]> {
@@ -50,6 +53,8 @@ function UpcomingPaymentSkeleton() {
 }
 
 export function UpcomingPayments() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { data: session } = useSession();
   const userId = session?.user.id;
 
@@ -104,7 +109,7 @@ export function UpcomingPayments() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-sm">
             <CardHeaderIcon icon={CalendarIcon} />
-            Próximos Pagos
+            {t("dashboard.upcoming.title")}
           </CardTitle>
           <Badge variant="outline" className="text-[10px]">
             <ClockIcon className="mr-1 size-3" />
@@ -133,12 +138,15 @@ export function UpcomingPayments() {
                       {subscription.name}
                     </p>
                     <p className="text-muted-foreground text-[11px]">
-                      {getNextBillingDate({
-                        billingDay: subscription.billingDay,
-                        billingCycle: subscription.billingCycle,
-                        createdAt: subscription.createdAt,
-                        billingMonth: subscription.billingMonth,
-                      })}
+                      {getNextBillingDate(
+                        {
+                          billingDay: subscription.billingDay,
+                          billingCycle: subscription.billingCycle,
+                          createdAt: subscription.createdAt,
+                          billingMonth: subscription.billingMonth,
+                        },
+                        language,
+                      )}
                     </p>
                   </div>
                 </div>
@@ -146,7 +154,9 @@ export function UpcomingPayments() {
                   {currencySymbols[subscription.currency]}
                   {(
                     parseFloat(String(subscription.price)) || 0
-                  ).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
+                  ).toLocaleString(toIntlLocale(language), {
+                    minimumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               {index < sortedSubscriptions.length - 1 && <Separator />}
@@ -155,7 +165,7 @@ export function UpcomingPayments() {
         ) : (
           <div className="text-muted-foreground py-6 text-center">
             <CalendarIcon className="mx-auto mb-2 size-6 opacity-40" />
-            <p className="text-xs">No hay pagos próximos</p>
+            <p className="text-xs">{t("dashboard.upcoming.empty")}</p>
           </div>
         )}
       </CardContent>

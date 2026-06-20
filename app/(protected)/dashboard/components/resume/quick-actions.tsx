@@ -27,9 +27,11 @@ import {
 import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
 import { DollarSignIcon, FilterIcon, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { FilterSubscriptions } from "../subscriptions/actions/filter-subscriptions";
 
 export function QuickActions() {
+  const { t } = useTranslation();
   const [currency, setCurrency] = useAtom(currencyAtom);
   const [filters, setFilters] = useAtom(filtersAtom);
 
@@ -52,7 +54,9 @@ export function QuickActions() {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm">Configuración</CardTitle>
+        <CardTitle className="text-sm">
+          {t("dashboard.quickActions.title")}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         <Item variant="muted" className="p-2.5">
@@ -60,7 +64,9 @@ export function QuickActions() {
             <DollarSignIcon className="text-primary size-4" />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle className="text-xs">Moneda</ItemTitle>
+            <ItemTitle className="text-xs">
+              {t("dashboard.quickActions.currency")}
+            </ItemTitle>
           </ItemContent>
           <ItemActions>
             <Select
@@ -73,7 +79,9 @@ export function QuickActions() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Moneda</SelectLabel>
+                  <SelectLabel>
+                    {t("dashboard.quickActions.currency")}
+                  </SelectLabel>
                   {currenciesItems.map((item) => (
                     <SelectItem key={item.value} value={item.value}>
                       {currencySymbols[item.value]} {item.label}
@@ -90,10 +98,14 @@ export function QuickActions() {
             <FilterIcon className="text-primary size-4" />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle className="text-xs">Filtros</ItemTitle>
+            <ItemTitle className="text-xs">
+              {t("dashboard.quickActions.filters")}
+            </ItemTitle>
             {activeFilterCount > 0 && (
               <ItemDescription className="text-[11px]">
-                {activeFilterCount} activo{activeFilterCount > 1 ? "s" : ""}
+                {t("dashboard.quickActions.active", {
+                  count: activeFilterCount,
+                })}
               </ItemDescription>
             )}
           </ItemContent>
@@ -102,7 +114,7 @@ export function QuickActions() {
               <button
                 onClick={() => setFilters(defaultFilters)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Limpiar filtros"
+                aria-label={t("dashboard.quickActions.clearFilters")}
               >
                 <XIcon className="size-3.5" />
               </button>
