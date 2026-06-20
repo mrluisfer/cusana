@@ -10,6 +10,7 @@ import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
+import { AlertTriangleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AddSubscription } from "../subscriptions/actions/add-subscription";
 
@@ -51,6 +52,9 @@ export function HeroSummary() {
       maximumFractionDigits: decimals,
     });
 
+  const missingRates = stats?.missingRates ?? [];
+  const skippedCount = stats?.skippedCount ?? 0;
+
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
@@ -77,6 +81,15 @@ export function HeroSummary() {
             </span>
           )}
         </p>
+        {missingRates.length > 0 && (
+          <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+            <AlertTriangleIcon className="size-3.5" />
+            {t("dashboard.fxWarning.excluded", {
+              count: skippedCount,
+              currencies: missingRates.join(", "),
+            })}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center gap-6">

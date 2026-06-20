@@ -12,6 +12,7 @@ export async function getSubscriptionsForTrend(userId: string) {
   return db.query.subscriptions.findMany({
     where: eq(subscriptions.userId, userId),
     columns: {
+      id: true,
       price: true,
       currency: true,
       billingCycle: true,

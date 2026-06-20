@@ -39,7 +39,7 @@ import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { PieChartIcon, TrendingUpIcon } from "lucide-react";
+import { AlertTriangleIcon, PieChartIcon, TrendingUpIcon } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -125,21 +125,36 @@ export function SpendingDistribution() {
       staleTime: 1000 * 60 * 30,
     });
 
-  const { totalSpending, sortedPlatforms } = useMemo(() => {
-    if (!subscriptions || !ratesData) {
-      return { totalSpending: 0, sortedPlatforms: [] };
-    }
+  const { totalSpending, sortedPlatforms, missingRates, skippedCount } =
+    useMemo(() => {
+      if (!subscriptions || !ratesData) {
+        return {
+          totalSpending: 0,
+          sortedPlatforms: [],
+          missingRates: [] as string[],
+          skippedCount: 0,
+        };
+      }
 
-    const totals = subscriptions.reduce(
-      (acc, sub) => {
+      const target = selectedCurrency.toUpperCase();
+      const missing = new Set<string>();
+      let skipped = 0;
+      const totals: Record<string, PlatformData> = {};
+
+      for (const sub of subscriptions) {
         const platform = sub.platform;
         const price = Number.parseFloat(String(sub.price)) || 0;
-        const subCurrency = sub.currency;
+        const subCurrency = String(sub.currency).toUpperCase();
 
         let convertedPrice = price;
-        if (subCurrency !== selectedCurrency) {
+        if (subCurrency !== target) {
           const rate =
-            ratesData.rates[subCurrency as keyof typeof ratesData.rates] || 1;
+            ratesData.rates?.[subCurrency as keyof typeof ratesData.rates];
+          if (!rate || rate <= 0) {
+            missing.add(subCurrency);
+            skipped++;
+            continue;
+          }
           convertedPrice = price / rate;
         }
 
@@ -148,8 +163,8 @@ export function SpendingDistribution() {
         const monthlyOriginal =
           sub.billingCycle === "yearly" ? price / 12 : price;
 
-        if (!acc[platform]) {
-          acc[platform] = {
+        if (!totals[platform]) {
+          totals[platform] = {
             total: 0,
             convertedTotal: 0,
             count: 0,
@@ -157,26 +172,27 @@ export function SpendingDistribution() {
           };
         }
 
-        acc[platform].total += monthlyOriginal;
-        acc[platform].convertedTotal += monthlyConverted;
-        acc[platform].count += 1;
+        totals[platform].total += monthlyOriginal;
+        totals[platform].convertedTotal += monthlyConverted;
+        totals[platform].count += 1;
+      }
 
-        return acc;
-      },
-      {} as Record<string, PlatformData>,
-    );
+      const total = Object.values(totals).reduce(
+        (sum, p) => sum + p.convertedTotal,
+        0,
+      );
 
-    const total = Object.values(totals).reduce(
-      (sum, p) => sum + p.convertedTotal,
-      0,
-    );
+      const sorted = Object.entries(totals)
+        .sort(([, a], [, b]) => b.convertedTotal - a.convertedTotal)
+        .slice(0, 6);
 
-    const sorted = Object.entries(totals)
-      .sort(([, a], [, b]) => b.convertedTotal - a.convertedTotal)
-      .slice(0, 6);
-
-    return { totalSpending: total, sortedPlatforms: sorted };
-  }, [subscriptions, ratesData, selectedCurrency]);
+      return {
+        totalSpending: total,
+        sortedPlatforms: sorted,
+        missingRates: [...missing],
+        skippedCount: skipped,
+      };
+    }, [subscriptions, ratesData, selectedCurrency]);
 
   const isPending = isLoadingSubscriptions || isLoadingRates;
   const currencySymbol =
@@ -212,6 +228,15 @@ export function SpendingDistribution() {
         )}
       </CardHeader>
       <CardContent>
+        {!isPending && missingRates.length > 0 && (
+          <p className="mb-3 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+            <AlertTriangleIcon className="size-3.5" />
+            {t("dashboard.fxWarning.excluded", {
+              count: skippedCount,
+              currencies: missingRates.join(", "),
+            })}
+          </p>
+        )}
         {isPending ? (
           <DistributionSkeleton />
         ) : sortedPlatforms.length > 0 ? (

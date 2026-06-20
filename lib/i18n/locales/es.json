@@ -78,6 +78,10 @@
       "title": "Próximos Pagos",
       "empty": "No hay pagos próximos"
     },
+    "fxWarning": {
+      "excluded_one": "{{count}} suscripción excluida — sin tipo de cambio para {{currencies}}",
+      "excluded_other": "{{count}} suscripciones excluidas — sin tipo de cambio para {{currencies}}"
+    },
     "trend": {
       "title": "Tendencia Mensual",
       "realByMonth": "Gasto real por mes en {{currency}}",

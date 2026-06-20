@@ -19,6 +19,8 @@ export type MonthlyTrendResponse = {
   min: number;
   changePercent: number;
   currency: string;
+  missingRates?: string[];
+  skippedCount?: number;
 };
 
 const MONTH_NAMES = [
@@ -67,12 +69,14 @@ function getMonthlyAmount(
   targetMonth: number,
   targetCurrency: string,
   rates: FrankfurterRatesResponse["rates"],
-): number {
+): number | null {
   const price = Number.parseFloat(String(sub.price)) || 0;
+  const subCurrency = String(sub.currency).toUpperCase();
 
   let converted = price;
-  if (sub.currency !== targetCurrency) {
-    const rate = rates[sub.currency as keyof typeof rates] || 1;
+  if (subCurrency !== targetCurrency) {
+    const rate = rates?.[subCurrency as keyof typeof rates];
+    if (!rate || rate <= 0) return null;
     converted = price / rate;
   }
 
@@ -126,8 +130,11 @@ export async function GET(
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
+  const targetCurrency = currency.toUpperCase();
 
   const trend: MonthData[] = [];
+  const missingRates = new Set<string>();
+  const skippedSubs = new Set<string>();
 
   for (let i = 0; i < monthsCount; i++) {
     const offset = monthsCount - 1 - i;
@@ -147,11 +154,16 @@ export async function GET(
       const amount = getMonthlyAmount(
         sub,
         targetMonth,
-        currency,
+        targetCurrency,
         ratesData.rates,
       );
 
-      // Count the subscription as active even if no payment this month (yearly)
+      if (amount === null) {
+        missingRates.add(String(sub.currency).toUpperCase());
+        skippedSubs.add(sub.id);
+        continue;
+      }
+
       activeCount++;
       monthlyAmount += amount;
     }
@@ -193,6 +205,10 @@ export async function GET(
       min: Math.round(min),
       changePercent: Math.round(changePercent * 10) / 10,
       currency,
+      ...(missingRates.size > 0 && {
+        missingRates: [...missingRates],
+        skippedCount: skippedSubs.size,
+      }),
     } satisfies MonthlyTrendResponse,
     { status: 200 },
   );

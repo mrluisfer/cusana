@@ -12,6 +12,8 @@ export type ResumeTotalResponse = {
   monthlySubs: number;
   yearlySubs: number;
   currency: string;
+  missingRates?: string[];
+  skippedCount?: number;
 };
 
 export async function GET(
@@ -47,14 +49,24 @@ export async function GET(
   let totalFromYearlySubs = 0; // Sum of yearly sub prices
   let monthlySubs = 0;
   let yearlySubs = 0;
+  const missingRates = new Set<string>();
+  let skippedCount = 0;
+
+  const targetCurrency = currency.toUpperCase();
 
   for (const sub of subscriptionsResume) {
     const price = parseFloat(String(sub.price)) || 0;
+    const subCurrency = String(sub.currency).toUpperCase();
 
     let converted = price;
-    if (sub.currency !== currency) {
+    if (subCurrency !== targetCurrency) {
       const rate =
-        ratesData.rates[sub.currency as keyof typeof ratesData.rates] || 1;
+        ratesData.rates?.[subCurrency as keyof typeof ratesData.rates];
+      if (!rate || rate <= 0) {
+        missingRates.add(subCurrency);
+        skippedCount++;
+        continue;
+      }
       converted = price / rate;
     }
 
@@ -67,24 +79,24 @@ export async function GET(
     }
   }
 
-  // Monthly effective cost: monthly subs + yearly subs amortized
-  const monthlyTotal =
-    monthlyFromMonthlySubs + totalFromYearlySubs / 12;
-
-  // Yearly projection: monthly subs * 12 + yearly subs as-is
-  const yearlyProjection =
-    monthlyFromMonthlySubs * 12 + totalFromYearlySubs;
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const monthlyTotal = monthlyFromMonthlySubs + totalFromYearlySubs / 12;
+  const yearlyProjection = monthlyFromMonthlySubs * 12 + totalFromYearlySubs;
 
   return Response.json(
     {
-      total: Math.round(monthlyTotal),
-      monthlyTotal: Math.round(monthlyFromMonthlySubs),
-      yearlyTotal: Math.round(totalFromYearlySubs),
-      yearlyProjection: Math.round(yearlyProjection),
+      total: round2(monthlyTotal),
+      monthlyTotal: round2(monthlyFromMonthlySubs),
+      yearlyTotal: round2(totalFromYearlySubs),
+      yearlyProjection: round2(yearlyProjection),
       subscriptionCount: subscriptionsResume.length,
       monthlySubs,
       yearlySubs,
       currency,
+      ...(missingRates.size > 0 && {
+        missingRates: [...missingRates],
+        skippedCount,
+      }),
     } satisfies ResumeTotalResponse,
     { status: 200 },
   );

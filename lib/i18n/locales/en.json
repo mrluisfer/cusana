@@ -78,6 +78,10 @@
       "title": "Upcoming Payments",
       "empty": "No upcoming payments"
     },
+    "fxWarning": {
+      "excluded_one": "{{count}} subscription excluded — no exchange rate for {{currencies}}",
+      "excluded_other": "{{count}} subscriptions excluded — no exchange rate for {{currencies}}"
+    },
     "trend": {
       "title": "Monthly Trend",
       "realByMonth": "Actual spend per month in {{currency}}",

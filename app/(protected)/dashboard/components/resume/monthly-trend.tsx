@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import {
+  AlertTriangleIcon,
   BarChart3Icon,
   MinusIcon,
   TrendingDownIcon,
@@ -261,6 +262,8 @@ export function MonthlyTrend() {
   const maxAmount = Math.max(...trend.map((d) => d.amount), 1);
   const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
   const average = data?.average ?? 0;
+  const missingRates = data?.missingRates ?? [];
+  const skippedCount = data?.skippedCount ?? 0;
 
   return (
     <Card>
@@ -286,6 +289,15 @@ export function MonthlyTrend() {
       </CardHeader>
 
       <CardContent>
+        {!isPending && missingRates.length > 0 && (
+          <p className="mb-3 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+            <AlertTriangleIcon className="size-3.5" />
+            {t("dashboard.fxWarning.excluded", {
+              count: skippedCount,
+              currencies: missingRates.join(", "),
+            })}
+          </p>
+        )}
         {isPending ? (
           <TrendSkeleton />
         ) : hasData ? (
