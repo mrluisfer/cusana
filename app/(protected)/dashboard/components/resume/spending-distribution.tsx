@@ -324,9 +324,7 @@ export function SpendingDistribution() {
                               maximumFractionDigits: 0,
                             },
                           )}{" "}
-                          <span className="text-xs">
-                            {data.originalCurrency}
-                          </span>
+                          <span className="text-xs">{selectedCurrency}</span>
                         </p>
                         <p className="text-muted-foreground text-[10px]">
                           {t("dashboard.distribution.perMonth")}
