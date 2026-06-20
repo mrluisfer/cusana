@@ -171,10 +171,19 @@ export async function GET(
   const max = Math.max(...amounts);
   const min = Math.min(...amounts);
 
-  // Change percent: compare months that have data to avoid division by zero
-  const first = trend[0]?.amount ?? 0;
+  // Change percent: current vs most recent prior month with data.
+  // Walking backwards skips leading zeros (subs created mid-window) that
+  // would otherwise force the result to 0 via the divide-by-zero guard.
   const last = trend[trend.length - 1]?.amount ?? 0;
-  const changePercent = first > 0 ? ((last - first) / first) * 100 : 0;
+  let baseline = 0;
+  for (let i = trend.length - 2; i >= 0; i--) {
+    if (trend[i].amount > 0) {
+      baseline = trend[i].amount;
+      break;
+    }
+  }
+  const changePercent =
+    baseline > 0 ? ((last - baseline) / baseline) * 100 : last > 0 ? 100 : 0;
 
   return Response.json(
     {

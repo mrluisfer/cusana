@@ -85,8 +85,8 @@ function TrendBadge({ change }: { change: number }) {
 
   return (
     <Badge
-      variant={isUp ? "destructive" : isDown ? "default" : "outline"}
-      className="gap-1 text-xs tabular-nums"
+      variant={isUp ? "secondary" : isDown ? "default" : "outline"}
+      className="gap-1 tabular-nums"
     >
       <TrendIcon change={change} />
       {isUp ? "+" : ""}
@@ -262,7 +262,6 @@ export function MonthlyTrend() {
   const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
   const average = data?.average ?? 0;
 
-  console.log({ data });
   return (
     <Card>
       <CardHeader>
