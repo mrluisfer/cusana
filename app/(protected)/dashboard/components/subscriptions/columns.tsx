@@ -70,7 +70,9 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
         <DropdownMenuTrigger
           render={
             <Button variant="outline" className="size-8 p-0">
-              <span className="sr-only">{t("dashboard.rowActions.openMenu")}</span>
+              <span className="sr-only">
+                {t("dashboard.rowActions.openMenu")}
+              </span>
               <MoreHorizontal className="size-4" />
             </Button>
           }
@@ -204,10 +206,13 @@ export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
       // Columna: Próximo cobro
       {
         accessorKey: "billingDay",
-        header: () => (
-          <div className="flex items-center gap-1.5">
+        header: ({ column }) => (
+          <div className="flex items-center gap-2">
             <Calendar className="size-4" />
-            <span>{t("dashboard.columns.nextCharge")}</span>
+            <DataTableColumnHeader
+              column={column}
+              title={t("dashboard.columns.nextCharge")}
+            />
           </div>
         ),
         cell: ({ row }) => {

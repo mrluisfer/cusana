@@ -99,7 +99,8 @@ export function UpcomingPayments() {
     );
 
     if (daysUntil <= 3) return "destructive";
-    if (daysUntil <= 7) return "secondary";
+    if (daysUntil <= 7) return "default";
+    if (daysUntil <= 14) return "secondary";
     return "outline";
   };
 
@@ -111,8 +112,8 @@ export function UpcomingPayments() {
             <CardHeaderIcon icon={CalendarIcon} />
             {t("dashboard.upcoming.title")}
           </CardTitle>
-          <Badge variant="outline" className="text-[10px]">
-            <ClockIcon className="mr-1 size-3" />
+          <Badge variant={"default"}>
+            <ClockIcon />
             {sortedSubscriptions?.length ?? 0}
           </Badge>
         </div>
@@ -150,14 +151,15 @@ export function UpcomingPayments() {
                     </p>
                   </div>
                 </div>
-                <span className="text-foreground font-mono text-sm font-semibold tabular-nums">
+                <Badge variant={getUrgencyColor(subscription)}>
                   {currencySymbols[subscription.currency]}
-                  {(
-                    parseFloat(String(subscription.price)) || 0
-                  ).toLocaleString(toIntlLocale(language), {
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
+                  {(parseFloat(String(subscription.price)) || 0).toLocaleString(
+                    toIntlLocale(language),
+                    {
+                      minimumFractionDigits: 2,
+                    },
+                  )}
+                </Badge>
               </div>
               {index < sortedSubscriptions.length - 1 && <Separator />}
             </div>

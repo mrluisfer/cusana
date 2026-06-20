@@ -204,7 +204,7 @@ function TrendBar({
                 })}
               </p>
               {isAboveAverage && (
-                <p className="text-xs text-amber-500">
+                <p className="text-primary text-xs">
                   {t("dashboard.trend.aboveAverage")}
                 </p>
               )}
@@ -262,6 +262,7 @@ export function MonthlyTrend() {
   const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
   const average = data?.average ?? 0;
 
+  console.log({ data });
   return (
     <Card>
       <CardHeader>
@@ -289,7 +290,7 @@ export function MonthlyTrend() {
         {isPending ? (
           <TrendSkeleton />
         ) : hasData ? (
-          <TooltipProvider delay={150}>
+          <TooltipProvider>
             <div className="space-y-4">
               <div
                 className="space-y-2"

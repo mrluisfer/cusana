@@ -216,7 +216,7 @@ export function SpendingDistribution() {
           <DistributionSkeleton />
         ) : sortedPlatforms.length > 0 ? (
           <div className="space-y-5">
-            <TooltipProvider delay={100}>
+            <TooltipProvider>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">
@@ -292,10 +292,7 @@ export function SpendingDistribution() {
                     variant={isTopSpender ? "muted" : "default"}
                   >
                     <ItemMedia variant="icon">
-                      <ServiceIcon
-                        service={platform as ServiceKey}
-                        size="xs"
-                      />
+                      <ServiceIcon service={platform as ServiceKey} size="xs" />
                     </ItemMedia>
                     <ItemContent>
                       <ItemTitle>
@@ -326,16 +323,19 @@ export function SpendingDistribution() {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 0,
                             },
-                          )}
+                          )}{" "}
+                          <span className="text-xs">
+                            {data.originalCurrency}
+                          </span>
                         </p>
                         <p className="text-muted-foreground text-[10px]">
                           {t("dashboard.distribution.perMonth")}
                         </p>
                       </div>
                       <Badge
-                        variant="outline"
+                        variant="default"
                         className={cn(
-                          "min-w-13 justify-center font-mono text-xs tabular-nums",
+                          "justify-center font-mono text-xs tabular-nums",
                         )}
                       >
                         {percentage.toFixed(0)}%
