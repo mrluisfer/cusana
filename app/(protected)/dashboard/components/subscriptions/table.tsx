@@ -2,7 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
-import { subscriptionsColumns } from "./columns";
+import { useSubscriptionColumns } from "./columns";
 import { DataTable } from "./data-table";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -41,6 +41,8 @@ export default function SubscriptionTable() {
     enabled: !!userId,
   });
 
+  const subscriptionsColumns = useSubscriptionColumns();
+
   if (isPending) {
     return (
       <section className="mt-8 space-y-6">
@@ -68,7 +70,6 @@ export default function SubscriptionTable() {
       </section>
     );
   }
-
   return (
     <section className="my-8 min-w-0 space-y-6">
       <DataTable columns={subscriptionsColumns} data={data} />
