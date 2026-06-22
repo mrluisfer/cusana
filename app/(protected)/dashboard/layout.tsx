@@ -1,4 +1,5 @@
 import { AiChatLayout } from "@/components/ai-chat/ai-chat-layout";
+import { CommandPalette } from "@/components/command-palette";
 
 export default function DashboardLayout({
   children,
@@ -39,6 +40,7 @@ export default function DashboardLayout({
       </a>
 
       <AiChatLayout>{children}</AiChatLayout>
+      <CommandPalette />
     </div>
   );
 }

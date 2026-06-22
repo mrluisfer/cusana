@@ -19,6 +19,7 @@ import { formatCurrency } from "@/utils/format-currency";
 import {
   getDaysUntilNextBilling,
   getNextBillingDate,
+  getNextBillingDateFull,
 } from "@/utils/get-next-billing-date";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -166,13 +167,10 @@ export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
         cell: ({ row }) => (
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-1.5">
-              <span className="text-foreground font-semibold">
+              <span className="text-foreground text-base font-semibold tabular-nums">
                 {formatCurrency(row.original.price, row.original.currency)}
               </span>
-              <Badge
-                variant="outline"
-                className="text-muted-foreground px-1 py-0 font-mono text-[10px] leading-tight"
-              >
+              <Badge variant="default" className="font-mono">
                 {row.original.currency}
               </Badge>
             </div>
@@ -205,7 +203,17 @@ export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
 
       // Columna: Próximo cobro
       {
-        accessorKey: "billingDay",
+        id: "nextBilling",
+        // Sort by the real next billing date (timestamp), not the day-of-month,
+        // so June 2026 correctly precedes January 2027.
+        accessorFn: (row) =>
+          getNextBillingDateFull({
+            billingDay: row.billingDay,
+            billingCycle: row.billingCycle,
+            createdAt: row.createdAt,
+            billingMonth: row.billingMonth,
+          }).getTime(),
+        sortingFn: "basic",
         header: ({ column }) => (
           <div className="flex items-center gap-2">
             <Calendar className="size-4" />

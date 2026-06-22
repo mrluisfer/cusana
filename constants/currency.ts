@@ -13,9 +13,3 @@ export const currencySymbols: Record<Currency, string> = {
   USD: "$",
   EUR: "€",
 };
-
-export const currencyNames: Record<Currency, string> = {
-  MXN: "Peso Mexicano",
-  USD: "Dólar Estadounidense",
-  EUR: "Euro",
-};

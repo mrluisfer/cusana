@@ -5,8 +5,8 @@ import * as XLSX from "xlsx";
 type ExportableSubscription = {
   id: string;
   name: string;
-  platform: ServiceKey;
-  price: number;
+  platform: string;
+  price: number | string;
   currency: string;
   billingCycle: "monthly" | "yearly";
   billingDay: number;
@@ -14,18 +14,27 @@ type ExportableSubscription = {
   createdAt: string | Date;
 };
 
-type ExportRow = {
-  Servicio: string;
-  Plataforma: string;
-  Precio: string;
-  Moneda: string;
-  Ciclo: string;
-  "Día de cobro": number;
-  "Próximo cobro": string;
+/** Translated labels supplied by the caller so exports follow the active language. */
+export type ExportLabels = {
+  columns: {
+    service: string;
+    platform: string;
+    price: string;
+    currency: string;
+    cycle: string;
+    billingDay: string;
+    nextCharge: string;
+  };
+  monthly: string;
+  yearly: string;
+  fileNamePrefix: string;
+  sheetName: string;
 };
 
-function getPlatformLabel(platform: ServiceKey): string {
-  const service = serviceIcons[platform];
+type ExportRow = Record<string, string | number>;
+
+function getPlatformLabel(platform: string): string {
+  const service = serviceIcons[platform as ServiceKey];
   return service?.label ?? platform;
 }
 
@@ -44,19 +53,23 @@ function getPriceFormatter(currency: string) {
   return f;
 }
 
-function formatPrice(price: number, currency: string): string {
-  return getPriceFormatter(currency).format(price || 0);
+function formatPrice(price: number | string, currency: string): string {
+  return getPriceFormatter(currency).format(Number(price) || 0);
 }
 
-function toExportRows(subscriptions: ExportableSubscription[]): ExportRow[] {
+function toExportRows(
+  subscriptions: ExportableSubscription[],
+  labels: ExportLabels,
+): ExportRow[] {
+  const { columns } = labels;
   return subscriptions.map((sub) => ({
-    Servicio: sub.name,
-    Plataforma: getPlatformLabel(sub.platform),
-    Precio: formatPrice(sub.price, sub.currency),
-    Moneda: sub.currency,
-    Ciclo: sub.billingCycle === "monthly" ? "Mensual" : "Anual",
-    "Día de cobro": sub.billingDay,
-    "Próximo cobro": getNextBillingDate({
+    [columns.service]: sub.name,
+    [columns.platform]: getPlatformLabel(sub.platform),
+    [columns.price]: formatPrice(sub.price, sub.currency),
+    [columns.currency]: sub.currency,
+    [columns.cycle]: sub.billingCycle === "monthly" ? labels.monthly : labels.yearly,
+    [columns.billingDay]: sub.billingDay,
+    [columns.nextCharge]: getNextBillingDate({
       billingDay: sub.billingDay,
       billingCycle: sub.billingCycle,
       createdAt: sub.createdAt,
@@ -65,18 +78,21 @@ function toExportRows(subscriptions: ExportableSubscription[]): ExportRow[] {
   }));
 }
 
-function getFileName(extension: string): string {
+function getFileName(prefix: string, extension: string): string {
   const date = new Date().toISOString().split("T")[0];
-  return `suscripciones_${date}.${extension}`;
+  return `${prefix}_${date}.${extension}`;
 }
 
 /** Exporta suscripciones como archivo CSV */
-export function exportToCSV(subscriptions: ExportableSubscription[]) {
-  const rows = toExportRows(subscriptions);
+export function exportToCSV(
+  subscriptions: ExportableSubscription[],
+  labels: ExportLabels,
+) {
+  const rows = toExportRows(subscriptions, labels);
 
   if (rows.length === 0) return;
 
-  const headers = Object.keys(rows[0]) as (keyof ExportRow)[];
+  const headers = Object.keys(rows[0]);
 
   const csvContent = [
     // BOM for Excel UTF-8 compatibility
@@ -100,12 +116,19 @@ export function exportToCSV(subscriptions: ExportableSubscription[]) {
     ),
   ].join("\n");
 
-  downloadBlob(csvContent, getFileName("csv"), "text/csv;charset=utf-8;");
+  downloadBlob(
+    csvContent,
+    getFileName(labels.fileNamePrefix, "csv"),
+    "text/csv;charset=utf-8;",
+  );
 }
 
 /** Exporta suscripciones como archivo Excel (.xlsx) */
-export function exportToExcel(subscriptions: ExportableSubscription[]) {
-  const rows = toExportRows(subscriptions);
+export function exportToExcel(
+  subscriptions: ExportableSubscription[],
+  labels: ExportLabels,
+) {
+  const rows = toExportRows(subscriptions, labels);
 
   if (rows.length === 0) return;
 
@@ -115,20 +138,23 @@ export function exportToExcel(subscriptions: ExportableSubscription[]) {
   const colWidths = Object.keys(rows[0]).map((key) => {
     const maxLen = Math.max(
       key.length,
-      ...rows.map((r) => String(r[key as keyof ExportRow]).length),
+      ...rows.map((r) => String(r[key]).length),
     );
     return { wch: Math.min(maxLen + 2, 30) };
   });
   worksheet["!cols"] = colWidths;
 
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Suscripciones");
+  XLSX.utils.book_append_sheet(workbook, worksheet, labels.sheetName);
 
-  XLSX.writeFile(workbook, getFileName("xlsx"));
+  XLSX.writeFile(workbook, getFileName(labels.fileNamePrefix, "xlsx"));
 }
 
 /** Exporta suscripciones como archivo JSON */
-export function exportToJSON(subscriptions: ExportableSubscription[]) {
+export function exportToJSON(
+  subscriptions: ExportableSubscription[],
+  labels: ExportLabels,
+) {
   if (subscriptions.length === 0) return;
 
   const data = subscriptions.map((sub) => ({
@@ -142,7 +168,11 @@ export function exportToJSON(subscriptions: ExportableSubscription[]) {
   }));
 
   const json = JSON.stringify(data, null, 2);
-  downloadBlob(json, getFileName("json"), "application/json;charset=utf-8;");
+  downloadBlob(
+    json,
+    getFileName(labels.fileNamePrefix, "json"),
+    "application/json;charset=utf-8;",
+  );
 }
 
 function downloadBlob(content: string, fileName: string, mimeType: string) {

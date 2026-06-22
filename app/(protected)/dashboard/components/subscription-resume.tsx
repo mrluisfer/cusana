@@ -1,8 +1,11 @@
 import { BillingCalendar } from "./resume/billing-calendar";
+import { BudgetTracker } from "./resume/budget-tracker";
 import { HeroSummary } from "./resume/hero-summary";
 import { MonthlyTrend } from "./resume/monthly-trend";
 import { QuickActions } from "./resume/quick-actions";
+import { SpendingByCategory } from "./resume/spending-by-category";
 import { SpendingDistribution } from "./resume/spending-distribution";
+import { SubscriptionInsights } from "./resume/subscription-insights";
 import { UpcomingPayments } from "./resume/upcoming-payments";
 
 export default async function SubscriptionResume() {
@@ -16,6 +19,7 @@ export default async function SubscriptionResume() {
         </div>
         <div className="space-y-4">
           <UpcomingPayments />
+          <BudgetTracker />
           <QuickActions />
         </div>
       </div>
@@ -23,6 +27,11 @@ export default async function SubscriptionResume() {
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <MonthlyTrend />
         <SpendingDistribution />
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <SpendingByCategory />
+        <SubscriptionInsights />
       </div>
     </div>
   );

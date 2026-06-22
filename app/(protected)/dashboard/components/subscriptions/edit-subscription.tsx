@@ -16,6 +16,7 @@ import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, SaveIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Subscription } from "./columns";
 import {
   SubscriptionForm,
@@ -33,7 +34,7 @@ async function updateSubscriptionApi(
   });
 
   if (!response.ok) {
-    throw new Error("Error al actualizar la suscripción");
+    throw new Error("Failed to update the subscription");
   }
 
   return response.json();
@@ -51,6 +52,7 @@ export function EditSubscription({
   onOpenChangeAction,
 }: EditSubscriptionProps) {
   const formId = useId();
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
@@ -95,10 +97,9 @@ export function EditSubscription({
     <Sheet open={open} onOpenChange={onOpenChangeAction}>
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-b px-6 py-4">
-          <SheetTitle>Editar suscripción</SheetTitle>
+          <SheetTitle>{t("dashboard.edit.title")}</SheetTitle>
           <SheetDescription>
-            Modifica los datos de tu suscripción. Los cambios quedarán
-            registrados en el historial.
+            {t("dashboard.edit.description")}
           </SheetDescription>
         </SheetHeader>
 
@@ -120,7 +121,7 @@ export function EditSubscription({
                 />
               }
             >
-              Cancelar
+              {t("dashboard.edit.cancel")}
             </SheetClose>
             <Button
               type="submit"
@@ -131,12 +132,12 @@ export function EditSubscription({
               {mutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" />
-                  Guardando…
+                  {t("dashboard.edit.saving")}
                 </>
               ) : (
                 <>
                   <SaveIcon className="mr-2 size-4" />
-                  Guardar cambios
+                  {t("dashboard.edit.save")}
                 </>
               )}
             </Button>

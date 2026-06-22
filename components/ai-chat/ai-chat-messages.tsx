@@ -2,13 +2,22 @@
 
 import type { ChatMessage } from "@/lib/ai-chat/types";
 import { cn } from "@/lib/utils";
-import { BotIcon, UserIcon } from "lucide-react";
+import { BotIcon, SparklesIcon, UserIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 type AiChatMessagesProps = {
   messages: ChatMessage[];
   isStreaming: boolean;
+  onSuggestionAction?: (text: string) => void;
 };
+
+const SUGGESTION_KEYS = [
+  "cancel",
+  "monthly",
+  "topCategory",
+  "duplicates",
+] as const;
 
 function MessageBubble({
   message,
@@ -61,7 +70,12 @@ function MessageBubble({
   );
 }
 
-export function AiChatMessages({ messages, isStreaming }: AiChatMessagesProps) {
+export function AiChatMessages({
+  messages,
+  isStreaming,
+  onSuggestionAction,
+}: AiChatMessagesProps) {
+  const { t } = useTranslation();
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,17 +84,39 @@ export function AiChatMessages({ messages, isStreaming }: AiChatMessagesProps) {
 
   if (messages.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
-        <div className="bg-primary/10 flex size-12 items-center justify-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
+        <div className="bg-primary/10 flex size-12 items-center justify-center rounded-xl">
           <BotIcon className="text-primary size-6" />
         </div>
         <div>
-          <p className="font-medium">Asistente Cusana</p>
+          <p className="font-medium">{t("aiChat.emptyTitle")}</p>
           <p className="text-muted-foreground mt-1 text-sm">
-            Pregúntame sobre tus suscripciones, gastos o cualquier función de la
-            app.
+            {t("aiChat.emptySubtitle")}
           </p>
         </div>
+        {onSuggestionAction && (
+          <div className="w-full max-w-xs space-y-2">
+            <p className="text-muted-foreground flex items-center justify-center gap-1.5 text-xs font-medium">
+              <SparklesIcon className="size-3.5" />
+              {t("aiChat.suggestionsLabel")}
+            </p>
+            <div className="flex flex-col gap-1.5">
+              {SUGGESTION_KEYS.map((key) => {
+                const text = t(`aiChat.suggestions.${key}`);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => onSuggestionAction(text)}
+                    className="border-border/60 bg-card hover:bg-muted hover:border-border text-foreground rounded-lg border px-3 py-2 text-left text-sm transition-colors"
+                  >
+                    {text}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

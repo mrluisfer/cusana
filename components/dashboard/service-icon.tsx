@@ -45,7 +45,7 @@ export function ServiceIcon({
     return (
       <div
         role="img"
-        aria-label={ariaLabel ?? "Servicio desconocido"}
+        aria-label={ariaLabel ?? "Unknown service"}
         className={cn(
           wrapperBase,
           "bg-muted text-muted-foreground",

@@ -25,53 +25,62 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { allowedPlatformsArray } from "@/constants/allowed-platforms";
-import {
-  billingCycleArray,
-  billingCycleLabels,
-} from "@/constants/billing-cycle";
+import { billingCycleArray } from "@/constants/billing-cycle";
 import { currencyArray, currencySymbols } from "@/constants/currency";
 import { serviceIcons, type ServiceKey } from "@/constants/icons";
 import { monthLabels, monthsArray } from "@/constants/months";
 import { DollarSignIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { type TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 // ============================================
 // Schema
 // ============================================
-export const subscriptionFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "El nombre no puede exceder 100 caracteres"),
-  platform: z.enum(allowedPlatformsArray, {
-    message: "Selecciona una plataforma",
-  }),
-  price: z
-    .string()
-    .min(1, "El precio es requerido")
-    .refine((val) => !Number.isNaN(Number(val)) && Number(val) > 0, {
-      message: "El precio debe ser mayor a 0",
+export function createSubscriptionFormSchema(t: TFunction) {
+  return z.object({
+    name: z
+      .string()
+      .min(2, t("dashboard.form.errors.nameMin"))
+      .max(100, t("dashboard.form.errors.nameMax")),
+    platform: z.enum(allowedPlatformsArray, {
+      message: t("dashboard.form.errors.platform"),
     }),
-  currency: z.enum(currencyArray, {
-    message: "Selecciona una moneda",
-  }),
-  billingCycle: z.enum(billingCycleArray, {
-    message: "Selecciona un ciclo",
-  }),
-  billingDay: z
-    .string()
-    .min(1, "El día es requerido")
-    .refine(
-      (val) => {
-        const num = Number(val);
-        return !Number.isNaN(num) && num >= 1 && num <= 31;
-      },
-      { message: "Día debe ser entre 1 y 31" },
-    ),
-  billingMonth: z.string().optional(),
-});
+    price: z
+      .string()
+      .min(1, t("dashboard.form.errors.priceRequired"))
+      .refine((val) => !Number.isNaN(Number(val)) && Number(val) > 0, {
+        message: t("dashboard.form.errors.priceMin"),
+      }),
+    currency: z.enum(currencyArray, {
+      message: t("dashboard.form.errors.currency"),
+    }),
+    billingCycle: z.enum(billingCycleArray, {
+      message: t("dashboard.form.errors.cycle"),
+    }),
+    billingDay: z
+      .string()
+      .min(1, t("dashboard.form.errors.dayRequired"))
+      .refine(
+        (val) => {
+          const num = Number(val);
+          return !Number.isNaN(num) && num >= 1 && num <= 31;
+        },
+        { message: t("dashboard.form.errors.dayRange") },
+      ),
+    billingMonth: z.string().optional(),
+  });
+}
 
-export type SubscriptionFormValues = z.infer<typeof subscriptionFormSchema>;
+export type SubscriptionFormValues = z.infer<
+  ReturnType<typeof createSubscriptionFormSchema>
+>;
+
+/** Platform label, translating the generic "otros" entry which is the only localized one. */
+function getPlatformDisplayLabel(platform: ServiceKey, t: TFunction): string {
+  if (platform === "otros") return t("dashboard.form.platformOther");
+  return serviceIcons[platform]?.label ?? platform;
+}
 
 // ============================================
 // Props
@@ -90,8 +99,10 @@ export function SubscriptionForm({
   onSubmitAction,
   resetKey,
 }: SubscriptionFormProps) {
+  const { t } = useTranslation();
+  const schema = useMemo(() => createSubscriptionFormSchema(t), [t]);
   const form = useForm<SubscriptionFormValues>({
-    resolver: zodResolver(subscriptionFormSchema),
+    resolver: zodResolver(schema),
     defaultValues,
     mode: "onTouched",
   });
@@ -136,7 +147,9 @@ export function SubscriptionForm({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Plataforma</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                {t("dashboard.form.platform")}
+              </FieldLabel>
               <Select
                 value={field.value}
                 onValueChange={(value) => {
@@ -154,23 +167,24 @@ export function SubscriptionForm({
                 }}
               >
                 <SelectTrigger id={field.name} className="w-full">
-                  <SelectValue placeholder="Selecciona una plataforma" />
+                  <SelectValue
+                    placeholder={t("dashboard.form.platformPlaceholder")}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {allowedPlatformsArray.map((platform) => {
-                    const config = serviceIcons[platform as ServiceKey];
-                    return (
-                      <SelectItem key={platform} value={platform}>
-                        <div className="flex items-center gap-2">
-                          <ServiceIcon
-                            service={platform as ServiceKey}
-                            size="xs"
-                          />
-                          <span>{config?.label ?? platform}</span>
-                        </div>
-                      </SelectItem>
-                    );
-                  })}
+                  {allowedPlatformsArray.map((platform) => (
+                    <SelectItem key={platform} value={platform}>
+                      <div className="flex items-center gap-2">
+                        <ServiceIcon
+                          service={platform as ServiceKey}
+                          size="xs"
+                        />
+                        <span>
+                          {getPlatformDisplayLabel(platform as ServiceKey, t)}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               {fieldState.error && (
@@ -187,13 +201,13 @@ export function SubscriptionForm({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>
-                Nombre que verás en tu lista
+                {t("dashboard.form.name")}
               </FieldLabel>
               <Input
                 {...field}
                 id={field.name}
                 type="text"
-                placeholder="Ej: Netflix Premium"
+                placeholder={t("dashboard.form.namePlaceholder")}
                 autoComplete="off"
               />
               {fieldState.error && (
@@ -210,7 +224,9 @@ export function SubscriptionForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Precio</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  {t("dashboard.form.price")}
+                </FieldLabel>
                 <InputGroup>
                   <InputGroupAddon align="inline-start">
                     <DollarSignIcon />
@@ -236,7 +252,9 @@ export function SubscriptionForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Moneda</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  {t("dashboard.form.currency")}
+                </FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger id={field.name} className="w-full">
                     <SelectValue />
@@ -267,17 +285,17 @@ export function SubscriptionForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Frecuencia</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  {t("dashboard.form.frequency")}
+                </FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger id={field.name} className="w-full">
                     <SelectValue
                       render={
                         <div>
                           {field.value
-                            ? billingCycleLabels[
-                                field.value as (typeof billingCycleArray)[number]
-                              ]
-                            : "Selecciona un ciclo"}
+                            ? t(`dashboard.billing.${field.value}`)
+                            : t("dashboard.form.cyclePlaceholder")}
                         </div>
                       }
                     />
@@ -285,7 +303,7 @@ export function SubscriptionForm({
                   <SelectContent>
                     {billingCycleArray.map((cycle) => (
                       <SelectItem key={cycle} value={cycle}>
-                        {billingCycleLabels[cycle]}
+                        {t(`dashboard.billing.${cycle}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -302,7 +320,9 @@ export function SubscriptionForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Día de cobro</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  {t("dashboard.form.billingDay")}
+                </FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
@@ -310,7 +330,7 @@ export function SubscriptionForm({
                   min={1}
                   max={31}
                   inputMode="numeric"
-                  placeholder="1-31"
+                  placeholder={t("dashboard.form.billingDayPlaceholder")}
                   autoComplete="off"
                 />
                 {fieldState.error && (
@@ -334,7 +354,7 @@ export function SubscriptionForm({
                 maximumFractionDigits: 2,
               })}
             </span>{" "}
-            promedio al mes
+            {t("dashboard.form.monthlyAverage")}
           </p>
         )}
 
@@ -346,9 +366,9 @@ export function SubscriptionForm({
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>
-                  Mes de cobro{" "}
+                  {t("dashboard.form.billingMonth")}{" "}
                   <span className="text-muted-foreground font-normal">
-                    (opcional)
+                    {t("dashboard.form.optional")}
                   </span>
                 </FieldLabel>
                 <Select
@@ -356,7 +376,9 @@ export function SubscriptionForm({
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger id={field.name} className="w-full">
-                    <SelectValue placeholder="Selecciona el mes" />
+                    <SelectValue
+                      placeholder={t("dashboard.form.monthPlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {monthsArray.map((month) => (
@@ -394,10 +416,16 @@ function LivePreview({
   currency: keyof typeof currencySymbols;
   cycle?: (typeof billingCycleArray)[number];
 }) {
+  const { t } = useTranslation();
   const symbol = currencySymbols[currency] ?? "$";
   const config = serviceIcons[platform];
-  const displayName = name?.trim() || config?.label || "Tu suscripción";
-  const cycleSuffix = cycle === "yearly" ? "/año" : "/mes";
+  const platformLabel = getPlatformDisplayLabel(platform, t);
+  const displayName =
+    name?.trim() || config?.label || t("dashboard.form.previewName");
+  const cycleSuffix =
+    cycle === "yearly"
+      ? t("dashboard.billing.perYearShort")
+      : t("dashboard.billing.perMonthShort");
 
   return (
     <div className="px-6 pt-5 pb-4" aria-live="polite">
@@ -422,8 +450,8 @@ function LivePreview({
             {displayName}
           </p>
           <p className="text-muted-foreground text-xs">
-            {config?.label ?? "Plataforma"}
-            {cycle ? ` · ${billingCycleLabels[cycle]}` : ""}
+            {platformLabel}
+            {cycle ? ` · ${t(`dashboard.billing.${cycle}`)}` : ""}
           </p>
         </div>
         <p className="relative shrink-0 text-right">

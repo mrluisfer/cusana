@@ -7,7 +7,7 @@ import { useCallback } from "react";
 // Función de fetch extraída para evitar closures
 async function fetchUserSubscriptions(userId: string) {
   const res = await fetch(`/api/${userId}/subscription`);
-  if (!res.ok) throw new Error("No se pudieron cargar las suscripciones");
+  if (!res.ok) throw new Error("Failed to load subscriptions");
   const json = await res.json();
   return json.subscriptions;
 }

@@ -14,7 +14,8 @@
       "Bash(pnpm icons:check)",
       "Bash(npx tsc *)",
       "Bash(npx next *)",
-      "Bash(pnpm lint *)"
+      "Bash(pnpm lint *)",
+      "Bash(cd *)"
     ]
   },
   "enabledMcpjsonServers": [

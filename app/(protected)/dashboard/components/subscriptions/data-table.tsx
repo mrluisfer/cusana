@@ -15,6 +15,7 @@ import {
 import { useAtom } from "jotai";
 import * as React from "react";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Table,
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue>({
   data,
   pageSize = 10,
 }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -154,15 +156,15 @@ export function DataTable<TData, TValue>({
         <div className="flex items-end gap-2">
           <Field className="min-w-0 flex-1 sm:w-64 sm:flex-none">
             <FieldLabel htmlFor="input-group-url">
-              Buscar suscripción
+              {t("dashboard.table.searchLabel")}
             </FieldLabel>
-            <InputGroup>
+            <InputGroup className="bg-card">
               <InputGroupAddon align="inline-start">
                 <SearchIcon />
               </InputGroupAddon>
               <InputGroupInput
                 id="input-group-url"
-                placeholder="Buscar..."
+                placeholder={t("dashboard.table.searchPlaceholder")}
                 value={
                   (table.getColumn("name")?.getFilterValue() as string) ?? ""
                 }
@@ -197,8 +199,9 @@ export function DataTable<TData, TValue>({
       {activeFilterCount > 0 && (
         <div className="flex items-center gap-2">
           <p className="text-muted-foreground text-xs">
-            {table.getFilteredRowModel().rows.length} resultado
-            {table.getFilteredRowModel().rows.length !== 1 ? "s" : ""}
+            {t("dashboard.table.results", {
+              count: table.getFilteredRowModel().rows.length,
+            })}
           </p>
           <button
             onClick={() =>
@@ -211,7 +214,7 @@ export function DataTable<TData, TValue>({
             className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
           >
             <XIcon className="size-3" />
-            Limpiar filtros
+            {t("dashboard.table.clearFilters")}
           </button>
         </div>
       )}
@@ -266,10 +269,8 @@ export function DataTable<TData, TValue>({
                 >
                   <div className="text-muted-foreground flex flex-col items-center gap-2">
                     <span className="text-4xl">🔭</span>
-                    <p>No hay suscripciones</p>
-                    <p className="text-sm">
-                      Agrega tu primera suscripción para comenzar
-                    </p>
+                    <p>{t("dashboard.table.emptyTitle")}</p>
+                    <p className="text-sm">{t("dashboard.table.emptyHint")}</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -282,25 +283,18 @@ export function DataTable<TData, TValue>({
       {table.getPageCount() > 1 && (
         <div className="flex items-center justify-between px-2">
           <p className="text-muted-foreground text-sm">
-            Mostrando{" "}
-            <span className="text-foreground font-medium">
-              {table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-                1}
-            </span>{" "}
-            a{" "}
-            <span className="text-foreground font-medium">
-              {Math.min(
+            {t("dashboard.table.showing", {
+              from:
+                table.getState().pagination.pageIndex *
+                  table.getState().pagination.pageSize +
+                1,
+              to: Math.min(
                 (table.getState().pagination.pageIndex + 1) *
                   table.getState().pagination.pageSize,
                 table.getFilteredRowModel().rows.length,
-              )}
-            </span>{" "}
-            de{" "}
-            <span className="text-foreground font-medium">
-              {table.getFilteredRowModel().rows.length}
-            </span>{" "}
-            suscripciones
+              ),
+              total: table.getFilteredRowModel().rows.length,
+            })}
           </p>
 
           <div className="flex items-center gap-1">
@@ -312,7 +306,7 @@ export function DataTable<TData, TValue>({
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronsLeft className="size-4" />
-              <span className="sr-only">Primera página</span>
+              <span className="sr-only">{t("dashboard.table.firstPage")}</span>
             </Button>
             <Button
               variant="outline"
@@ -322,15 +316,19 @@ export function DataTable<TData, TValue>({
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronLeft className="size-4" />
-              <span className="sr-only">Página anterior</span>
+              <span className="sr-only">{t("dashboard.table.prevPage")}</span>
             </Button>
 
             <div className="mx-2 flex items-center gap-1">
-              <span className="text-muted-foreground text-sm">Página</span>
+              <span className="text-muted-foreground text-sm">
+                {t("dashboard.table.page")}
+              </span>
               <span className="text-sm font-medium">
                 {table.getState().pagination.pageIndex + 1}
               </span>
-              <span className="text-muted-foreground text-sm">de</span>
+              <span className="text-muted-foreground text-sm">
+                {t("dashboard.table.of")}
+              </span>
               <span className="text-sm font-medium">
                 {table.getPageCount()}
               </span>
@@ -344,7 +342,7 @@ export function DataTable<TData, TValue>({
               disabled={!table.getCanNextPage()}
             >
               <ChevronRight className="size-4" />
-              <span className="sr-only">Página siguiente</span>
+              <span className="sr-only">{t("dashboard.table.nextPage")}</span>
             </Button>
             <Button
               variant="outline"
@@ -354,7 +352,7 @@ export function DataTable<TData, TValue>({
               disabled={!table.getCanNextPage()}
             >
               <ChevronsRight className="size-4" />
-              <span className="sr-only">Última página</span>
+              <span className="sr-only">{t("dashboard.table.lastPage")}</span>
             </Button>
           </div>
         </div>

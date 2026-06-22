@@ -3,10 +3,12 @@
 import { aiChatOpenAtom } from "@/atoms";
 import { useAtom } from "jotai";
 import { XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 import { AiChatSheet } from "./ai-chat-sheet";
 
 export function AiChatPanel() {
+  const { t } = useTranslation();
   const [open, setOpen] = useAtom(aiChatOpenAtom);
 
   return (
@@ -18,7 +20,7 @@ export function AiChatPanel() {
           size={"icon"}
           variant={"ghost"}
           onClick={() => setOpen(false)}
-          aria-label="Cerrar asistente Cusana"
+          aria-label={t("aiChat.closeAria")}
         >
           <XIcon />
         </Button>

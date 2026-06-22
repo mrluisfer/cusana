@@ -114,6 +114,58 @@
       "emptyTitle": "Sin datos disponibles",
       "emptyHint": "Agrega suscripciones para ver la distribución"
     },
+    "categoryChart": {
+      "title": "Gasto por categoría",
+      "subtitle": "Distribución mensual por tipo de servicio en {{currency}}",
+      "total": "Total",
+      "perMonth": "al mes",
+      "empty": "Sin datos para mostrar",
+      "emptyHint": "Agrega suscripciones para ver el desglose"
+    },
+    "insights": {
+      "title": "Ideas para ti",
+      "subtitle": "Sugerencias basadas en tus suscripciones",
+      "empty": "Agrega suscripciones para recibir sugerencias",
+      "items": {
+        "topCategory": "Tu mayor gasto es {{category}} ({{percent}}% del total).",
+        "consolidate": "Tienes {{count}} servicios de {{category}}. Quizá puedas consolidar o cancelar alguno.",
+        "biggest": "Tu suscripción más cara es {{name}} con {{amount}} al mes.",
+        "inactive_one": "Tienes {{count}} suscripción inactiva que podrías eliminar.",
+        "inactive_other": "Tienes {{count}} suscripciones inactivas que podrías eliminar.",
+        "yearly": "Tus suscripciones proyectan {{amount}} al año."
+      }
+    },
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Música",
+      "ai": "IA",
+      "developer": "Desarrollo",
+      "productivity": "Productividad",
+      "gaming": "Gaming",
+      "transport": "Transporte",
+      "marketplace": "Marketplace",
+      "creator": "Creadores",
+      "social": "Social",
+      "store": "Tiendas",
+      "device": "Dispositivos",
+      "finance": "Finanzas",
+      "other": "Otros"
+    },
+    "budget": {
+      "title": "Presupuesto mensual",
+      "setPrompt": "Define un límite mensual para controlar tu gasto.",
+      "placeholder": "Ej: 1000",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "set": "Definir presupuesto",
+      "edit": "Editar presupuesto",
+      "ofBudget": "de {{budget}}",
+      "remaining": "Te quedan {{amount}}",
+      "over": "Te pasaste por {{amount}}",
+      "onTrack": "Vas bien con tu presupuesto",
+      "nearLimit": "Estás cerca de tu límite",
+      "overLimit": "Superaste tu presupuesto"
+    },
     "calendar": {
       "prevMonth": "Mes anterior",
       "nextMonth": "Mes siguiente",
@@ -171,6 +223,77 @@
       "noneTitle": "Sin suscripciones",
       "noneDescription": "Aún no tienes ninguna suscripción registrada."
     },
+    "form": {
+      "platform": "Plataforma",
+      "platformPlaceholder": "Selecciona una plataforma",
+      "name": "Nombre que verás en tu lista",
+      "namePlaceholder": "Ej: Netflix Premium",
+      "price": "Precio",
+      "currency": "Moneda",
+      "frequency": "Frecuencia",
+      "cyclePlaceholder": "Selecciona un ciclo",
+      "billingDay": "Día de cobro",
+      "billingDayPlaceholder": "1-31",
+      "monthlyAverage": "promedio al mes",
+      "billingMonth": "Mes de cobro",
+      "optional": "(opcional)",
+      "monthPlaceholder": "Selecciona el mes",
+      "previewName": "Tu suscripción",
+      "previewPlatform": "Plataforma",
+      "platformOther": "Otros (Puedes modificarlo después)",
+      "errors": {
+        "nameMin": "El nombre debe tener al menos 2 caracteres",
+        "nameMax": "El nombre no puede exceder 100 caracteres",
+        "platform": "Selecciona una plataforma",
+        "priceRequired": "El precio es requerido",
+        "priceMin": "El precio debe ser mayor a 0",
+        "currency": "Selecciona una moneda",
+        "cycle": "Selecciona un ciclo",
+        "dayRequired": "El día es requerido",
+        "dayRange": "Día debe ser entre 1 y 31"
+      }
+    },
+    "add": {
+      "trigger": "Agregar suscripción",
+      "triggerShort": "Agregar",
+      "title": "Nueva suscripción",
+      "description": "Agrega los detalles para llevar mejor control de tus gastos.",
+      "cancel": "Cancelar",
+      "saving": "Guardando…",
+      "save": "Guardar",
+      "successTitle": "Suscripción agregada",
+      "successDescription": "{{name}} se guardó correctamente.",
+      "errorTitle": "No se pudo guardar",
+      "errorDescription": "Algo salió mal. Intenta de nuevo.",
+      "saveError": "Error al guardar la suscripción"
+    },
+    "edit": {
+      "title": "Editar suscripción",
+      "description": "Modifica los datos de tu suscripción. Los cambios quedarán registrados en el historial.",
+      "cancel": "Cancelar",
+      "saving": "Guardando…",
+      "save": "Guardar cambios",
+      "updateError": "Error al actualizar la suscripción"
+    },
+    "delete": {
+      "title": "Eliminar suscripción",
+      "confirmLead": "¿Estás seguro de eliminar",
+      "confirmTail": "? La suscripción será desactivada y dejará de ser visible y contabilizada.",
+      "cancel": "Cancelar",
+      "deleting": "Eliminando…",
+      "delete": "Eliminar",
+      "deleteError": "Error al eliminar la suscripción"
+    },
+    "filters": {
+      "trigger": "Filtrar",
+      "title": "Filtrar suscripciones",
+      "clear": "Limpiar",
+      "cycle": "Ciclo",
+      "currency": "Moneda",
+      "status": "Estado",
+      "active": "Activas",
+      "inactive": "Inactivas"
+    },
     "refetch": "Refrescar datos",
     "export": {
       "sr": "Exportar",
@@ -179,7 +302,20 @@
       "formatLabel": "Formato de exportación",
       "excelDesc": "Compatible con Excel, Sheets",
       "csvDesc": "Universal, cualquier editor",
-      "jsonDesc": "Para desarrolladores"
+      "jsonDesc": "Para desarrolladores",
+      "columns": {
+        "service": "Servicio",
+        "platform": "Plataforma",
+        "price": "Precio",
+        "currency": "Moneda",
+        "cycle": "Ciclo",
+        "billingDay": "Día de cobro",
+        "nextCharge": "Próximo cobro"
+      },
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "fileNamePrefix": "suscripciones",
+      "sheetName": "Suscripciones"
     }
   },
   "auth": {
@@ -222,7 +358,78 @@
     "oauth": {
       "divider": "O continúa con",
       "continueWith": "Continuar con {{provider}}"
+    },
+    "input": {
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña"
     }
+  },
+  "aiChat": {
+    "tokenSetup": {
+      "errorEmpty": "Ingresa tu clave de OpenAI.",
+      "errorPrefix": "La clave debe comenzar con 'sk-'.",
+      "title": "Configura tu clave API",
+      "instructions": "Para usar el asistente, necesitas una clave de API de OpenAI. Puedes obtenerla en",
+      "save": "Guardar clave",
+      "security": "Tu clave se almacena solo en esta sesión del navegador."
+    },
+    "errors": {
+      "invalidKey": "Clave API inválida. Verifica tu clave de OpenAI.",
+      "rateLimit": "Límite de solicitudes alcanzado. Intenta de nuevo en unos momentos.",
+      "readError": "No se pudo leer la respuesta del servidor.",
+      "unknown": "Error desconocido"
+    },
+    "title": "Asistente Cusana",
+    "subtitle": "Pregunta sobre tus suscripciones y gastos.",
+    "clearChat": "Limpiar chat",
+    "changeKey": "Cambiar clave API",
+    "closePanel": "Cerrar panel",
+    "open": "Pregunta a CusanaAI",
+    "close": "Cerrar CusanaAI",
+    "openAria": "Abrir asistente Cusana",
+    "closeAria": "Cerrar asistente Cusana",
+    "send": "Enviar",
+    "stop": "Detener",
+    "inputPlaceholder": "Escribe tu pregunta...",
+    "emptyTitle": "Asistente Cusana",
+    "emptySubtitle": "Pregúntame sobre tus suscripciones, gastos o cualquier función de la app.",
+    "suggestionsLabel": "Prueba preguntar",
+    "suggestions": {
+      "cancel": "¿Qué suscripciones puedo cancelar?",
+      "monthly": "¿Cuánto gasto al mes?",
+      "topCategory": "¿En qué categoría gasto más?",
+      "duplicates": "¿Tengo servicios duplicados?"
+    }
+  },
+  "command": {
+    "placeholder": "Buscar o ejecutar un comando…",
+    "empty": "Sin resultados",
+    "trigger": "Comandos",
+    "groupActions": "Acciones",
+    "groupTheme": "Tema",
+    "groupCurrency": "Moneda",
+    "groupExport": "Exportar",
+    "groupNav": "Navegar",
+    "groupSubscriptions": "Suscripciones",
+    "openAi": "Abrir asistente IA",
+    "themeLight": "Tema claro",
+    "themeDark": "Tema oscuro",
+    "themeSystem": "Tema del sistema",
+    "setCurrency": "Cambiar moneda a {{currency}}",
+    "exportExcel": "Exportar a Excel",
+    "exportCsv": "Exportar a CSV",
+    "exportJson": "Exportar a JSON",
+    "navHome": "Ir al inicio",
+    "navPrivacy": "Privacidad",
+    "navTerms": "Términos"
+  },
+  "errorState": {
+    "title": "Algo salió mal",
+    "message": "No pudimos cargar la información. Por favor intenta de nuevo.",
+    "retry": "Reintentar",
+    "home": "Ir al inicio",
+    "back": "Volver",
+    "inlineMessage": "Error al cargar"
   },
   "landing": {
     "header": {
@@ -339,6 +546,16 @@
       "terms": "Términos",
       "contact": "Contacto",
       "legalLabel": "Legal"
+    },
+    "phoneMockup": {
+      "ariaLabel": "Vista previa de la app Cusana en un iPhone",
+      "monthlySpend": "Gasto mensual",
+      "active": "{{count}} activas",
+      "add": "Agregar",
+      "insights": "Insights",
+      "activeSubscriptions": "Suscripciones activas",
+      "seeAll": "Ver todo",
+      "monthly": "Mensual"
     }
   }
 }

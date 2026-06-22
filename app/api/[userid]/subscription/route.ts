@@ -58,13 +58,13 @@ export async function POST(
 
   if (!res || res.length === 0) {
     return Response.json(
-      { message: "Error al crear la suscripción" },
+      { message: "Failed to create the subscription" },
       { status: 500 },
     );
   }
 
   return Response.json(
-    { message: "Suscripción creada exitosamente", subscription: res[0] },
+    { message: "Subscription created successfully", subscription: res[0] },
     { status: 201 },
   );
 }
@@ -93,13 +93,13 @@ export async function PATCH(
 
   if (!res || res.length === 0) {
     return Response.json(
-      { message: "Suscripción no encontrada" },
+      { message: "Subscription not found" },
       { status: 404 },
     );
   }
 
   return Response.json(
-    { message: "Suscripción actualizada exitosamente", subscription: res[0] },
+    { message: "Subscription updated successfully", subscription: res[0] },
     { status: 200 },
   );
 }
@@ -127,7 +127,7 @@ export async function DELETE(
   await deleteSubscription(subscriptionId, userid);
 
   return Response.json(
-    { message: "Suscripción eliminada exitosamente" },
+    { message: "Subscription deleted successfully" },
     { status: 200 },
   );
 }

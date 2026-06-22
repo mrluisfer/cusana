@@ -3,7 +3,10 @@
 import { streamChatCompletion } from "@/lib/ai-chat/openai-stream";
 import { CUSANA_SYSTEM_PROMPT } from "@/lib/ai-chat/system-prompt";
 import type { ChatMessage, OpenAIChatMessage } from "@/lib/ai-chat/types";
+import { useSubscriptions } from "@/hooks/use-subscriptions";
+import { buildAiSubscriptionContext } from "@/utils/subscription-insights";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { useTranslation } from "react-i18next";
 
 const STORAGE_KEY = "cusana-openai-token";
 
@@ -47,6 +50,8 @@ function getServerTokenSnapshot() {
 }
 
 export function useAiChat() {
+  const { t } = useTranslation();
+  const { data: subscriptions } = useSubscriptions();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,9 +103,14 @@ export function useAiChat() {
       setMessages((prev) => [...prev, userMessage, assistantMessage]);
       setIsStreaming(true);
 
-      // Build OpenAI messages array
+      // Build OpenAI messages array. When the user has subscriptions, inject a
+      // live snapshot so the assistant can give data-driven, personalized advice.
+      const dataContext = buildAiSubscriptionContext(subscriptions);
       const openaiMessages: OpenAIChatMessage[] = [
         { role: "system", content: CUSANA_SYSTEM_PROMPT },
+        ...(dataContext
+          ? [{ role: "system" as const, content: dataContext }]
+          : []),
         ...messages.map((m) => ({ role: m.role, content: m.content })),
         { role: "user" as const, content: content.trim() },
       ];
@@ -143,9 +153,15 @@ export function useAiChat() {
           });
         },
         abortController.signal,
+        {
+          invalidKey: t("aiChat.errors.invalidKey"),
+          rateLimit: t("aiChat.errors.rateLimit"),
+          readError: t("aiChat.errors.readError"),
+          unknown: t("aiChat.errors.unknown"),
+        },
       );
     },
-    [getToken, messages],
+    [getToken, messages, subscriptions, t],
   );
 
   const cancelStream = useCallback(() => {

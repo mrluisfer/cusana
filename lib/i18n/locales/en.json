@@ -114,6 +114,58 @@
       "emptyTitle": "No data available",
       "emptyHint": "Add subscriptions to see the distribution"
     },
+    "categoryChart": {
+      "title": "Spending by category",
+      "subtitle": "Monthly breakdown by service type in {{currency}}",
+      "total": "Total",
+      "perMonth": "per month",
+      "empty": "No data to show",
+      "emptyHint": "Add subscriptions to see the breakdown"
+    },
+    "insights": {
+      "title": "Ideas for you",
+      "subtitle": "Suggestions based on your subscriptions",
+      "empty": "Add subscriptions to get suggestions",
+      "items": {
+        "topCategory": "Your biggest spend is {{category}} ({{percent}}% of the total).",
+        "consolidate": "You have {{count}} {{category}} services. You might consolidate or cancel one.",
+        "biggest": "Your most expensive subscription is {{name}} at {{amount}} per month.",
+        "inactive_one": "You have {{count}} inactive subscription you could remove.",
+        "inactive_other": "You have {{count}} inactive subscriptions you could remove.",
+        "yearly": "Your subscriptions project {{amount}} per year."
+      }
+    },
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Music",
+      "ai": "AI",
+      "developer": "Development",
+      "productivity": "Productivity",
+      "gaming": "Gaming",
+      "transport": "Transport",
+      "marketplace": "Marketplace",
+      "creator": "Creators",
+      "social": "Social",
+      "store": "Stores",
+      "device": "Devices",
+      "finance": "Finance",
+      "other": "Other"
+    },
+    "budget": {
+      "title": "Monthly budget",
+      "setPrompt": "Set a monthly limit to keep your spending in check.",
+      "placeholder": "e.g. 1000",
+      "save": "Save",
+      "cancel": "Cancel",
+      "set": "Set budget",
+      "edit": "Edit budget",
+      "ofBudget": "of {{budget}}",
+      "remaining": "{{amount}} left",
+      "over": "Over by {{amount}}",
+      "onTrack": "You're on track with your budget",
+      "nearLimit": "You're close to your limit",
+      "overLimit": "You went over your budget"
+    },
     "calendar": {
       "prevMonth": "Previous month",
       "nextMonth": "Next month",
@@ -171,6 +223,77 @@
       "noneTitle": "No subscriptions",
       "noneDescription": "You don't have any subscriptions registered yet."
     },
+    "form": {
+      "platform": "Platform",
+      "platformPlaceholder": "Select a platform",
+      "name": "Name you'll see in your list",
+      "namePlaceholder": "e.g. Netflix Premium",
+      "price": "Price",
+      "currency": "Currency",
+      "frequency": "Frequency",
+      "cyclePlaceholder": "Select a cycle",
+      "billingDay": "Billing day",
+      "billingDayPlaceholder": "1-31",
+      "monthlyAverage": "average per month",
+      "billingMonth": "Billing month",
+      "optional": "(optional)",
+      "monthPlaceholder": "Select the month",
+      "previewName": "Your subscription",
+      "previewPlatform": "Platform",
+      "platformOther": "Other (you can change it later)",
+      "errors": {
+        "nameMin": "Name must be at least 2 characters",
+        "nameMax": "Name cannot exceed 100 characters",
+        "platform": "Select a platform",
+        "priceRequired": "Price is required",
+        "priceMin": "Price must be greater than 0",
+        "currency": "Select a currency",
+        "cycle": "Select a cycle",
+        "dayRequired": "Day is required",
+        "dayRange": "Day must be between 1 and 31"
+      }
+    },
+    "add": {
+      "trigger": "Add subscription",
+      "triggerShort": "Add",
+      "title": "New subscription",
+      "description": "Add the details to better track your spending.",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "save": "Save",
+      "successTitle": "Subscription added",
+      "successDescription": "{{name}} was saved successfully.",
+      "errorTitle": "Couldn't save",
+      "errorDescription": "Something went wrong. Try again.",
+      "saveError": "Failed to save the subscription"
+    },
+    "edit": {
+      "title": "Edit subscription",
+      "description": "Update your subscription details. Changes will be recorded in the history.",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "save": "Save changes",
+      "updateError": "Failed to update the subscription"
+    },
+    "delete": {
+      "title": "Delete subscription",
+      "confirmLead": "Are you sure you want to delete",
+      "confirmTail": "? The subscription will be deactivated and will no longer be visible or counted.",
+      "cancel": "Cancel",
+      "deleting": "Deleting…",
+      "delete": "Delete",
+      "deleteError": "Failed to delete the subscription"
+    },
+    "filters": {
+      "trigger": "Filter",
+      "title": "Filter subscriptions",
+      "clear": "Clear",
+      "cycle": "Cycle",
+      "currency": "Currency",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
     "refetch": "Refresh data",
     "export": {
       "sr": "Export",
@@ -179,7 +302,20 @@
       "formatLabel": "Export format",
       "excelDesc": "Works with Excel, Sheets",
       "csvDesc": "Universal, any editor",
-      "jsonDesc": "For developers"
+      "jsonDesc": "For developers",
+      "columns": {
+        "service": "Service",
+        "platform": "Platform",
+        "price": "Price",
+        "currency": "Currency",
+        "cycle": "Cycle",
+        "billingDay": "Billing day",
+        "nextCharge": "Next charge"
+      },
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "fileNamePrefix": "subscriptions",
+      "sheetName": "Subscriptions"
     }
   },
   "auth": {
@@ -222,7 +358,78 @@
     "oauth": {
       "divider": "Or continue with",
       "continueWith": "Continue with {{provider}}"
+    },
+    "input": {
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     }
+  },
+  "aiChat": {
+    "tokenSetup": {
+      "errorEmpty": "Enter your OpenAI key.",
+      "errorPrefix": "The key must start with 'sk-'.",
+      "title": "Set up your API key",
+      "instructions": "To use the assistant, you need an OpenAI API key. You can get one at",
+      "save": "Save key",
+      "security": "Your key is stored only in this browser session."
+    },
+    "errors": {
+      "invalidKey": "Invalid API key. Check your OpenAI key.",
+      "rateLimit": "Rate limit reached. Try again in a few moments.",
+      "readError": "Could not read the server response.",
+      "unknown": "Unknown error"
+    },
+    "title": "Cusana Assistant",
+    "subtitle": "Ask about your subscriptions and spending.",
+    "clearChat": "Clear chat",
+    "changeKey": "Change API key",
+    "closePanel": "Close panel",
+    "open": "Ask CusanaAI",
+    "close": "Close CusanaAI",
+    "openAria": "Open Cusana assistant",
+    "closeAria": "Close Cusana assistant",
+    "send": "Send",
+    "stop": "Stop",
+    "inputPlaceholder": "Type your question...",
+    "emptyTitle": "Cusana Assistant",
+    "emptySubtitle": "Ask me about your subscriptions, spending or any app feature.",
+    "suggestionsLabel": "Try asking",
+    "suggestions": {
+      "cancel": "Which subscriptions can I cancel?",
+      "monthly": "How much do I spend per month?",
+      "topCategory": "Which category do I spend most on?",
+      "duplicates": "Do I have duplicate services?"
+    }
+  },
+  "command": {
+    "placeholder": "Search or run a command…",
+    "empty": "No results",
+    "trigger": "Commands",
+    "groupActions": "Actions",
+    "groupTheme": "Theme",
+    "groupCurrency": "Currency",
+    "groupExport": "Export",
+    "groupNav": "Navigate",
+    "groupSubscriptions": "Subscriptions",
+    "openAi": "Open AI assistant",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme",
+    "themeSystem": "System theme",
+    "setCurrency": "Switch currency to {{currency}}",
+    "exportExcel": "Export to Excel",
+    "exportCsv": "Export to CSV",
+    "exportJson": "Export to JSON",
+    "navHome": "Go home",
+    "navPrivacy": "Privacy",
+    "navTerms": "Terms"
+  },
+  "errorState": {
+    "title": "Something went wrong",
+    "message": "We couldn't load the information. Please try again.",
+    "retry": "Retry",
+    "home": "Go home",
+    "back": "Go back",
+    "inlineMessage": "Failed to load"
   },
   "landing": {
     "header": {
@@ -339,6 +546,16 @@
       "terms": "Terms",
       "contact": "Contact",
       "legalLabel": "Legal"
+    },
+    "phoneMockup": {
+      "ariaLabel": "Preview of the Cusana app on an iPhone",
+      "monthlySpend": "Monthly spend",
+      "active": "{{count}} active",
+      "add": "Add",
+      "insights": "Insights",
+      "activeSubscriptions": "Active subscriptions",
+      "seeAll": "See all",
+      "monthly": "Monthly"
     }
   }
 }

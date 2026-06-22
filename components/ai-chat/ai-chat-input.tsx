@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SendIcon, SquareIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type AiChatInputProps = {
   onSendAction: (message: string) => void;
@@ -18,6 +19,7 @@ export function AiChatInput({
   isStreaming,
   disabled,
 }: AiChatInputProps) {
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -43,7 +45,7 @@ export function AiChatInput({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Escribe tu pregunta..."
+        placeholder={t("aiChat.inputPlaceholder")}
         autoComplete="off"
         disabled={disabled}
         className="flex-1"
@@ -54,7 +56,7 @@ export function AiChatInput({
           variant="destructive"
           size="icon"
           onClick={onCancelAction}
-          aria-label="Detener"
+          aria-label={t("aiChat.stop")}
         >
           <SquareIcon className="size-4" />
         </Button>
@@ -63,7 +65,7 @@ export function AiChatInput({
           type="submit"
           size="icon"
           disabled={disabled || !value.trim()}
-          aria-label="Enviar"
+          aria-label={t("aiChat.send")}
         >
           <SendIcon className="size-4" />
         </Button>

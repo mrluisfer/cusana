@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useSubscriptions } from "@/hooks/use-subscriptions";
 import {
+  type ExportLabels,
   exportToCSV,
   exportToExcel,
   exportToJSON,
@@ -30,25 +31,46 @@ import {
   Loader2Icon,
 } from "lucide-react";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export function ExportData() {
+  const { t } = useTranslation();
   const { data, isPending, isError } = useSubscriptions();
 
   const subscriptions = useMemo(() => data ?? [], [data]);
   const isEmpty = subscriptions.length === 0;
   const isDisabled = isEmpty || isPending || isError;
 
+  const labels = useMemo<ExportLabels>(
+    () => ({
+      columns: {
+        service: t("dashboard.export.columns.service"),
+        platform: t("dashboard.export.columns.platform"),
+        price: t("dashboard.export.columns.price"),
+        currency: t("dashboard.export.columns.currency"),
+        cycle: t("dashboard.export.columns.cycle"),
+        billingDay: t("dashboard.export.columns.billingDay"),
+        nextCharge: t("dashboard.export.columns.nextCharge"),
+      },
+      monthly: t("dashboard.export.monthly"),
+      yearly: t("dashboard.export.yearly"),
+      fileNamePrefix: t("dashboard.export.fileNamePrefix"),
+      sheetName: t("dashboard.export.sheetName"),
+    }),
+    [t],
+  );
+
   const handleCSV = useCallback(
-    () => exportToCSV(subscriptions),
-    [subscriptions],
+    () => exportToCSV(subscriptions, labels),
+    [subscriptions, labels],
   );
   const handleExcel = useCallback(
-    () => exportToExcel(subscriptions),
-    [subscriptions],
+    () => exportToExcel(subscriptions, labels),
+    [subscriptions, labels],
   );
   const handleJSON = useCallback(
-    () => exportToJSON(subscriptions),
-    [subscriptions],
+    () => exportToJSON(subscriptions, labels),
+    [subscriptions, labels],
   );
 
   const triggerButton = (
@@ -60,7 +82,7 @@ export function ExportData() {
       ) : (
         <DownloadIcon className="size-4" />
       )}
-      <span className="sr-only">Exportar</span>
+      <span className="sr-only">{t("dashboard.export.sr")}</span>
     </Button>
   );
 
@@ -69,7 +91,7 @@ export function ExportData() {
     return (
       <Tooltip>
         <TooltipTrigger>{triggerButton}</TooltipTrigger>
-        <TooltipContent>No se pudieron cargar los datos</TooltipContent>
+        <TooltipContent>{t("dashboard.export.loadError")}</TooltipContent>
       </Tooltip>
     );
   }
@@ -80,12 +102,12 @@ export function ExportData() {
         <TooltipTrigger
           render={<DropdownMenuTrigger render={triggerButton} />}
         />
-        <TooltipContent>Exportar datos</TooltipContent>
+        <TooltipContent>{t("dashboard.export.tooltip")}</TooltipContent>
       </Tooltip>
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuGroup>
           <DropdownMenuLabel>
-            Formato de exportación
+            {t("dashboard.export.formatLabel")}
             <span className="text-muted-foreground ml-1 font-normal">
               ({subscriptions.length})
             </span>
@@ -99,7 +121,7 @@ export function ExportData() {
           <div className="flex flex-col">
             <span>Excel (.xlsx)</span>
             <span className="text-muted-foreground text-[10px]">
-              Compatible con Excel, Sheets
+              {t("dashboard.export.excelDesc")}
             </span>
           </div>
         </DropdownMenuItem>
@@ -109,7 +131,7 @@ export function ExportData() {
           <div className="flex flex-col">
             <span>CSV (.csv)</span>
             <span className="text-muted-foreground text-[10px]">
-              Universal, cualquier editor
+              {t("dashboard.export.csvDesc")}
             </span>
           </div>
         </DropdownMenuItem>
@@ -121,7 +143,7 @@ export function ExportData() {
           <div className="flex flex-col">
             <span>JSON (.json)</span>
             <span className="text-muted-foreground text-[10px]">
-              Para desarrolladores
+              {t("dashboard.export.jsonDesc")}
             </span>
           </div>
         </DropdownMenuItem>

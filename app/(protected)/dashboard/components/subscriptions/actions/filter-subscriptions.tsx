@@ -16,8 +16,8 @@ import { Separator } from "@/components/ui/separator";
 import { currencyArray, currencySymbols } from "@/constants/currency";
 import { useAtom } from "jotai";
 import { FilterIcon, XIcon } from "lucide-react";
-import { on } from "node:stream";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 function toggleFilterValue<K extends keyof SubscriptionFilters>(
   filters: SubscriptionFilters,
@@ -40,6 +40,7 @@ export function FilterSubscriptions({
   triggerProps,
   onlyIcon = false,
 }: FilterSubscriptionsProps) {
+  const { t } = useTranslation();
   const [filters, setFilters] = useAtom(filtersAtom);
 
   const activeFilterCount =
@@ -67,7 +68,7 @@ export function FilterSubscriptions({
         render={
           <Button variant="outline" size="default" {...triggerProps}>
             <FilterIcon />
-            {!onlyIcon && "Filtrar"}
+            {!onlyIcon && t("dashboard.filters.trigger")}
             {activeFilterCount > 0 && !onlyIcon && (
               <Badge variant="default" className="ml-1 size-5 p-0 text-[10px]">
                 {activeFilterCount}
@@ -79,7 +80,7 @@ export function FilterSubscriptions({
       <PopoverContent className="w-64">
         <PopoverHeader>
           <div className="flex items-center justify-between">
-            <PopoverTitle>Filtrar suscripciones</PopoverTitle>
+            <PopoverTitle>{t("dashboard.filters.title")}</PopoverTitle>
             {activeFilterCount > 0 && (
               <Button
                 variant="ghost"
@@ -88,7 +89,7 @@ export function FilterSubscriptions({
                 onClick={onClearFilters}
               >
                 <XIcon className="mr-1 size-3" />
-                Limpiar
+                {t("dashboard.filters.clear")}
               </Button>
             )}
           </div>
@@ -99,7 +100,7 @@ export function FilterSubscriptions({
         {/* Ciclo de facturación */}
         <div className="space-y-2">
           <p className="text-muted-foreground text-xs font-medium uppercase">
-            Ciclo
+            {t("dashboard.filters.cycle")}
           </p>
           <div className="space-y-1.5">
             <Label className="flex items-center gap-2 font-normal">
@@ -109,14 +110,14 @@ export function FilterSubscriptions({
                   onToggleFilter("billingCycle", "monthly")
                 }
               />
-              Mensual
+              {t("dashboard.billing.monthly")}
             </Label>
             <Label className="flex items-center gap-2 font-normal">
               <Checkbox
                 checked={filters.billingCycle.includes("yearly")}
                 onCheckedChange={() => onToggleFilter("billingCycle", "yearly")}
               />
-              Anual
+              {t("dashboard.billing.yearly")}
             </Label>
           </div>
         </div>
@@ -126,7 +127,7 @@ export function FilterSubscriptions({
         {/* Moneda */}
         <div className="space-y-2">
           <p className="text-muted-foreground text-xs font-medium uppercase">
-            Moneda
+            {t("dashboard.filters.currency")}
           </p>
           <div className="space-y-1.5">
             {currencyArray.map((curr) => (
@@ -146,7 +147,7 @@ export function FilterSubscriptions({
         {/* Estado */}
         <div className="space-y-2">
           <p className="text-muted-foreground text-xs font-medium uppercase">
-            Estado
+            {t("dashboard.filters.status")}
           </p>
           <div className="space-y-1.5">
             <Label className="flex items-center gap-2 font-normal">
@@ -154,14 +155,14 @@ export function FilterSubscriptions({
                 checked={filters.active.includes("active")}
                 onCheckedChange={() => onToggleFilter("active", "active")}
               />
-              Activas
+              {t("dashboard.filters.active")}
             </Label>
             <Label className="flex items-center gap-2 font-normal">
               <Checkbox
                 checked={filters.active.includes("inactive")}
                 onCheckedChange={() => onToggleFilter("active", "inactive")}
               />
-              Inactivas
+              {t("dashboard.filters.inactive")}
             </Label>
           </div>
         </div>

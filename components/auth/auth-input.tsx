@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -23,6 +24,7 @@ export function AuthInput({
   className,
   ...props
 }: AuthInputProps) {
+  const { t } = useTranslation();
   const reactId = useId();
   const inputId = id ?? reactId;
   const hintId = hint ? `${inputId}-hint` : undefined;
@@ -48,7 +50,11 @@ export function AuthInput({
           <button
             type="button"
             onClick={() => setRevealed((v) => !v)}
-            aria-label={revealed ? "Ocultar contraseña" : "Mostrar contraseña"}
+            aria-label={
+              revealed
+                ? t("auth.input.hidePassword")
+                : t("auth.input.showPassword")
+            }
             aria-pressed={revealed}
             className="text-muted-foreground hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >

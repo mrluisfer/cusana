@@ -17,6 +17,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
 import { AlertCircle, Inbox, RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AddSubscription } from "./actions/add-subscription";
 
 // Función de fetch extraída para evitar closures
@@ -24,7 +25,7 @@ async function fetchSubscriptions(userId: string) {
   const res = await fetch(`/api/${userId}/subscription`);
 
   if (!res.ok) {
-    throw new Error("No se pudieron cargar las suscripciones");
+    throw new Error("Failed to load subscriptions");
   }
 
   const json = await res.json();
@@ -119,10 +120,11 @@ function ErrorState({
   onRetry: () => void;
   isRetrying: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <Alert variant="destructive">
       <AlertCircle className="size-4" />
-      <AlertTitle>Error al cargar suscripciones</AlertTitle>
+      <AlertTitle>{t("dashboard.table.errorTitle")}</AlertTitle>
       <AlertDescription className="flex items-center justify-between">
         <span>{message}</span>
         <Button
@@ -136,7 +138,7 @@ function ErrorState({
           ) : (
             <RefreshCw className="mr-2 size-4" />
           )}
-          Reintentar
+          {t("dashboard.table.retry")}
         </Button>
       </AlertDescription>
     </Alert>
@@ -144,15 +146,18 @@ function ErrorState({
 }
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <Card className="border-dashed">
       <CardHeader className="pb-2 text-center">
         <div className="bg-muted mx-auto mb-2 w-fit rounded-full p-3">
           <Inbox className="text-muted-foreground size-6" />
         </div>
-        <CardTitle className="text-lg">Sin suscripciones</CardTitle>
+        <CardTitle className="text-lg">
+          {t("dashboard.table.noneTitle")}
+        </CardTitle>
         <CardDescription>
-          Aún no tienes ninguna suscripción registrada.
+          {t("dashboard.table.noneDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent className="text-center">

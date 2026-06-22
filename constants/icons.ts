@@ -240,7 +240,7 @@ export const serviceIcons = {
   },
   otros: {
     name: AllowedPlatforms.OTROS,
-    label: "Otros (Puedes modificarlo después)",
+    label: "Other",
     color: "#64748B",
     bgColor: withAlpha("#64748B"),
     icon: Other,

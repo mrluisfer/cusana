@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/tooltip";
 import { useAtom } from "jotai";
 import { MessageCircleIcon, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function AiChatButton({
   triggerClassName,
 }: {
   triggerClassName?: string;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useAtom(aiChatOpenAtom);
 
   return (
@@ -25,9 +27,7 @@ export function AiChatButton({
             variant="default"
             size="icon-lg"
             onClick={() => setOpen((prev) => !prev)}
-            aria-label={
-              open ? "Cerrar asistente Cusana" : "Abrir asistente Cusana"
-            }
+            aria-label={open ? t("aiChat.closeAria") : t("aiChat.openAria")}
             className={triggerClassName}
           />
         }
@@ -36,7 +36,7 @@ export function AiChatButton({
         <span className="sr-only">CusanaAI</span>
       </TooltipTrigger>
       <TooltipContent>
-        {open ? "Cerrar CusanaAI" : "Pregunta a CusanaAI"}
+        {open ? t("aiChat.close") : t("aiChat.open")}
       </TooltipContent>
     </Tooltip>
   );

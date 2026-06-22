@@ -1,5 +1,4 @@
 import type { Subscription } from "@/lib/schema";
-import { billingCycleLabels } from "@/constants/billing-cycle";
 import { currencySymbols } from "@/constants/currency";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/lib/i18n/use-language";
@@ -51,7 +50,7 @@ export function DayPopoverContent({
                   {payment.name}
                 </p>
                 <p className="text-muted-foreground text-[11px]">
-                  {billingCycleLabels[payment.billingCycle]}
+                  {t(`dashboard.billing.${payment.billingCycle}`)}
                 </p>
               </div>
               <span className="font-mono text-sm font-semibold tabular-nums">

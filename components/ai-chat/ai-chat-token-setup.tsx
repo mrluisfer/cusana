@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { KeyIcon, SaveIcon, ShieldCheckIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type AiChatTokenSetupProps = {
   onSaveTokenAction: (token: string) => void;
 };
 
 export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
+  const { t } = useTranslation();
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
 
@@ -18,12 +20,12 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
     const trimmed = token.trim();
 
     if (!trimmed) {
-      setError("Ingresa tu clave de OpenAI.");
+      setError(t("aiChat.tokenSetup.errorEmpty"));
       return;
     }
 
     if (!trimmed.startsWith("sk-")) {
-      setError("La clave debe comenzar con 'sk-'.");
+      setError(t("aiChat.tokenSetup.errorPrefix"));
       return;
     }
 
@@ -37,10 +39,11 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
         <div className="bg-primary/10 flex size-12 items-center justify-center">
           <KeyIcon className="text-primary size-6" />
         </div>
-        <h3 className="text-lg font-semibold">Configura tu clave API</h3>
+        <h3 className="text-lg font-semibold">
+          {t("aiChat.tokenSetup.title")}
+        </h3>
         <p className="text-muted-foreground text-sm leading-relaxed">
-          Para usar el asistente, necesitas una clave de API de OpenAI. Puedes
-          obtenerla en{" "}
+          {t("aiChat.tokenSetup.instructions")}{" "}
           <a
             href="https://platform.openai.com/api-keys"
             target="_blank"
@@ -63,13 +66,13 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
         {error && <p className="text-destructive text-xs">{error}</p>}
         <Button type="submit" className="w-full">
           <SaveIcon />
-          Guardar clave
+          {t("aiChat.tokenSetup.save")}
         </Button>
       </form>
 
       <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
         <ShieldCheckIcon className="size-3.5" />
-        Tu clave se almacena solo en esta sesión del navegador.
+        {t("aiChat.tokenSetup.security")}
       </p>
     </div>
   );

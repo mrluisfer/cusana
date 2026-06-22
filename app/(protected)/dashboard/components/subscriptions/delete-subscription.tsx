@@ -16,6 +16,7 @@ import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Trash2Icon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Subscription } from "./columns";
 
 async function deleteSubscriptionApi(userId: string, subscriptionId: string) {
@@ -25,7 +26,7 @@ async function deleteSubscriptionApi(userId: string, subscriptionId: string) {
   );
 
   if (!response.ok) {
-    throw new Error("Error al eliminar la suscripción");
+    throw new Error("Failed to delete the subscription");
   }
 
   return response.json();
@@ -42,6 +43,7 @@ export function DeleteSubscription({
   open,
   onOpenChangeAction,
 }: DeleteSubscriptionProps) {
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
@@ -60,12 +62,11 @@ export function DeleteSubscription({
           <AlertDialogMedia className="bg-destructive/10">
             <Trash2Icon className="text-destructive size-5" />
           </AlertDialogMedia>
-          <AlertDialogTitle>Eliminar suscripción</AlertDialogTitle>
+          <AlertDialogTitle>{t("dashboard.delete.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            ¿Estás seguro de eliminar{" "}
-            <strong className="text-foreground">{subscription.name}</strong>? La
-            suscripción será desactivada y dejará de ser visible y
-            contabilizada.
+            {t("dashboard.delete.confirmLead")}{" "}
+            <strong className="text-foreground">{subscription.name}</strong>
+            {t("dashboard.delete.confirmTail")}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -81,7 +82,7 @@ export function DeleteSubscription({
 
         <AlertDialogFooter>
           <AlertDialogCancel disabled={mutation.isPending}>
-            Cancelar
+            {t("dashboard.delete.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
@@ -94,12 +95,12 @@ export function DeleteSubscription({
             {mutation.isPending ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
-                Eliminando…
+                {t("dashboard.delete.deleting")}
               </>
             ) : (
               <>
                 <Trash2Icon className="mr-2 size-4" />
-                Eliminar
+                {t("dashboard.delete.delete")}
               </>
             )}
           </AlertDialogAction>

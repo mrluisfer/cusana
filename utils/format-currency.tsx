@@ -7,7 +7,11 @@ function getFormatter(currency: string) {
     f = new Intl.NumberFormat("es-MX", {
       style: "currency",
       currency,
+      // narrowSymbol keeps every currency symbol-prefixed and consistent
+      // ($9.99, €9.99) instead of mixing ISO codes ("USD 9.99", "EUR 9.99").
+      currencyDisplay: "narrowSymbol",
       minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
     formatterCache.set(currency, f);
   }

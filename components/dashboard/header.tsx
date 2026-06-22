@@ -1,9 +1,11 @@
 "use client";
 import { useSession } from "@/lib/auth-client";
 import { useTranslation } from "react-i18next";
+import { CommandMenuButton } from "../command-palette";
 import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { UserMenu } from "./user-menu";
+import { LanguageToggle } from "../language-toggle";
 
 export default function Header() {
   const { data: session } = useSession();
@@ -29,6 +31,8 @@ export default function Header() {
         </p>
       </div>
       <div className="flex items-center gap-2">
+        <CommandMenuButton />
+        <LanguageToggle variant="outline" />
         <ThemeToggle variant="outline" />
         <UserMenu />
       </div>

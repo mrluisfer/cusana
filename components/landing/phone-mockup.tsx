@@ -1,5 +1,8 @@
+"use client";
+
 import type { ServiceKey } from "@/constants/icons";
 import { PieChartIcon, PlusIcon, SignalHigh, Wifi } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ServiceIcon } from "../dashboard/service-icon";
 import { Button } from "../ui/button";
 
@@ -11,11 +14,12 @@ const mockSubscriptions: { name: ServiceKey; price: string }[] = [
 ];
 
 export default function PhoneMockup() {
+  const { t } = useTranslation();
   return (
     <div
       className="relative mx-auto"
       role="img"
-      aria-label="Vista previa de la app Cusana en un iPhone"
+      aria-label={t("landing.phoneMockup.ariaLabel")}
     >
       {/* Side buttons */}
       <div
@@ -79,7 +83,7 @@ export default function PhoneMockup() {
                     <div className="size-9 rounded-full bg-linear-to-br from-sky-300 via-violet-300 to-fuchsia-400 ring-2 ring-white/30" />
                     <div>
                       <p className="text-primary-foreground/80 text-[10px] font-medium tracking-wider uppercase">
-                        Gasto mensual
+                        {t("landing.phoneMockup.monthlySpend")}
                       </p>
                       <p className="text-primary-foreground text-xl leading-tight font-bold">
                         $42
@@ -90,7 +94,9 @@ export default function PhoneMockup() {
                     </div>
                   </div>
                   <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
-                    4 activas
+                    {t("landing.phoneMockup.active", {
+                      count: mockSubscriptions.length,
+                    })}
                   </span>
                 </div>
               </div>
@@ -99,7 +105,7 @@ export default function PhoneMockup() {
               <div className="flex gap-2">
                 <Button size="sm" className="h-9 flex-1 text-xs">
                   <PlusIcon className="size-3.5" aria-hidden="true" />
-                  Agregar
+                  {t("landing.phoneMockup.add")}
                 </Button>
                 <Button
                   size="sm"
@@ -107,7 +113,7 @@ export default function PhoneMockup() {
                   className="h-9 flex-1 text-xs"
                 >
                   <PieChartIcon className="size-3.5" aria-hidden="true" />
-                  Insights
+                  {t("landing.phoneMockup.insights")}
                 </Button>
               </div>
 
@@ -115,10 +121,10 @@ export default function PhoneMockup() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-1">
                   <p className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400">
-                    Suscripciones activas
+                    {t("landing.phoneMockup.activeSubscriptions")}
                   </p>
                   <p className="text-primary text-[10px] font-medium">
-                    Ver todo
+                    {t("landing.phoneMockup.seeAll")}
                   </p>
                 </div>
 
@@ -134,7 +140,7 @@ export default function PhoneMockup() {
                           {sub.name}
                         </span>
                         <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                          Mensual
+                          {t("landing.phoneMockup.monthly")}
                         </span>
                       </div>
                     </div>

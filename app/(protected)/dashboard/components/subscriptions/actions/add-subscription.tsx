@@ -21,6 +21,7 @@ import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, SaveIcon, SparklesIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
   SubscriptionForm,
@@ -56,6 +57,7 @@ export const AddSubscription = ({
   label,
 }: AddSubscriptionProps) => {
   const formId = useId();
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: session } = useSession();
@@ -74,24 +76,26 @@ export const AddSubscription = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error al guardar la suscripción");
+        throw new Error(t("dashboard.add.saveError"));
       }
 
       return response.json();
     },
     onSuccess: (_, payload) => {
-      toast.success("Suscripción agregada", {
-        description: `${payload.name} se guardó correctamente.`,
+      toast.success(t("dashboard.add.successTitle"), {
+        description: t("dashboard.add.successDescription", {
+          name: payload.name,
+        }),
       });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
       setIsOpen(false);
     },
     onError: (error) => {
-      toast.error("No se pudo guardar", {
+      toast.error(t("dashboard.add.errorTitle"), {
         description:
           error instanceof Error
             ? error.message
-            : "Algo salió mal. Intenta de nuevo.",
+            : t("dashboard.add.errorDescription"),
       });
     },
   });
@@ -119,8 +123,10 @@ export const AddSubscription = ({
           label
         ) : (
           <>
-            <span className="hidden sm:inline">Agregar suscripción</span>
-            <span className="sm:hidden">Agregar</span>
+            <span className="hidden sm:inline">
+              {t("dashboard.add.trigger")}
+            </span>
+            <span className="sm:hidden">{t("dashboard.add.triggerShort")}</span>
           </>
         )}
       </SheetTrigger>
@@ -132,9 +138,11 @@ export const AddSubscription = ({
               <SparklesIcon className="size-5" aria-hidden="true" />
             </div>
             <div className="min-w-0 flex-1">
-              <SheetTitle className="text-base">Nueva suscripción</SheetTitle>
+              <SheetTitle className="text-base">
+                {t("dashboard.add.title")}
+              </SheetTitle>
               <SheetDescription className="text-xs">
-                Agrega los detalles para llevar mejor control de tus gastos.
+                {t("dashboard.add.description")}
               </SheetDescription>
             </div>
           </div>
@@ -158,7 +166,7 @@ export const AddSubscription = ({
                 />
               }
             >
-              Cancelar
+              {t("dashboard.add.cancel")}
             </SheetClose>
             <Button
               type="submit"
@@ -169,12 +177,12 @@ export const AddSubscription = ({
               {isSubmitting ? (
                 <>
                   <Spinner aria-hidden="true" />
-                  Guardando…
+                  {t("dashboard.add.saving")}
                 </>
               ) : (
                 <>
                   <SaveIcon className="size-4" aria-hidden="true" />
-                  Guardar
+                  {t("dashboard.add.save")}
                 </>
               )}
             </Button>

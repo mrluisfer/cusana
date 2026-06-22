@@ -3,6 +3,21 @@ import type { OpenAIChatMessage } from "./types";
 const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = "gpt-4o-mini";
 
+/** Translated error strings injected by the caller so messages follow the active language. */
+export type StreamErrorMessages = {
+  invalidKey: string;
+  rateLimit: string;
+  readError: string;
+  unknown: string;
+};
+
+const DEFAULT_ERROR_MESSAGES: StreamErrorMessages = {
+  invalidKey: "Invalid API key. Check your OpenAI key.",
+  rateLimit: "Rate limit reached. Try again in a few moments.",
+  readError: "Could not read the server response.",
+  unknown: "Unknown error",
+};
+
 export async function streamChatCompletion(
   apiKey: string,
   messages: OpenAIChatMessage[],
@@ -10,6 +25,7 @@ export async function streamChatCompletion(
   onDone: () => void,
   onError: (error: Error) => void,
   signal?: AbortSignal,
+  errorMessages: StreamErrorMessages = DEFAULT_ERROR_MESSAGES,
 ): Promise<void> {
   try {
     const response = await fetch(OPENAI_API_URL, {
@@ -32,19 +48,17 @@ export async function streamChatCompletion(
       const message = errorData?.error?.message ?? `Error ${response.status}`;
 
       if (response.status === 401) {
-        throw new Error("Clave API inválida. Verifica tu clave de OpenAI.");
+        throw new Error(errorMessages.invalidKey);
       }
       if (response.status === 429) {
-        throw new Error(
-          "Límite de solicitudes alcanzado. Intenta de nuevo en unos momentos.",
-        );
+        throw new Error(errorMessages.rateLimit);
       }
       throw new Error(message);
     }
 
     const reader = response.body?.getReader();
     if (!reader) {
-      throw new Error("No se pudo leer la respuesta del servidor.");
+      throw new Error(errorMessages.readError);
     }
 
     const decoder = new TextDecoder();
@@ -86,6 +100,8 @@ export async function streamChatCompletion(
       onDone();
       return;
     }
-    onError(error instanceof Error ? error : new Error("Error desconocido"));
+    onError(
+      error instanceof Error ? error : new Error(errorMessages.unknown),
+    );
   }
 }
