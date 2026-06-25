@@ -43,6 +43,13 @@
       "when": 1770604473726,
       "tag": "0005_mute_nighthawk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1782404126613,
+      "tag": "0006_misty_freak",
+      "breakpoints": true
     }
   ]
 }

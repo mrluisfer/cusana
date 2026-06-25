@@ -1,6 +1,7 @@
 "use client";
 
-import { currencyAtom, monthlyBudgetAtom } from "@/atoms";
+import type { BudgetResponse } from "@/app/api/[userid]/[currency]/budget/route";
+import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,9 +22,9 @@ import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import { computeCategoryBreakdown } from "@/utils/subscription-insights";
-import { useQuery } from "@tanstack/react-query";
-import { useAtom, useAtomValue } from "jotai";
-import { PencilIcon, WalletIcon } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { Loader2, PencilIcon, SparklesIcon, WalletIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -44,12 +45,35 @@ async function fetchExchangeRates(
   return response.json();
 }
 
+async function fetchBudget(
+  userId: string,
+  currency: string,
+): Promise<BudgetResponse> {
+  const response = await fetch(`/api/${userId}/${currency}/budget`);
+  if (!response.ok) throw new Error("Failed to fetch budget");
+  return response.json();
+}
+
+async function saveBudgetApi(
+  userId: string,
+  currency: string,
+  amount: number,
+): Promise<BudgetResponse> {
+  const response = await fetch(`/api/${userId}/${currency}/budget`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount }),
+  });
+  if (!response.ok) throw new Error("Failed to save budget");
+  return response.json();
+}
+
 export function BudgetTracker() {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const { data: session } = useSession();
   const selectedCurrency = useAtomValue(currencyAtom);
-  const [budgets, setBudgets] = useAtom(monthlyBudgetAtom);
+  const queryClient = useQueryClient();
 
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState("");
@@ -70,6 +94,23 @@ export function BudgetTracker() {
       staleTime: 1000 * 60 * 30,
     });
 
+  const { data: budgetData, isPending: isLoadingBudget } =
+    useQuery<BudgetResponse>({
+      queryKey: [QueryKeys.BUDGET, selectedCurrency],
+      queryFn: () => fetchBudget(session!.user.id, selectedCurrency),
+      enabled: !!session?.user.id,
+      staleTime: 1000 * 60 * 5,
+    });
+
+  const saveMutation = useMutation({
+    mutationFn: (amount: number) =>
+      saveBudgetApi(session!.user.id, selectedCurrency, amount),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.BUDGET] });
+      setIsEditing(false);
+    },
+  });
+
   const total = useMemo(
     () =>
       computeCategoryBreakdown(subscriptions, selectedCurrency, ratesData?.rates)
@@ -77,11 +118,12 @@ export function BudgetTracker() {
     [subscriptions, ratesData, selectedCurrency],
   );
 
-  const isPending = isLoadingSubscriptions || isLoadingRates;
+  const isPending = isLoadingSubscriptions || isLoadingRates || isLoadingBudget;
   const locale = toIntlLocale(language);
   const currencySymbol =
     currencySymbols[selectedCurrency as keyof typeof currencySymbols] || "$";
-  const budget = budgets[selectedCurrency];
+  const budget = budgetData?.budget ?? null;
+  const inherited = budgetData?.inherited ?? false;
 
   const formatMoney = (amount: number) =>
     `${currencySymbol}${Math.round(amount).toLocaleString(locale, {
@@ -96,8 +138,7 @@ export function BudgetTracker() {
   const saveBudget = () => {
     const value = Number.parseFloat(draft);
     if (!Number.isFinite(value) || value <= 0) return;
-    setBudgets((prev) => ({ ...prev, [selectedCurrency]: value }));
-    setIsEditing(false);
+    saveMutation.mutate(value);
   };
 
   const percent = budget && budget > 0 ? (total / budget) * 100 : 0;
@@ -159,6 +200,7 @@ export function BudgetTracker() {
                 }}
                 placeholder={t("dashboard.budget.placeholder")}
                 className="h-9"
+                disabled={saveMutation.isPending}
               />
               <span className="text-muted-foreground text-xs font-medium">
                 {selectedCurrency}
@@ -169,10 +211,18 @@ export function BudgetTracker() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsEditing(false)}
+                disabled={saveMutation.isPending}
               >
                 {t("dashboard.budget.cancel")}
               </Button>
-              <Button size="sm" onClick={saveBudget} disabled={!draft.trim()}>
+              <Button
+                size="sm"
+                onClick={saveBudget}
+                disabled={!draft.trim() || saveMutation.isPending}
+              >
+                {saveMutation.isPending && (
+                  <Loader2 className="size-3.5 animate-spin" />
+                )}
                 {t("dashboard.budget.save")}
               </Button>
             </div>
@@ -230,6 +280,26 @@ export function BudgetTracker() {
                     })}
               </span>
             </div>
+            {inherited && (
+              <div className="border-border/60 flex items-center justify-between gap-2 border-t pt-2">
+                <span className="text-muted-foreground inline-flex items-center gap-1.5 text-[11px]">
+                  <SparklesIcon className="size-3" />
+                  {t("dashboard.budget.inherited")}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2 text-[11px]"
+                  onClick={() => saveMutation.mutate(budget)}
+                  disabled={saveMutation.isPending}
+                >
+                  {saveMutation.isPending && (
+                    <Loader2 className="size-3 animate-spin" />
+                  )}
+                  {t("dashboard.budget.keepForMonth")}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

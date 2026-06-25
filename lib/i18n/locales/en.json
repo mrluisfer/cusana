@@ -164,7 +164,17 @@
       "over": "Over by {{amount}}",
       "onTrack": "You're on track with your budget",
       "nearLimit": "You're close to your limit",
-      "overLimit": "You went over your budget"
+      "overLimit": "You went over your budget",
+      "inherited": "Carried over from last month",
+      "keepForMonth": "Keep for this month"
+    },
+    "budgetHistory": {
+      "title": "Budget history",
+      "description": "Budget vs. actual spending by month",
+      "spent": "Spent",
+      "noBudget": "No budget this month",
+      "empty": "No budgets saved yet",
+      "emptyHint": "Set a monthly budget and your history will show up here."
     },
     "calendar": {
       "prevMonth": "Previous month",

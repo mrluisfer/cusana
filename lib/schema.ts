@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   index,
   integer,
   jsonb,
@@ -9,6 +10,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -88,6 +90,7 @@ export const userRelations = relations(user, ({ many }) => ({
   accounts: many(account),
   subscriptions: many(subscriptions),
   subscriptionEvents: many(subscriptionEvents),
+  budgets: many(budgets),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -261,3 +264,58 @@ export type EventMetadata = {
 // Tipos inferidos del audit log
 export type SubscriptionEvent = typeof subscriptionEvents.$inferSelect;
 export type NewSubscriptionEvent = typeof subscriptionEvents.$inferInsert;
+
+// ─── Presupuestos mensuales ────────────────────────────────────────────
+
+/**
+ * Presupuesto mensual del usuario, una fila por (usuario, moneda, mes).
+ *
+ * - `period` es siempre el primer día del mes al que aplica (YYYY-MM-01),
+ *   lo que da un histórico natural: cada mes guarda su propio presupuesto.
+ * - El índice único evita duplicados y permite usar `onConflictDoUpdate`
+ *   (upsert) al guardar.
+ * - Al persistirse en DB, el presupuesto se sincroniza entre dispositivos.
+ */
+export const budgets = pgTable(
+  "budgets",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+
+    currency: currencyEnum("currency").notNull().default("MXN"),
+
+    // Primer día del mes al que aplica este presupuesto (YYYY-MM-01)
+    period: date("period").notNull(),
+
+    amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("budgets_user_currency_period_idx").on(
+      table.userId,
+      table.currency,
+      table.period,
+    ),
+    index("budgets_user_idx").on(table.userId),
+  ],
+);
+
+export const budgetsRelations = relations(budgets, ({ one }) => ({
+  user: one(user, {
+    fields: [budgets.userId],
+    references: [user.id],
+  }),
+}));
+
+export type Budget = typeof budgets.$inferSelect;
+export type NewBudget = typeof budgets.$inferInsert;

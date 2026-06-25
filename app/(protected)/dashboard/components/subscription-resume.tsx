@@ -1,4 +1,5 @@
 import { BillingCalendar } from "./resume/billing-calendar";
+import { BudgetHistory } from "./resume/budget-history";
 import { BudgetTracker } from "./resume/budget-tracker";
 import { HeroSummary } from "./resume/hero-summary";
 import { MonthlyTrend } from "./resume/monthly-trend";
@@ -26,13 +27,15 @@ export default async function SubscriptionResume() {
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <MonthlyTrend />
-        <SpendingDistribution />
+        <BudgetHistory />
       </div>
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <SpendingDistribution />
         <SpendingByCategory />
-        <SubscriptionInsights />
       </div>
+
+      <SubscriptionInsights />
     </div>
   );
 }

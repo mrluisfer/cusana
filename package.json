@@ -64,7 +64,7 @@
     "xlsx": "0.18.5",
     "zod": "4.3.6"
   },
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": ">=22.13"
   },

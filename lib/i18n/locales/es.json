@@ -164,7 +164,17 @@
       "over": "Te pasaste por {{amount}}",
       "onTrack": "Vas bien con tu presupuesto",
       "nearLimit": "Estás cerca de tu límite",
-      "overLimit": "Superaste tu presupuesto"
+      "overLimit": "Superaste tu presupuesto",
+      "inherited": "Heredado del mes anterior",
+      "keepForMonth": "Fijar para este mes"
+    },
+    "budgetHistory": {
+      "title": "Historial de presupuesto",
+      "description": "Presupuesto vs. gasto real por mes",
+      "spent": "Gastado",
+      "noBudget": "Sin presupuesto este mes",
+      "empty": "Aún no hay presupuestos guardados",
+      "emptyHint": "Define un presupuesto mensual y aquí verás tu historial."
     },
     "calendar": {
       "prevMonth": "Mes anterior",
