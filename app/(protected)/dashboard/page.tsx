@@ -8,6 +8,7 @@ import {
   SectionFallback,
 } from "./components/section-header";
 import SubscriptionResume from "./components/subscription-resume";
+import InactiveSubscriptionsTable from "./components/subscriptions/inactive-subscriptions-table";
 import SubscriptionTable from "./components/subscriptions/table";
 
 export default async function DashboardPage() {
@@ -37,6 +38,7 @@ export default async function DashboardPage() {
           <Suspense fallback={<SectionFallback />}>
             <SubscriptionTable />
           </Suspense>
+          <InactiveSubscriptionsTable />
         </section>
       </main>
     </Container>

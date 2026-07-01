@@ -108,6 +108,21 @@ export async function logSubscriptionUpdated(
   });
 }
 
+/** Registra un evento de reactivación de suscripción */
+export async function logSubscriptionReactivated(
+  sub: Subscription,
+  metadata?: EventMetadata,
+) {
+  return db.insert(subscriptionEvents).values({
+    userId: sub.userId,
+    subscriptionId: sub.id,
+    eventType: "reactivated",
+    snapshot: createSnapshot(sub),
+    changes: null,
+    metadata: metadata ?? null,
+  });
+}
+
 /** Registra un evento de eliminación de suscripción */
 export async function logSubscriptionDeleted(
   sub: Subscription,

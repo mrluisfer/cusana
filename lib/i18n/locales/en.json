@@ -294,6 +294,32 @@
       "delete": "Delete",
       "deleteError": "Failed to delete the subscription"
     },
+    "inactive": {
+      "title": "Inactive subscriptions",
+      "description": "For visual reference only. They are not included in your totals or calculations.",
+      "status": "Status",
+      "inactiveBadge": "Inactive",
+      "reactivate": "Reactivate",
+      "deleteForever": "Delete forever"
+    },
+    "deleteForever": {
+      "title": "Delete forever",
+      "confirmLead": "Permanently delete",
+      "confirmTail": "? This will remove the record from the database and cannot be undone.",
+      "cancel": "Cancel",
+      "deleting": "Deleting…",
+      "delete": "Delete forever",
+      "deleteError": "Failed to permanently delete the subscription"
+    },
+    "reactivate": {
+      "title": "Reactivate subscription",
+      "confirmLead": "Do you want to reactivate",
+      "confirmTail": "? It will become active again and be counted in your totals once more.",
+      "cancel": "Cancel",
+      "reactivating": "Reactivating…",
+      "reactivate": "Reactivate",
+      "reactivateError": "Failed to reactivate the subscription"
+    },
     "filters": {
       "trigger": "Filter",
       "title": "Filter subscriptions",

@@ -294,6 +294,32 @@
       "delete": "Eliminar",
       "deleteError": "Error al eliminar la suscripción"
     },
+    "inactive": {
+      "title": "Suscripciones inactivas",
+      "description": "Solo como ayuda visual. No se consideran en tus totales ni cálculos.",
+      "status": "Estado",
+      "inactiveBadge": "Inactiva",
+      "reactivate": "Reactivar",
+      "deleteForever": "Eliminar para siempre"
+    },
+    "deleteForever": {
+      "title": "Eliminar para siempre",
+      "confirmLead": "¿Eliminar permanentemente",
+      "confirmTail": "? Esta acción borrará el registro de la base de datos y no se puede deshacer.",
+      "cancel": "Cancelar",
+      "deleting": "Eliminando…",
+      "delete": "Eliminar para siempre",
+      "deleteError": "Error al eliminar la suscripción permanentemente"
+    },
+    "reactivate": {
+      "title": "Reactivar suscripción",
+      "confirmLead": "¿Quieres reactivar",
+      "confirmTail": "? Volverá a estar activa y se contabilizará nuevamente en tus totales.",
+      "cancel": "Cancelar",
+      "reactivating": "Reactivando…",
+      "reactivate": "Reactivar",
+      "reactivateError": "Error al reactivar la suscripción"
+    },
     "filters": {
       "trigger": "Filtrar",
       "title": "Filtrar suscripciones",

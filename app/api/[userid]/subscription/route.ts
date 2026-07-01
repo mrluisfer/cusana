@@ -2,7 +2,10 @@ import { allowedPlatformsArray } from "@/constants/allowed-platforms";
 import {
   createSubscription,
   deleteSubscription,
+  getInactiveSubscriptionsByUser,
   getSubscriptionsByUser,
+  hardDeleteSubscription,
+  reactivateSubscription,
   updateSubscription,
 } from "@/lib/queries/subscriptions";
 import type { RouteContext } from "@/types/route-context";
@@ -14,7 +17,14 @@ export async function GET(
 ) {
   const { userid } = await ctx.params;
 
-  const rawSubscriptions = await getSubscriptionsByUser(userid);
+  // `?status=inactive` devuelve las suscripciones desactivadas (soft-deleted),
+  // usadas solo como ayuda visual; por defecto se devuelven las activas.
+  const status = _req.nextUrl.searchParams.get("status");
+
+  const rawSubscriptions =
+    status === "inactive"
+      ? await getInactiveSubscriptionsByUser(userid)
+      : await getSubscriptionsByUser(userid);
 
   const subscriptions = rawSubscriptions.reduce<
     Array<
@@ -89,7 +99,12 @@ export async function PATCH(
     );
   }
 
-  const res = await updateSubscription(id, userid, data);
+  // Reactivación: cuando el único cambio es activar la suscripción,
+  // registramos un evento dedicado de "reactivated".
+  const res =
+    data.active === true && Object.keys(data).length === 1
+      ? await reactivateSubscription(id, userid)
+      : await updateSubscription(id, userid, data);
 
   if (!res || res.length === 0) {
     return Response.json(
@@ -116,11 +131,30 @@ export async function DELETE(
 
   const { searchParams } = req.nextUrl;
   const subscriptionId = searchParams.get("id");
+  // `?permanent=true` borra el registro de la base de datos (hard delete);
+  // por defecto se hace soft delete (marcar como inactiva).
+  const permanent = searchParams.get("permanent") === "true";
 
   if (!subscriptionId) {
     return Response.json(
       { message: "Subscription ID is required" },
       { status: 400 },
+    );
+  }
+
+  if (permanent) {
+    const res = await hardDeleteSubscription(subscriptionId, userid);
+
+    if (!res || res.length === 0) {
+      return Response.json(
+        { message: "Subscription not found" },
+        { status: 404 },
+      );
+    }
+
+    return Response.json(
+      { message: "Subscription permanently deleted" },
+      { status: 200 },
     );
   }
 

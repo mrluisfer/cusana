@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import {
   logSubscriptionCreated,
   logSubscriptionDeleted,
+  logSubscriptionReactivated,
   logSubscriptionUpdated,
 } from "./subscription-events";
 
@@ -14,6 +15,20 @@ export async function getSubscriptionsByUser(userId: string) {
       eq(subscriptions.active, true),
     ),
     orderBy: (subscriptions, { asc }) => [asc(subscriptions.billingDay)],
+  });
+}
+
+/**
+ * Suscripciones inactivas (soft-deleted) de un usuario.
+ * Solo se usan como ayuda visual; nunca entran en cálculos de negocio.
+ */
+export async function getInactiveSubscriptionsByUser(userId: string) {
+  return db.query.subscriptions.findMany({
+    where: and(
+      eq(subscriptions.userId, userId),
+      eq(subscriptions.active, false),
+    ),
+    orderBy: (subscriptions, { desc }) => [desc(subscriptions.updatedAt)],
   });
 }
 
@@ -57,6 +72,25 @@ export async function updateSubscription(
   return result;
 }
 
+export async function reactivateSubscription(id: string, userId: string) {
+  // Solo reactivar suscripciones que estén inactivas
+  const before = await getSubscriptionById(id, userId);
+  if (!before) return null;
+
+  const result = await db
+    .update(subscriptions)
+    .set({ active: true, updatedAt: new Date() })
+    .where(and(eq(subscriptions.id, id), eq(subscriptions.userId, userId)))
+    .returning();
+
+  // Registrar evento de reactivación
+  if (result[0]) {
+    await logSubscriptionReactivated(result[0], { source: "web" });
+  }
+
+  return result;
+}
+
 export async function deleteSubscription(id: string, userId: string) {
   // Capturar estado antes de desactivar
   const before = await getSubscriptionById(id, userId);
@@ -75,4 +109,18 @@ export async function deleteSubscription(id: string, userId: string) {
   }
 
   return result;
+}
+
+/**
+ * Eliminación permanente (hard delete): borra el registro de la base de datos.
+ * El historial (subscription_events) se conserva como audit log inmutable.
+ */
+export async function hardDeleteSubscription(id: string, userId: string) {
+  const before = await getSubscriptionById(id, userId);
+  if (!before) return null;
+
+  return db
+    .delete(subscriptions)
+    .where(and(eq(subscriptions.id, id), eq(subscriptions.userId, userId)))
+    .returning();
 }
