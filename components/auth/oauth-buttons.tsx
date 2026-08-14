@@ -1,10 +1,15 @@
 "use client";
 
+import { Github } from "@/assets/icons/github";
 import { Google } from "@/assets/icons/google";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
-import { Github } from "lucide-react";
-import { useCallback, useState, type ComponentType, type SVGProps } from "react";
+import {
+  useCallback,
+  useState,
+  type ComponentType,
+  type SVGProps,
+} from "react";
 import { useTranslation } from "react-i18next";
 
 type Provider = {
@@ -51,7 +56,7 @@ export function OAuthButtons() {
           <div className="border-border/60 w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-card/60 supports-[backdrop-filter]:bg-card/40 text-muted-foreground rounded-full px-3 py-0.5 backdrop-blur font-medium tracking-wide uppercase">
+          <span className="bg-card/60 supports-[backdrop-filter]:bg-card/40 text-muted-foreground rounded-full px-3 py-0.5 font-medium tracking-wide uppercase backdrop-blur">
             {t("auth.oauth.divider")}
           </span>
         </div>

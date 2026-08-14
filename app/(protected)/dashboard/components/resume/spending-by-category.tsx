@@ -38,8 +38,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { AlertTriangleIcon, ChartPieIcon } from "lucide-react";
 import { useMemo } from "react";
-import { Label, Pie, PieChart } from "recharts";
 import { useTranslation } from "react-i18next";
+import { Label, Pie, PieChart } from "recharts";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -147,7 +147,7 @@ export function SpendingByCategory() {
   const subscriptionCount = categories.reduce((sum, c) => sum + c.count, 0);
 
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CardHeaderIcon icon={ChartPieIcon} />

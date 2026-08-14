@@ -128,17 +128,18 @@ export function UpcomingPayments() {
         ) : sortedSubscriptions && sortedSubscriptions.length > 0 ? (
           sortedSubscriptions.map((subscription, index) => (
             <div key={subscription.id}>
-              <div className="flex items-center justify-between py-2.5">
-                <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-between gap-2 py-2.5">
+                <div className="flex min-w-0 flex-1 items-center gap-2.5">
                   <ServiceIcon
                     service={subscription.platform as keyof typeof serviceIcons}
                     size="xs"
+                    className="shrink-0"
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">
                       {subscription.name}
                     </p>
-                    <p className="text-muted-foreground text-[11px]">
+                    <p className="text-muted-foreground truncate text-[11px]">
                       {getNextBillingDate(
                         {
                           billingDay: subscription.billingDay,
@@ -151,7 +152,10 @@ export function UpcomingPayments() {
                     </p>
                   </div>
                 </div>
-                <Badge variant={getUrgencyColor(subscription)}>
+                <Badge
+                  variant={getUrgencyColor(subscription)}
+                  className="shrink-0"
+                >
                   {currencySymbols[subscription.currency]}
                   {(parseFloat(String(subscription.price)) || 0).toLocaleString(
                     toIntlLocale(language),

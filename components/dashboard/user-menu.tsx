@@ -1,7 +1,9 @@
 "use client";
 
+import { calendarHoverPreviewAtom } from "@/atoms";
 import { signOut, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
+import { useAtom } from "jotai";
 import { locales, localeLabels } from "@/lib/i18n/settings";
 import { useLanguage } from "@/lib/i18n/use-language";
 import {
@@ -11,6 +13,7 @@ import {
   MonitorIcon,
   MoonIcon,
   PaletteIcon,
+  ScanEyeIcon,
   ShieldCheckIcon,
   SunIcon,
   UserIcon,
@@ -24,6 +27,7 @@ import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -45,6 +49,9 @@ export const UserMenu = () => {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [calendarHoverPreview, setCalendarHoverPreview] = useAtom(
+    calendarHoverPreviewAtom,
+  );
 
   const handleSignOut = useCallback(async () => {
     await signOut();
@@ -137,7 +144,9 @@ export const UserMenu = () => {
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup
                   value={language}
-                  onValueChange={(value) => setLanguage(value as typeof language)}
+                  onValueChange={(value) =>
+                    setLanguage(value as typeof language)
+                  }
                 >
                   {locales.map((locale) => (
                     <DropdownMenuRadioItem key={locale} value={locale}>
@@ -147,6 +156,17 @@ export const UserMenu = () => {
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
+            {/*
+              Siempre visible. Que el hover aplique o no se decide en el
+              calendario según el tipo de puntero, no escondiendo el ajuste.
+            */}
+            <DropdownMenuCheckboxItem
+              checked={calendarHoverPreview}
+              onCheckedChange={setCalendarHoverPreview}
+            >
+              <ScanEyeIcon className="mr-2 size-4" />
+              {t("userMenu.calendarHoverPreview")}
+            </DropdownMenuCheckboxItem>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />

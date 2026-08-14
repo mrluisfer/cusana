@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e4]:
+      - link "Cusana" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e17]:
+        - button "Idioma" [ref=e18] [cursor=pointer]
+        - button "Cambiar tema" [disabled]
+        - link "Regresar" [ref=e19] [cursor=pointer]:
+          - /url: /
+    - main [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - heading "Bienvenido de vuelta" [level=1] [ref=e24]
+          - paragraph [ref=e25]: Inicia sesión para ver tus suscripciones.
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: Email
+            - textbox "Email" [ref=e31]:
+              - /placeholder: tu@email.com
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - generic [ref=e34]: Contraseña
+              - link "¿Olvidaste tu contraseña?" [ref=e35] [cursor=pointer]:
+                - /url: /forgot-password
+            - generic [ref=e36]:
+              - textbox "Contraseña" [ref=e37]:
+                - /placeholder: ••••••••
+              - button "Mostrar contraseña" [ref=e38] [cursor=pointer]
+          - button "Iniciar sesión" [ref=e42] [cursor=pointer]
+        - generic [ref=e43]: O continúa con
+        - generic [ref=e48]:
+          - button "Continuar con Google" [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]: Google
+          - button "Continuar con GitHub" [ref=e51] [cursor=pointer]:
+            - generic [ref=e52]: GitHub
+        - paragraph [ref=e53]:
+          - text: ¿No tienes cuenta?
+          - link "Regístrate gratis" [ref=e54] [cursor=pointer]:
+            - /url: /register
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e60] [cursor=pointer]

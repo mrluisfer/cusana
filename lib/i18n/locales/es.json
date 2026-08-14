@@ -36,6 +36,7 @@
     "profile": "Perfil",
     "preferences": "Preferencias",
     "appearance": "Apariencia",
+    "calendarHoverPreview": "Vista previa al pasar el cursor",
     "legal": "Legal",
     "privacy": "Privacidad",
     "terms": "Términos",
@@ -126,6 +127,8 @@
       "title": "Ideas para ti",
       "subtitle": "Sugerencias basadas en tus suscripciones",
       "empty": "Agrega suscripciones para recibir sugerencias",
+      "show": "Mostrar ideas",
+      "hide": "Ocultar ideas",
       "items": {
         "topCategory": "Tu mayor gasto es {{category}} ({{percent}}% del total).",
         "consolidate": "Tienes {{count}} servicios de {{category}}. Quizá puedas consolidar o cancelar alguno.",

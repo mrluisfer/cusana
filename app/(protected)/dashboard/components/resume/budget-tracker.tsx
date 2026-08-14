@@ -286,7 +286,7 @@ export function BudgetTracker() {
                   {t("dashboard.budget.inherited")}
                 </span>
                 <Button
-                  variant="ghost"
+                  variant="default"
                   size="sm"
                   className="h-6 px-2 text-[11px]"
                   onClick={() => saveMutation.mutate(budget)}

@@ -6,7 +6,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { calendarHoverPreviewAtom } from "@/atoms";
 import type { Subscription } from "@/lib/schema";
+import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +30,7 @@ export function CalendarDay({
   dayOfWeek,
 }: CalendarDayProps) {
   const { t } = useTranslation();
+  const hoverPreview = useAtomValue(calendarHoverPreviewAtom);
   const hasPayments = payments.length > 0;
 
   const dayElement = (
@@ -76,7 +79,14 @@ export function CalendarDay({
 
   return (
     <Popover>
-      <PopoverTrigger className="outline-none">{dayElement}</PopoverTrigger>
+      <PopoverTrigger
+        className="outline-none"
+        openOnHover={hoverPreview}
+        delay={150}
+        closeDelay={100}
+      >
+        {dayElement}
+      </PopoverTrigger>
       <PopoverContent side="bottom" sideOffset={6} className="w-72">
         <DayPopoverContent
           day={day}

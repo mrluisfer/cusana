@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { Currency } from "./constants/currency";
 
 export const currencyAtom = atom<Currency>(Currency.MXN);
@@ -23,3 +24,13 @@ export const defaultFilters: SubscriptionFilters = {
 };
 
 export const filtersAtom = atom<SubscriptionFilters>(defaultFilters);
+
+/**
+ * Preferencia de escritorio: abrir el detalle de un día del calendario al
+ * pasar el cursor, además del click. Se persiste en localStorage; en el primer
+ * render vale `false` y se sincroniza al montar, para no romper la hidratación.
+ */
+export const calendarHoverPreviewAtom = atomWithStorage(
+  "cusana:calendar-hover-preview",
+  false,
+);

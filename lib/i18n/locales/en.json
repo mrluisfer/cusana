@@ -36,6 +36,7 @@
     "profile": "Profile",
     "preferences": "Preferences",
     "appearance": "Appearance",
+    "calendarHoverPreview": "Calendar hover preview",
     "legal": "Legal",
     "privacy": "Privacy",
     "terms": "Terms",
@@ -126,6 +127,8 @@
       "title": "Ideas for you",
       "subtitle": "Suggestions based on your subscriptions",
       "empty": "Add subscriptions to get suggestions",
+      "show": "Show insights",
+      "hide": "Hide insights",
       "items": {
         "topCategory": "Your biggest spend is {{category}} ({{percent}}% of the total).",
         "consolidate": "You have {{count}} {{category}} services. You might consolidate or cancel one.",

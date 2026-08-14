@@ -218,12 +218,10 @@ export function SubscriptionInsights() {
 
   if (hideInsights)
     return (
-      <div className="flex items-start justify-end">
-        <Button onClick={() => setHideInsights(false)}>
-          <LightbulbIcon />
-          Show insights
-        </Button>
-      </div>
+      <Button onClick={() => setHideInsights(false)}>
+        <LightbulbIcon />
+        {t("dashboard.insights.show")}
+      </Button>
     );
 
   return (
@@ -235,7 +233,11 @@ export function SubscriptionInsights() {
         </CardTitle>
         <CardDescription>{t("dashboard.insights.subtitle")}</CardDescription>
         <CardAction>
-          <Button onClick={() => setHideInsights(true)} size={"icon"}>
+          <Button
+            onClick={() => setHideInsights(true)}
+            size={"icon"}
+            aria-label={t("dashboard.insights.hide")}
+          >
             <XIcon />
           </Button>
         </CardAction>

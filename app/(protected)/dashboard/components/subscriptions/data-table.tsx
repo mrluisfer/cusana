@@ -4,13 +4,10 @@ import { filtersAtom } from "@/atoms";
 import {
   ColumnDef,
   ColumnFiltersState,
+  RowData,
   SortingState,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  useTable,
 } from "@tanstack/react-table";
 import { useAtom } from "jotai";
 import * as React from "react";
@@ -47,18 +44,22 @@ import {
 import { AddSubscription } from "./actions/add-subscription";
 import { ExportData } from "./actions/export-data";
 import { FilterSubscriptions } from "./actions/filter-subscriptions";
+import {
+  subscriptionTableFeatures,
+  type SubscriptionTableFeatures,
+} from "./table-features";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData extends RowData> {
+  columns: ColumnDef<SubscriptionTableFeatures, TData>[];
   data: TData[];
   pageSize?: number;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   pageSize = 10,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const { t } = useTranslation();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -107,21 +108,19 @@ export function DataTable<TData, TValue>({
 
   // TanStack Table isn't compatible with React Compiler memoization.
   // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
+  const table = useTable({
+    features: subscriptionTableFeatures,
     data: filteredData,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
     state: {
       sorting,
       columnFilters,
     },
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     initialState: {
       pagination: {
+        pageIndex: 0,
         pageSize,
       },
     },
@@ -285,12 +284,12 @@ export function DataTable<TData, TValue>({
           <p className="text-muted-foreground text-sm">
             {t("dashboard.table.showing", {
               from:
-                table.getState().pagination.pageIndex *
-                  table.getState().pagination.pageSize +
+                table.state.pagination.pageIndex *
+                  table.state.pagination.pageSize +
                 1,
               to: Math.min(
-                (table.getState().pagination.pageIndex + 1) *
-                  table.getState().pagination.pageSize,
+                (table.state.pagination.pageIndex + 1) *
+                  table.state.pagination.pageSize,
                 table.getFilteredRowModel().rows.length,
               ),
               total: table.getFilteredRowModel().rows.length,
@@ -324,7 +323,7 @@ export function DataTable<TData, TValue>({
                 {t("dashboard.table.page")}
               </span>
               <span className="text-sm font-medium">
-                {table.getState().pagination.pageIndex + 1}
+                {table.state.pagination.pageIndex + 1}
               </span>
               <span className="text-muted-foreground text-sm">
                 {t("dashboard.table.of")}

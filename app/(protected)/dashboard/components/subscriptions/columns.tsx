@@ -34,6 +34,7 @@ import { useTranslation } from "react-i18next";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DeleteSubscription } from "./delete-subscription";
 import { EditSubscription } from "./edit-subscription";
+import type { SubscriptionTableFeatures } from "./table-features";
 
 export type Subscription = {
   id: string;
@@ -124,11 +125,13 @@ function SubscriptionActions({ subscription }: { subscription: Subscription }) {
   );
 }
 
-export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
+type SubscriptionColumnDef = ColumnDef<SubscriptionTableFeatures, Subscription>;
+
+export function useSubscriptionColumns(): SubscriptionColumnDef[] {
   const { t } = useTranslation();
   const { language } = useLanguage();
 
-  return useMemo<ColumnDef<Subscription>[]>(
+  return useMemo<SubscriptionColumnDef[]>(
     () => [
       // Columna: Servicio (icono + nombre)
       {
@@ -213,7 +216,7 @@ export function useSubscriptionColumns(): ColumnDef<Subscription>[] {
             createdAt: row.createdAt,
             billingMonth: row.billingMonth,
           }).getTime(),
-        sortingFn: "basic",
+        sortFn: "basic",
         header: ({ column }) => (
           <div className="flex items-center gap-2">
             <Calendar className="size-4" />
