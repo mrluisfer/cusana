@@ -1,5 +1,9 @@
 "use client";
 
+import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthError } from "@/components/auth/auth-error";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -7,10 +11,6 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { signUp } from "@/lib/auth-client";
-import { ArrowRight, Check } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const perkIds = ["noCard", "noBank", "cancelAnytime"] as const;
 
@@ -84,7 +84,7 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="group shadow-primary/20 w-full shadow-lg"
+          className="group w-full shadow-lg shadow-primary/20"
           disabled={isPending}
         >
           {isPending ? (
@@ -110,9 +110,9 @@ export default function RegisterPage() {
           {perkIds.map((perk) => (
             <li
               key={perk}
-              className="text-muted-foreground flex items-center gap-1 text-xs"
+              className="flex items-center gap-1 text-muted-foreground text-xs"
             >
-              <span className="bg-primary/15 text-primary inline-flex size-3.5 items-center justify-center rounded-full">
+              <span className="inline-flex size-3.5 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Check className="size-2.5" aria-hidden="true" />
               </span>
               {t(`auth.register.perks.${perk}` as const)}
@@ -120,7 +120,7 @@ export default function RegisterPage() {
           ))}
         </ul>
 
-        <p className="text-muted-foreground text-center text-xs leading-relaxed">
+        <p className="text-center text-muted-foreground text-xs leading-relaxed">
           {t("auth.register.termsLead")}{" "}
           <Link
             href="/terms"
@@ -141,11 +141,11 @@ export default function RegisterPage() {
 
       <OAuthButtons />
 
-      <p className="text-muted-foreground mt-6 text-center text-sm">
+      <p className="mt-6 text-center text-muted-foreground text-sm">
         {t("auth.register.haveAccount")}{" "}
         <Link
           href="/login"
-          className="text-foreground hover:text-primary font-medium underline-offset-4 transition-colors hover:underline"
+          className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
         >
           {t("auth.register.loginCta")}
         </Link>

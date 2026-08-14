@@ -87,7 +87,10 @@ export const termsDoc: LocalizedLegalDoc = {
         id: "uso-aceptable",
         title: "5. Uso aceptable",
         blocks: [
-          { type: "p", text: "Te comprometes a no utilizar la Plataforma para:" },
+          {
+            type: "p",
+            text: "Te comprometes a no utilizar la Plataforma para:",
+          },
           {
             type: "ul",
             items: [

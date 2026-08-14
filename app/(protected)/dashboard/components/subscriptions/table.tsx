@@ -1,10 +1,8 @@
 "use client";
 
-import { useSession } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
-import { useSubscriptionColumns } from "./columns";
-import { DataTable } from "./data-table";
-
+import { AlertCircle, Inbox, RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,9 +14,10 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
-import { AlertCircle, Inbox, RefreshCw } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useSession } from "@/lib/auth-client";
 import { AddSubscription } from "./actions/add-subscription";
+import { useSubscriptionColumns } from "./columns";
+import { DataTable } from "./data-table";
 
 // Función de fetch extraída para evitar closures
 async function fetchSubscriptions(userId: string) {
@@ -89,7 +88,7 @@ function TableSkeleton() {
       </div>
 
       <div className="rounded-md border">
-        <div className="bg-muted/50 border-b p-4">
+        <div className="border-b bg-muted/50 p-4">
           <div className="flex gap-4">
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-4 flex-1" />
@@ -150,8 +149,8 @@ function EmptyState() {
   return (
     <Card className="border-dashed">
       <CardHeader className="pb-2 text-center">
-        <div className="bg-muted mx-auto mb-2 w-fit rounded-full p-3">
-          <Inbox className="text-muted-foreground size-6" />
+        <div className="mx-auto mb-2 w-fit rounded-full bg-muted p-3">
+          <Inbox className="size-6 text-muted-foreground" />
         </div>
         <CardTitle className="text-lg">
           {t("dashboard.table.noneTitle")}

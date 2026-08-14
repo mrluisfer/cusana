@@ -1,9 +1,9 @@
 "use client";
 
-import { aiChatOpenAtom } from "@/atoms";
 import { useAtom } from "jotai";
 import { XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { aiChatOpenAtom } from "@/atoms";
 import { Button } from "../ui/button";
 import { AiChatSheet } from "./ai-chat-sheet";
 
@@ -13,7 +13,7 @@ export function AiChatPanel() {
 
   return (
     <aside
-      className={`bg-background border-border fixed top-0 right-0 h-dvh w-[400px] border-l transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "translate-x-full"}`}
+      className={`fixed top-0 right-0 h-dvh w-[400px] border-border border-l bg-background transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "translate-x-full"}`}
     >
       <div className="flex w-full items-center justify-end pt-5 pr-5">
         <Button

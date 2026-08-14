@@ -1,12 +1,12 @@
 "use client";
 
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { useTranslation } from "react-i18next";
+import { useSubscriptions } from "@/hooks/use-subscriptions";
 import { streamChatCompletion } from "@/lib/ai-chat/openai-stream";
 import { CUSANA_SYSTEM_PROMPT } from "@/lib/ai-chat/system-prompt";
 import type { ChatMessage, OpenAIChatMessage } from "@/lib/ai-chat/types";
-import { useSubscriptions } from "@/hooks/use-subscriptions";
 import { buildAiSubscriptionContext } from "@/utils/subscription-insights";
-import { useCallback, useRef, useState, useSyncExternalStore } from "react";
-import { useTranslation } from "react-i18next";
 
 const STORAGE_KEY = "cusana-openai-token";
 
@@ -17,7 +17,9 @@ function generateId(): string {
 const tokenListeners = new Set<() => void>();
 
 function notifyTokenListeners() {
-  tokenListeners.forEach((listener) => listener());
+  for (const listener of tokenListeners) {
+    listener();
+  }
 }
 
 function subscribeToToken(listener: () => void) {

@@ -1,10 +1,10 @@
 "use client";
 
-import type { ChatMessage } from "@/lib/ai-chat/types";
-import { cn } from "@/lib/utils";
 import { BotIcon, SparklesIcon, UserIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import type { ChatMessage } from "@/lib/ai-chat/types";
+import { cn } from "@/lib/utils";
 
 type AiChatMessagesProps = {
   messages: ChatMessage[];
@@ -58,9 +58,9 @@ function MessageBubble({
       >
         {isEmpty && isStreaming ? (
           <span className="inline-flex items-center gap-1">
-            <span className="bg-foreground/40 size-1.5 animate-pulse" />
-            <span className="bg-foreground/40 size-1.5 animate-pulse delay-150" />
-            <span className="bg-foreground/40 size-1.5 animate-pulse delay-300" />
+            <span className="size-1.5 animate-pulse bg-foreground/40" />
+            <span className="size-1.5 animate-pulse bg-foreground/40 delay-150" />
+            <span className="size-1.5 animate-pulse bg-foreground/40 delay-300" />
           </span>
         ) : (
           <span className="whitespace-pre-wrap">{message.content}</span>
@@ -85,18 +85,18 @@ export function AiChatMessages({
   if (messages.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
-        <div className="bg-primary/10 flex size-12 items-center justify-center rounded-xl">
-          <BotIcon className="text-primary size-6" />
+        <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+          <BotIcon className="size-6 text-primary" />
         </div>
         <div>
           <p className="font-medium">{t("aiChat.emptyTitle")}</p>
-          <p className="text-muted-foreground mt-1 text-sm">
+          <p className="mt-1 text-muted-foreground text-sm">
             {t("aiChat.emptySubtitle")}
           </p>
         </div>
         {onSuggestionAction && (
           <div className="w-full max-w-xs space-y-2">
-            <p className="text-muted-foreground flex items-center justify-center gap-1.5 text-xs font-medium">
+            <p className="flex items-center justify-center gap-1.5 font-medium text-muted-foreground text-xs">
               <SparklesIcon className="size-3.5" />
               {t("aiChat.suggestionsLabel")}
             </p>
@@ -108,7 +108,7 @@ export function AiChatMessages({
                     key={key}
                     type="button"
                     onClick={() => onSuggestionAction(text)}
-                    className="border-border/60 bg-card hover:bg-muted hover:border-border text-foreground rounded-lg border px-3 py-2 text-left text-sm transition-colors"
+                    className="rounded-lg border border-border/60 bg-card px-3 py-2 text-left text-foreground text-sm transition-colors hover:border-border hover:bg-muted"
                   >
                     {text}
                   </button>

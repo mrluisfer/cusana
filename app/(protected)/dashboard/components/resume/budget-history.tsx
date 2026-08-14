@@ -1,5 +1,10 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { HistoryIcon } from "lucide-react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { BudgetHistoryResponse } from "@/app/api/[userid]/[currency]/budget/history/route";
 import type { MonthlyTrendResponse } from "@/app/api/[userid]/[currency]/monthly-trend/route";
 import { currencyAtom } from "@/atoms";
@@ -26,11 +31,6 @@ import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { toPeriod } from "@/lib/period";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { HistoryIcon } from "lucide-react";
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 const MONTHS_TO_SHOW = 6;
 
@@ -122,19 +122,19 @@ function HistoryBar({
     <div className="flex items-center gap-3">
       <span
         className={cn(
-          "w-8 text-right text-xs font-medium",
-          row.isCurrent ? "text-primary font-bold" : "text-muted-foreground",
+          "w-8 text-right font-medium text-xs",
+          row.isCurrent ? "font-bold text-primary" : "text-muted-foreground",
         )}
       >
         {row.month}
       </span>
-      <div className="bg-muted/50 relative h-7 flex-1 overflow-hidden">
+      <div className="relative h-7 flex-1 overflow-hidden bg-muted/50">
         <div
           className={cn("h-full transition-all duration-500", fillClass)}
           style={{ width: `${Math.max(fillPercent, 3)}%` }}
         />
       </div>
-      <span className="text-muted-foreground min-w-20 text-right font-mono text-xs tabular-nums">
+      <span className="min-w-20 text-right font-mono text-muted-foreground text-xs tabular-nums">
         {hasBudget
           ? `${fmt(row.spent)} / ${fmt(row.budget as number)}`
           : fmt(row.spent)}
@@ -263,11 +263,11 @@ export function BudgetHistory() {
             </div>
           </TooltipProvider>
         ) : (
-          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <HistoryIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">
+            <p className="font-medium text-sm">
               {t("dashboard.budgetHistory.empty")}
             </p>
             <p className="mt-1 text-xs opacity-70">

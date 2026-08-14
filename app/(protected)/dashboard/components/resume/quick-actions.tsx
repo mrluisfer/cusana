@@ -1,5 +1,8 @@
 "use client";
 
+import { useAtom } from "jotai";
+import { DollarSignIcon, FilterIcon, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { currencyAtom, defaultFilters, filtersAtom } from "@/atoms";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -19,10 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
-import { useAtom } from "jotai";
-import { DollarSignIcon, FilterIcon, XIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import {
+  type Currency,
+  currencyArray,
+  currencySymbols,
+} from "@/constants/currency";
 import { FilterSubscriptions } from "../subscriptions/actions/filter-subscriptions";
 
 export function QuickActions() {
@@ -56,7 +60,7 @@ export function QuickActions() {
       <CardContent className="space-y-2">
         <Item variant="muted" className="p-2.5">
           <ItemMedia variant="icon">
-            <DollarSignIcon className="text-primary size-4" />
+            <DollarSignIcon className="size-4 text-primary" />
           </ItemMedia>
           <ItemContent>
             <ItemTitle className="text-xs">
@@ -90,7 +94,7 @@ export function QuickActions() {
 
         <Item variant="muted" className="p-2.5">
           <ItemMedia variant="icon">
-            <FilterIcon className="text-primary size-4" />
+            <FilterIcon className="size-4 text-primary" />
           </ItemMedia>
           <ItemContent>
             <ItemTitle className="text-xs">
@@ -107,8 +111,9 @@ export function QuickActions() {
           <ItemActions className="gap-1">
             {activeFilterCount > 0 && (
               <button
+                type="button"
                 onClick={() => setFilters(defaultFilters)}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={t("dashboard.quickActions.clearFilters")}
               >
                 <XIcon className="size-3.5" />

@@ -1,11 +1,11 @@
 // components/ui/error-state.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { AlertCircle, ArrowLeft, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface ErrorStateProps {
   title?: string;
@@ -69,15 +69,15 @@ export function ErrorState({
       )}
     >
       {/* Icono */}
-      <div className="bg-destructive/10 mb-4 flex size-12 items-center justify-center rounded-full">
-        {icon ?? <AlertCircle className="text-destructive size-6" />}
+      <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-destructive/10">
+        {icon ?? <AlertCircle className="size-6 text-destructive" />}
       </div>
 
       {/* Texto */}
-      <h3 className="text-foreground mb-1 text-lg font-semibold">
+      <h3 className="mb-1 font-semibold text-foreground text-lg">
         {resolvedTitle}
       </h3>
-      <p className="text-muted-foreground mb-6 max-w-sm text-sm">
+      <p className="mb-6 max-w-sm text-muted-foreground text-sm">
         {resolvedMessage}
       </p>
 
@@ -120,12 +120,12 @@ export function ErrorStateInline({
   return (
     <div
       className={cn(
-        "bg-destructive/5 border-destructive/20 flex items-center justify-between gap-4 rounded-lg border p-4",
+        "flex items-center justify-between gap-4 rounded-lg border border-destructive/20 bg-destructive/5 p-4",
         className,
       )}
     >
       <div className="flex items-center gap-3">
-        <AlertCircle className="text-destructive size-5 shrink-0" />
+        <AlertCircle className="size-5 shrink-0 text-destructive" />
         <p className="text-destructive text-sm">
           {message ?? t("errorState.inlineMessage")}
         </p>

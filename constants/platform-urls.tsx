@@ -1,4 +1,4 @@
-import { ServiceKey } from "./icons";
+import type { ServiceKey } from "./icons";
 
 export const PLATFORM_URLS: Partial<Record<ServiceKey, string>> = {
   netflix: "https://netflix.com",

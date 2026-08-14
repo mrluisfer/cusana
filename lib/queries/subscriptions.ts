@@ -1,6 +1,6 @@
+import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { type NewSubscription, subscriptions } from "@/lib/schema";
-import { and, eq } from "drizzle-orm";
 import {
   logSubscriptionCreated,
   logSubscriptionDeleted,

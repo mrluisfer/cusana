@@ -1,7 +1,9 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2, SaveIcon } from "lucide-react";
 import { useId, useMemo } from "react";
-
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,9 +16,6 @@ import {
 } from "@/components/ui/sheet";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2, SaveIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import type { Subscription } from "./columns";
 import {
   SubscriptionForm,
@@ -98,9 +97,7 @@ export function EditSubscription({
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-b px-6 py-4">
           <SheetTitle>{t("dashboard.edit.title")}</SheetTitle>
-          <SheetDescription>
-            {t("dashboard.edit.description")}
-          </SheetDescription>
+          <SheetDescription>{t("dashboard.edit.description")}</SheetDescription>
         </SheetHeader>
 
         <SubscriptionForm

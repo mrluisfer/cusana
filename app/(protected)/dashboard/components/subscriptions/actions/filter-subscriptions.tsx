@@ -1,6 +1,10 @@
 "use client";
 
-import { defaultFilters, filtersAtom, SubscriptionFilters } from "@/atoms";
+import { useAtom } from "jotai";
+import { FilterIcon, XIcon } from "lucide-react";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { defaultFilters, filtersAtom, type SubscriptionFilters } from "@/atoms";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,10 +18,6 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { currencyArray, currencySymbols } from "@/constants/currency";
-import { useAtom } from "jotai";
-import { FilterIcon, XIcon } from "lucide-react";
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
 
 function toggleFilterValue<K extends keyof SubscriptionFilters>(
   filters: SubscriptionFilters,
@@ -99,7 +99,7 @@ export function FilterSubscriptions({
 
         {/* Ciclo de facturación */}
         <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium uppercase">
+          <p className="font-medium text-muted-foreground text-xs uppercase">
             {t("dashboard.filters.cycle")}
           </p>
           <div className="space-y-1.5">
@@ -126,7 +126,7 @@ export function FilterSubscriptions({
 
         {/* Moneda */}
         <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium uppercase">
+          <p className="font-medium text-muted-foreground text-xs uppercase">
             {t("dashboard.filters.currency")}
           </p>
           <div className="space-y-1.5">
@@ -146,7 +146,7 @@ export function FilterSubscriptions({
 
         {/* Estado */}
         <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium uppercase">
+          <p className="font-medium text-muted-foreground text-xs uppercase">
             {t("dashboard.filters.status")}
           </p>
           <div className="space-y-1.5">

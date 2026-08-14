@@ -1,5 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { AlertTriangleIcon, ChartPieIcon } from "lucide-react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Label, Pie, PieChart } from "recharts";
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import {
@@ -19,8 +25,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   type CategoryKey,
   MAX_CHART_SLICES,
-  seriesColor,
   STATUS_CLASSES,
+  seriesColor,
 } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
@@ -34,12 +40,6 @@ import {
   computeCategoryBreakdown,
   foldToTopCategories,
 } from "@/utils/subscription-insights";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { AlertTriangleIcon, ChartPieIcon } from "lucide-react";
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { Label, Pie, PieChart } from "recharts";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -200,7 +200,7 @@ export function SpendingByCategory() {
                           />
                           {chartConfig[name as string]?.label ?? name}
                         </span>
-                        <span className="text-foreground font-mono font-medium tabular-nums">
+                        <span className="font-medium font-mono text-foreground tabular-nums">
                           {currencySymbol}
                           {Number(value).toLocaleString(locale, {
                             maximumFractionDigits: 0,
@@ -231,7 +231,7 @@ export function SpendingByCategory() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground font-mono text-xl font-bold"
+                          className="fill-foreground font-bold font-mono text-xl"
                         >
                           {currencySymbol}
                           {Math.round(total).toLocaleString(locale, {
@@ -253,11 +253,11 @@ export function SpendingByCategory() {
             </PieChart>
           </ChartContainer>
         ) : (
-          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center rounded-full">
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
               <ChartPieIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">
+            <p className="font-medium text-sm">
               {t("dashboard.categoryChart.empty")}
             </p>
             <p className="mt-1 text-xs opacity-70">
@@ -271,13 +271,13 @@ export function SpendingByCategory() {
             {categories.map((c, i) => (
               <div
                 key={c.category}
-                className="text-muted-foreground flex items-center gap-1.5 text-xs"
+                className="flex items-center gap-1.5 text-muted-foreground text-xs"
               >
                 <span
                   className="size-2.5 shrink-0 rounded-[2px]"
                   style={{ backgroundColor: colorOf(c.category, i) }}
                 />
-                <span className="text-foreground font-medium">
+                <span className="font-medium text-foreground">
                   {t(`dashboard.categories.${c.category}`)}
                 </span>
                 <span className="tabular-nums">{c.percent.toFixed(0)}%</span>
@@ -287,7 +287,7 @@ export function SpendingByCategory() {
         )}
 
         {!isPending && chartData.length > 0 && (
-          <p className="text-muted-foreground mt-3 text-center text-xs">
+          <p className="mt-3 text-center text-muted-foreground text-xs">
             {t("dashboard.distribution.subscriptions", {
               count: subscriptionCount,
             })}

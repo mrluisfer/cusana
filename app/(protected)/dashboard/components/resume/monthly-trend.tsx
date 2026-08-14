@@ -1,5 +1,15 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import {
+  AlertTriangleIcon,
+  BarChart3Icon,
+  MinusIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { MonthlyTrendResponse } from "@/app/api/[userid]/[currency]/monthly-trend/route";
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
@@ -27,16 +37,6 @@ import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import {
-  AlertTriangleIcon,
-  BarChart3Icon,
-  MinusIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 const MONTHS_TO_SHOW = 6;
 
@@ -137,14 +137,14 @@ function TrendBar({
     >
       <span
         className={cn(
-          "w-8 text-right text-xs font-medium",
-          isCurrent ? "text-primary font-bold" : "text-muted-foreground",
+          "w-8 text-right font-medium text-xs",
+          isCurrent ? "font-bold text-primary" : "text-muted-foreground",
         )}
         aria-hidden="true"
       >
         {month}
       </span>
-      <div className="bg-muted/50 relative h-7 flex-1 overflow-hidden">
+      <div className="relative h-7 flex-1 overflow-hidden bg-muted/50">
         <div
           className={cn(
             "flex h-full items-center justify-end pr-2 transition-all duration-500",
@@ -164,7 +164,7 @@ function TrendBar({
           aria-label={`${currencySymbol}${formattedAmount}`}
         >
           {showInnerLabel && (
-            <span className="text-primary-foreground font-mono text-[10px] tabular-nums">
+            <span className="font-mono text-[10px] text-primary-foreground tabular-nums">
               {currencySymbol}
               {formattedAmount}
             </span>
@@ -172,7 +172,7 @@ function TrendBar({
         </div>
       </div>
       {!showInnerLabel && (
-        <span className="text-muted-foreground min-w-12 font-mono text-xs tabular-nums">
+        <span className="min-w-12 font-mono text-muted-foreground text-xs tabular-nums">
           {isZero ? "—" : `${currencySymbol}${formattedAmount}`}
         </span>
       )}
@@ -187,7 +187,7 @@ function TrendBar({
           <p className="font-medium capitalize">
             {month} {year}
             {isCurrent && (
-              <span className="text-primary ml-1 text-[10px] font-normal">
+              <span className="ml-1 font-normal text-[10px] text-primary">
                 ({t("dashboard.trend.current")})
               </span>
             )}
@@ -212,7 +212,7 @@ function TrendBar({
               )}
             </>
           )}
-          <p className="text-muted-foreground text-[10px]">
+          <p className="text-[10px] text-muted-foreground">
             {t("dashboard.trend.activeSubscriptions", {
               count: subscriptionCount,
             })}
@@ -231,10 +231,10 @@ type StatItemProps = {
 function StatItem({ label, value }: StatItemProps) {
   return (
     <div className="flex-1 text-center">
-      <p className="font-mono text-sm font-semibold tabular-nums sm:text-lg">
+      <p className="font-mono font-semibold text-sm tabular-nums sm:text-lg">
         {value}
       </p>
-      <p className="text-muted-foreground text-[10px] tracking-wider uppercase">
+      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
         {label}
       </p>
     </div>
@@ -333,6 +333,7 @@ export function MonthlyTrend() {
 
               <div
                 className="flex items-center gap-2"
+                role="group"
                 aria-label={t("dashboard.trend.statsLabel")}
               >
                 <StatItem
@@ -353,11 +354,11 @@ export function MonthlyTrend() {
             </div>
           </TooltipProvider>
         ) : (
-          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <BarChart3Icon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">
+            <p className="font-medium text-sm">
               {t("dashboard.trend.emptyTitle")}
             </p>
             <p className="mt-1 text-xs opacity-70">

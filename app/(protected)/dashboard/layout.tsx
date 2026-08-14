@@ -14,7 +14,7 @@ export default function DashboardLayout({
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       >
-        <div className="bg-primary/20 absolute top-[-15%] left-[5%] size-[40rem] rounded-full blur-[120px] motion-safe:animate-pulse" />
+        <div className="absolute top-[-15%] left-[5%] size-[40rem] rounded-full bg-primary/20 blur-[120px] motion-safe:animate-pulse" />
         <div className="absolute top-[30%] right-[-10%] size-[35rem] rounded-full bg-fuchsia-500/15 blur-[120px] [animation-delay:1.5s] motion-safe:animate-pulse" />
         <div className="absolute bottom-[-10%] left-[20%] size-[30rem] rounded-full bg-sky-500/15 blur-[120px] [animation-delay:3s] motion-safe:animate-pulse" />
         <div
@@ -34,7 +34,7 @@ export default function DashboardLayout({
       {/* Skip link para teclado / screen readers */}
       <a
         href="#dashboard-main"
-        className="bg-primary text-primary-foreground focus-visible:ring-ring sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:ring-2 focus-visible:outline-none"
+        className="sr-only bg-primary text-primary-foreground focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         Saltar al contenido
       </a>

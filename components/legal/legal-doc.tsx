@@ -1,11 +1,11 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
-import { getLegalDoc, LEGAL_LAST_UPDATED, type LegalDocId } from "@/lib/legal";
-import { defaultLocale, isLocale } from "@/lib/i18n/settings";
 import { useTranslation } from "react-i18next";
-import { RichText } from "./rich-text";
+import { Separator } from "@/components/ui/separator";
+import { defaultLocale, isLocale } from "@/lib/i18n/settings";
+import { getLegalDoc, LEGAL_LAST_UPDATED, type LegalDocId } from "@/lib/legal";
 import type { LegalSection } from "@/lib/legal/types";
+import { RichText } from "./rich-text";
 
 function SectionBlocks({ section }: { section: LegalSection }) {
   return (
@@ -16,15 +16,15 @@ function SectionBlocks({ section }: { section: LegalSection }) {
     >
       <h2
         id={`${section.id}-heading`}
-        className="text-foreground mb-3 text-xl font-semibold"
+        className="mb-3 font-semibold text-foreground text-xl"
       >
         {section.title}
       </h2>
-      <div className="text-muted-foreground space-y-3 leading-relaxed">
+      <div className="space-y-3 text-muted-foreground leading-relaxed">
         {section.blocks.map((block, i) => {
           if (block.type === "h3") {
             return (
-              <h3 key={i} className="text-foreground mt-4 font-medium">
+              <h3 key={i} className="mt-4 font-medium text-foreground">
                 {block.text}
               </h3>
             );
@@ -66,11 +66,11 @@ export function LegalDocView({ doc: docId }: { doc: LegalDocId }) {
   return (
     <article className="space-y-10">
       <header className="space-y-4 pt-8">
-        <h1 className="text-foreground text-3xl font-semibold tracking-tight md:text-4xl">
+        <h1 className="font-semibold text-3xl text-foreground tracking-tight md:text-4xl">
           {doc.title}
         </h1>
         {doc.intro && (
-          <p className="text-muted-foreground text-pretty">{doc.intro}</p>
+          <p className="text-pretty text-muted-foreground">{doc.intro}</p>
         )}
         <p className="text-muted-foreground text-sm">
           {doc.updatedLabel} {updated}
@@ -79,15 +79,15 @@ export function LegalDocView({ doc: docId }: { doc: LegalDocId }) {
       </header>
 
       <nav aria-label={doc.tocLabel} className="space-y-2">
-        <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">
+        <h2 className="font-semibold text-foreground text-sm uppercase tracking-wider">
           {doc.tocLabel}
         </h2>
-        <ol className="text-muted-foreground list-inside list-decimal space-y-1 text-sm">
+        <ol className="list-inside list-decimal space-y-1 text-muted-foreground text-sm">
           {doc.sections.map((section) => (
             <li key={section.id}>
               <a
                 href={`#${section.id}`}
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 {section.title.replace(/^\d+\.\s*/, "")}
               </a>

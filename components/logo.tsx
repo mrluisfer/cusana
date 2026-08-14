@@ -82,9 +82,9 @@ export const FlowerIcon = ({
 
 export function Logo() {
   return (
-    <div className="flex items-center justify-start gap-1 select-none">
+    <div className="flex select-none items-center justify-start gap-1">
       <FlowerIcon className="size-10" />
-      <span className="font-mono text-xl font-extrabold">Cusana</span>
+      <span className="font-extrabold font-mono text-xl">Cusana</span>
     </div>
   );
 }

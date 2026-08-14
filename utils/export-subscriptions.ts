@@ -1,6 +1,6 @@
-import { serviceIcons, type ServiceKey } from "@/constants/icons";
-import { getNextBillingDate } from "@/utils/get-next-billing-date";
 import * as XLSX from "xlsx";
+import { type ServiceKey, serviceIcons } from "@/constants/icons";
+import { getNextBillingDate } from "@/utils/get-next-billing-date";
 
 type ExportableSubscription = {
   id: string;
@@ -67,7 +67,8 @@ function toExportRows(
     [columns.platform]: getPlatformLabel(sub.platform),
     [columns.price]: formatPrice(sub.price, sub.currency),
     [columns.currency]: sub.currency,
-    [columns.cycle]: sub.billingCycle === "monthly" ? labels.monthly : labels.yearly,
+    [columns.cycle]:
+      sub.billingCycle === "monthly" ? labels.monthly : labels.yearly,
     [columns.billingDay]: sub.billingDay,
     [columns.nextCharge]: getNextBillingDate({
       billingDay: sub.billingDay,

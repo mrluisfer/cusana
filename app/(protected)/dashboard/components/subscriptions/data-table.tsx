@@ -1,27 +1,26 @@
 "use client";
 
-import { filtersAtom } from "@/atoms";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  RowData,
-  SortingState,
+  type ColumnDef,
+  type ColumnFiltersState,
   flexRender,
+  type RowData,
+  type SortingState,
   useTable,
 } from "@tanstack/react-table";
 import { useAtom } from "jotai";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  SearchIcon,
+  XIcon,
+} from "lucide-react";
 import * as React from "react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { filtersAtom } from "@/atoms";
 
 import { AiChatButton } from "@/components/ai-chat/ai-chat-button";
 import { RefetchButton } from "@/components/dashboard/refetch-button";
@@ -34,19 +33,19 @@ import {
 } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  SearchIcon,
-  XIcon,
-} from "lucide-react";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { AddSubscription } from "./actions/add-subscription";
 import { ExportData } from "./actions/export-data";
 import { FilterSubscriptions } from "./actions/filter-subscriptions";
 import {
-  subscriptionTableFeatures,
   type SubscriptionTableFeatures,
+  subscriptionTableFeatures,
 } from "./table-features";
 
 interface DataTableProps<TData extends RowData> {
@@ -107,7 +106,6 @@ export function DataTable<TData extends RowData>({
   }, [data, filters]);
 
   // TanStack Table isn't compatible with React Compiler memoization.
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useTable({
     features: subscriptionTableFeatures,
     data: filteredData,
@@ -203,6 +201,7 @@ export function DataTable<TData extends RowData>({
             })}
           </p>
           <button
+            type="button"
             onClick={() =>
               setFilters({
                 billingCycle: [],
@@ -210,7 +209,7 @@ export function DataTable<TData extends RowData>({
                 active: [],
               })
             }
-            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+            className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
           >
             <XIcon className="size-3" />
             {t("dashboard.table.clearFilters")}
@@ -218,7 +217,7 @@ export function DataTable<TData extends RowData>({
         </div>
       )}
       {/* Tabla - FIX: Removido overflow-hidden, agregado rounded-md */}
-      <div className="border-border bg-card/50 rounded-md border backdrop-blur-sm">
+      <div className="rounded-md border border-border bg-card/50 backdrop-blur-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -229,7 +228,7 @@ export function DataTable<TData extends RowData>({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="text-muted-foreground text-xs font-semibold tracking-wider uppercase"
+                    className="font-semibold text-muted-foreground text-xs uppercase tracking-wider"
                   >
                     {header.isPlaceholder
                       ? null
@@ -248,7 +247,7 @@ export function DataTable<TData extends RowData>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group hover:bg-muted/30 transition-colors"
+                  className="group transition-colors hover:bg-muted/30"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-4">
@@ -266,7 +265,7 @@ export function DataTable<TData extends RowData>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  <div className="text-muted-foreground flex flex-col items-center gap-2">
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <span className="text-4xl">🔭</span>
                     <p>{t("dashboard.table.emptyTitle")}</p>
                     <p className="text-sm">{t("dashboard.table.emptyHint")}</p>
@@ -322,13 +321,13 @@ export function DataTable<TData extends RowData>({
               <span className="text-muted-foreground text-sm">
                 {t("dashboard.table.page")}
               </span>
-              <span className="text-sm font-medium">
+              <span className="font-medium text-sm">
                 {table.state.pagination.pageIndex + 1}
               </span>
               <span className="text-muted-foreground text-sm">
                 {t("dashboard.table.of")}
               </span>
-              <span className="text-sm font-medium">
+              <span className="font-medium text-sm">
                 {table.getPageCount()}
               </span>
             </div>

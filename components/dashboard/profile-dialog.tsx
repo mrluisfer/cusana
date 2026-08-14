@@ -1,6 +1,5 @@
 "use client";
 
-import { authClient, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
 import {
   CalendarIcon,
@@ -11,6 +10,7 @@ import {
   ShieldCheckIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { authClient, useSession } from "@/lib/auth-client";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -135,13 +135,14 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
             </div>
           ) : (
             <button
+              type="button"
               onClick={() => setIsEditing(true)}
-              className="group hover:bg-muted flex items-center gap-1.5 rounded-md px-2 py-1 transition-colors"
+              className="group flex items-center gap-1.5 rounded-md px-2 py-1 transition-colors hover:bg-muted"
             >
-              <span className="text-foreground text-base font-medium">
+              <span className="font-medium text-base text-foreground">
                 {user?.name}
               </span>
-              <PencilIcon className="text-muted-foreground size-3 opacity-0 transition-opacity group-hover:opacity-100" />
+              <PencilIcon className="size-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
             </button>
           )}
         </div>
@@ -151,18 +152,18 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
         {/* Info rows */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-md">
-              <MailIcon className="text-muted-foreground size-4" />
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted">
+              <MailIcon className="size-4 text-muted-foreground" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-muted-foreground text-xs">Correo</p>
-              <p className="text-foreground truncate text-sm">{user?.email}</p>
+              <p className="truncate text-foreground text-sm">{user?.email}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-md">
-              <ShieldCheckIcon className="text-muted-foreground size-4" />
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted">
+              <ShieldCheckIcon className="size-4 text-muted-foreground" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-muted-foreground text-xs">
@@ -184,8 +185,8 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
 
           {createdAt && (
             <div className="flex items-center gap-3">
-              <div className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-md">
-                <CalendarIcon className="text-muted-foreground size-4" />
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted">
+                <CalendarIcon className="size-4 text-muted-foreground" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-muted-foreground text-xs">Miembro desde</p>

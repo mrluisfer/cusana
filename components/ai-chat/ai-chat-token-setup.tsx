@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { KeyIcon, SaveIcon, ShieldCheckIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type AiChatTokenSetupProps = {
   onSaveTokenAction: (token: string) => void;
@@ -36,10 +36,10 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 p-6">
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="bg-primary/10 flex size-12 items-center justify-center">
-          <KeyIcon className="text-primary size-6" />
+        <div className="flex size-12 items-center justify-center bg-primary/10">
+          <KeyIcon className="size-6 text-primary" />
         </div>
-        <h3 className="text-lg font-semibold">
+        <h3 className="font-semibold text-lg">
           {t("aiChat.tokenSetup.title")}
         </h3>
         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -70,7 +70,7 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
         </Button>
       </form>
 
-      <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
+      <p className="flex items-center gap-1.5 text-muted-foreground text-xs">
         <ShieldCheckIcon className="size-3.5" />
         {t("aiChat.tokenSetup.security")}
       </p>

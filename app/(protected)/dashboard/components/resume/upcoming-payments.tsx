@@ -1,31 +1,25 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { CalendarIcon, ClockIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { currencySymbols } from "@/constants/currency";
-import { serviceIcons } from "@/constants/icons";
+import type { serviceIcons } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import {
   getNextBillingDate,
   getNextBillingDateFull,
 } from "@/utils/get-next-billing-date";
-import { toIntlLocale } from "@/lib/i18n/format";
-import { useLanguage } from "@/lib/i18n/use-language";
-import { useQuery } from "@tanstack/react-query";
-import { CalendarIcon, ClockIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 // Función de fetch extraída para evitar closures
 async function fetchSubscriptionsList(userId: string): Promise<Subscription[]> {
@@ -136,10 +130,10 @@ export function UpcomingPayments() {
                     className="shrink-0"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">
+                    <p className="truncate font-medium text-sm">
                       {subscription.name}
                     </p>
-                    <p className="text-muted-foreground truncate text-[11px]">
+                    <p className="truncate text-[11px] text-muted-foreground">
                       {getNextBillingDate(
                         {
                           billingDay: subscription.billingDay,
@@ -169,7 +163,7 @@ export function UpcomingPayments() {
             </div>
           ))
         ) : (
-          <div className="text-muted-foreground py-6 text-center">
+          <div className="py-6 text-center text-muted-foreground">
             <CalendarIcon className="mx-auto mb-2 size-6 opacity-40" />
             <p className="text-xs">{t("dashboard.upcoming.empty")}</p>
           </div>

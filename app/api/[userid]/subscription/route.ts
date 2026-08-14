@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { allowedPlatformsArray } from "@/constants/allowed-platforms";
 import {
   createSubscription,
@@ -9,7 +10,6 @@ import {
   updateSubscription,
 } from "@/lib/queries/subscriptions";
 import type { RouteContext } from "@/types/route-context";
-import type { NextRequest } from "next/server";
 
 export async function GET(
   _req: NextRequest,

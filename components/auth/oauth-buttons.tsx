@@ -1,16 +1,16 @@
 "use client";
 
+import {
+  type ComponentType,
+  type SVGProps,
+  useCallback,
+  useState,
+} from "react";
+import { useTranslation } from "react-i18next";
 import { Github } from "@/assets/icons/github";
 import { Google } from "@/assets/icons/google";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
-import {
-  useCallback,
-  useState,
-  type ComponentType,
-  type SVGProps,
-} from "react";
-import { useTranslation } from "react-i18next";
 
 type Provider = {
   id: "google" | "github";
@@ -53,10 +53,10 @@ export function OAuthButtons() {
     <>
       <div className="relative my-5">
         <div aria-hidden="true" className="absolute inset-0 flex items-center">
-          <div className="border-border/60 w-full border-t" />
+          <div className="w-full border-border/60 border-t" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-card/60 supports-[backdrop-filter]:bg-card/40 text-muted-foreground rounded-full px-3 py-0.5 font-medium tracking-wide uppercase backdrop-blur">
+          <span className="rounded-full bg-card/60 px-3 py-0.5 font-medium text-muted-foreground uppercase tracking-wide backdrop-blur supports-[backdrop-filter]:bg-card/40">
             {t("auth.oauth.divider")}
           </span>
         </div>

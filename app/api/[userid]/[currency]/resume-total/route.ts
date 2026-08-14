@@ -1,7 +1,7 @@
+import type { NextRequest } from "next/server";
 import { getResumeTotalByUser } from "@/lib/queries/resume-total";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import type { RouteContext } from "@/types/route-context";
-import type { NextRequest } from "next/server";
 
 export type ResumeTotalResponse = {
   total: number;

@@ -1,4 +1,4 @@
-import { serviceIcons, ServiceKey } from "@/constants/icons";
+import { type ServiceKey, serviceIcons } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 
 interface ServiceIconProps {
@@ -53,7 +53,7 @@ export function ServiceIcon({
           className,
         )}
       >
-        <span aria-hidden="true" className="text-sm font-semibold">
+        <span aria-hidden="true" className="font-semibold text-sm">
           ?
         </span>
       </div>

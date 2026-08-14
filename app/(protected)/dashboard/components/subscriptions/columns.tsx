@@ -1,5 +1,15 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  Calendar,
+  ExternalLink,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ServiceKey } from "@/constants/icons";
+import type { ServiceKey } from "@/constants/icons";
 import { PLATFORM_URLS } from "@/constants/platform-urls";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { formatCurrency } from "@/utils/format-currency";
@@ -21,16 +31,6 @@ import {
   getNextBillingDate,
   getNextBillingDateFull,
 } from "@/utils/get-next-billing-date";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-  Calendar,
-  ExternalLink,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-} from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DeleteSubscription } from "./delete-subscription";
 import { EditSubscription } from "./edit-subscription";
@@ -147,7 +147,7 @@ export function useSubscriptionColumns(): SubscriptionColumnDef[] {
           <div className="flex items-center gap-3">
             <ServiceIcon service={row.original.platform} />
             <div className="flex flex-col">
-              <span className="text-foreground font-medium">
+              <span className="font-medium text-foreground">
                 {row.original.name}
               </span>
               <span className="text-muted-foreground text-xs capitalize">
@@ -170,7 +170,7 @@ export function useSubscriptionColumns(): SubscriptionColumnDef[] {
         cell: ({ row }) => (
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-1.5">
-              <span className="text-foreground text-base font-semibold tabular-nums">
+              <span className="font-semibold text-base text-foreground tabular-nums">
                 {formatCurrency(row.original.price, row.original.currency)}
               </span>
               <Badge variant="default" className="font-mono">

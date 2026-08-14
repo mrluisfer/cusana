@@ -13,9 +13,7 @@ export function AuthHeader() {
   const { t } = useTranslation();
 
   return (
-    <header
-      className="border-border/60 bg-background/60 supports-[backdrop-filter]:bg-background/40 sticky top-4 z-40 flex w-full items-center justify-between rounded-2xl border px-4 py-2.5 shadow-sm backdrop-blur-xl"
-    >
+    <header className="sticky top-4 z-40 flex w-full items-center justify-between rounded-2xl border border-border/60 bg-background/60 px-4 py-2.5 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
       <Link href="/">
         <Logo />
       </Link>

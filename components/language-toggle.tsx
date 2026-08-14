@@ -1,10 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/lib/i18n/use-language";
-import { locales, localeLabels } from "@/lib/i18n/settings";
-import { cn } from "@/lib/utils";
 import { CheckIcon, LanguagesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { localeLabels, locales } from "@/lib/i18n/settings";
+import { useLanguage } from "@/lib/i18n/use-language";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
 import {
   DropdownMenu,

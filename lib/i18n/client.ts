@@ -2,8 +2,8 @@
 
 import i18next, { type i18n as I18nInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
-import { resources, defaultNS } from "./resources";
-import { defaultLocale, locales, type Locale } from "./settings";
+import { defaultNS, resources } from "./resources";
+import { defaultLocale, type Locale, locales } from "./settings";
 
 function createI18n(initialLanguage: Locale): I18nInstance {
   const instance = i18next.createInstance();

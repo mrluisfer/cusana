@@ -1,13 +1,13 @@
 "use client";
 
+import { useSetAtom } from "jotai";
+import { KeyIcon, Trash2Icon, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { aiChatOpenAtom } from "@/atoms";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAiChat } from "@/hooks/use-ai-chat";
-import { useSetAtom } from "jotai";
-import { KeyIcon, Trash2Icon, XIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { AiChatInput } from "./ai-chat-input";
 import { AiChatMessages } from "./ai-chat-messages";
 import { AiChatTokenSetup } from "./ai-chat-token-setup";
@@ -35,7 +35,7 @@ export function AiChatSheet() {
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b px-4 py-3">
         <div>
-          <h2 className="text-base font-semibold">{t("aiChat.title")}</h2>
+          <h2 className="font-semibold text-base">{t("aiChat.title")}</h2>
           <p className="text-muted-foreground text-xs">
             {t("aiChat.subtitle")}
           </p>

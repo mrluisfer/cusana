@@ -1,7 +1,10 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PlusIcon, SaveIcon, SparklesIcon } from "lucide-react";
 import { useId, useState } from "react";
-
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,10 +22,6 @@ import { BillingCycle } from "@/constants/billing-cycle";
 import { Currency } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PlusIcon, SaveIcon, SparklesIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import {
   SubscriptionForm,
   type SubscriptionFormValues,
@@ -134,7 +133,7 @@ export const AddSubscription = ({
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">
         <SheetHeader className="border-border/60 border-b px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="bg-primary/10 text-primary ring-primary/20 flex size-10 shrink-0 items-center justify-center rounded-xl ring-1">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
               <SparklesIcon className="size-5" aria-hidden="true" />
             </div>
             <div className="min-w-0 flex-1">
@@ -155,7 +154,7 @@ export const AddSubscription = ({
           resetKey={isOpen}
         />
 
-        <SheetFooter className="border-border/60 bg-background/80 supports-[backdrop-filter]:bg-background/60 border-t px-6 py-4 backdrop-blur-xl">
+        <SheetFooter className="border-border/60 border-t bg-background/80 px-6 py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
           <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <SheetClose
               render={

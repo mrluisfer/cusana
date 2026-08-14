@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 type CardHeaderIconProps = {
   icon: LucideIcon;
@@ -6,8 +6,8 @@ type CardHeaderIconProps = {
 export const CardHeaderIcon = ({ icon }: CardHeaderIconProps) => {
   const Icon = icon;
   return (
-    <div className="bg-primary/10 flex size-7 items-center justify-center rounded-md">
-      <Icon className="text-primary size-4" />
+    <div className="flex size-7 items-center justify-center rounded-md bg-primary/10">
+      <Icon className="size-4 text-primary" />
     </div>
   );
 };

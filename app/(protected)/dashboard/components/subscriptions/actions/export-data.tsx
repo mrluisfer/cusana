@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  AlertCircleIcon,
+  DownloadIcon,
+  FileJsonIcon,
+  FileSpreadsheetIcon,
+  FileTextIcon,
+  Loader2Icon,
+} from "lucide-react";
+import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,16 +32,6 @@ import {
   exportToExcel,
   exportToJSON,
 } from "@/utils/export-subscriptions";
-import {
-  AlertCircleIcon,
-  DownloadIcon,
-  FileJsonIcon,
-  FileSpreadsheetIcon,
-  FileTextIcon,
-  Loader2Icon,
-} from "lucide-react";
-import { useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 export function ExportData() {
   const { t } = useTranslation();
@@ -108,7 +108,7 @@ export function ExportData() {
         <DropdownMenuGroup>
           <DropdownMenuLabel>
             {t("dashboard.export.formatLabel")}
-            <span className="text-muted-foreground ml-1 font-normal">
+            <span className="ml-1 font-normal text-muted-foreground">
               ({subscriptions.length})
             </span>
           </DropdownMenuLabel>
@@ -120,7 +120,7 @@ export function ExportData() {
           <FileSpreadsheetIcon className="mr-2 size-4" />
           <div className="flex flex-col">
             <span>Excel (.xlsx)</span>
-            <span className="text-muted-foreground text-[10px]">
+            <span className="text-[10px] text-muted-foreground">
               {t("dashboard.export.excelDesc")}
             </span>
           </div>
@@ -130,7 +130,7 @@ export function ExportData() {
           <FileTextIcon className="mr-2 size-4" />
           <div className="flex flex-col">
             <span>CSV (.csv)</span>
-            <span className="text-muted-foreground text-[10px]">
+            <span className="text-[10px] text-muted-foreground">
               {t("dashboard.export.csvDesc")}
             </span>
           </div>
@@ -142,7 +142,7 @@ export function ExportData() {
           <FileJsonIcon className="mr-2 size-4" />
           <div className="flex flex-col">
             <span>JSON (.json)</span>
-            <span className="text-muted-foreground text-[10px]">
+            <span className="text-[10px] text-muted-foreground">
               {t("dashboard.export.jsonDesc")}
             </span>
           </div>

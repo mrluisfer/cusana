@@ -1,7 +1,7 @@
-import { currencyArray, type Currency } from "@/constants/currency";
+import type { NextRequest } from "next/server";
+import { type Currency, currencyArray } from "@/constants/currency";
 import { getBudgetHistory } from "@/lib/queries/budgets";
 import type { RouteContext } from "@/types/route-context";
-import type { NextRequest } from "next/server";
 
 export type BudgetHistoryResponse = {
   history: { period: string; amount: number }[];
@@ -23,7 +23,10 @@ export async function GET(
   }
 
   const limitParam = req.nextUrl.searchParams.get("limit");
-  const limit = Math.min(Math.max(Number.parseInt(limitParam ?? "12", 10) || 12, 1), 24);
+  const limit = Math.min(
+    Math.max(Number.parseInt(limitParam ?? "12", 10) || 12, 1),
+    24,
+  );
 
   const rows = await getBudgetHistory(userid, currency, limit);
 

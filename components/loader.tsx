@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { Loading03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import React from "react";
+import type React from "react";
+import { cn } from "@/lib/utils";
 
 interface LoaderProps {
   size?: number;
@@ -16,7 +16,7 @@ export const Loader: React.FC<LoaderProps> = ({ className = "", message }) => {
   return (
     <div
       className={cn(
-        "flex flex-row items-center justify-center gap-2 select-none",
+        "flex select-none flex-row items-center justify-center gap-2",
         className,
       )}
       role="status"

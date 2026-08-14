@@ -1,5 +1,20 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import {
+  CalendarClockIcon,
+  CrownIcon,
+  Layers2Icon,
+  LayersIcon,
+  LightbulbIcon,
+  type LucideIcon,
+  Trash2Icon,
+  TrendingUpIcon,
+  XIcon,
+} from "lucide-react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Button } from "@/components/ui/button";
@@ -26,21 +41,6 @@ import {
   convertToTarget,
   getMonthlyAmount,
 } from "@/utils/subscription-insights";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import {
-  CalendarClockIcon,
-  CrownIcon,
-  Layers2Icon,
-  LayersIcon,
-  LightbulbIcon,
-  Trash2Icon,
-  TrendingUpIcon,
-  XIcon,
-  type LucideIcon,
-} from "lucide-react";
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 type InsightTone = "info" | "warning" | "success";
 
@@ -120,6 +120,7 @@ export function SubscriptionInsights() {
       maximumFractionDigits: 0,
     })}`;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: formatMoney se recrea en cada render; sus entradas reales (locale, currencySymbol) ya están en la lista.
   const insights = useMemo<Insight[]>(() => {
     if (!subscriptions || !ratesData) return [];
 
@@ -213,7 +214,6 @@ export function SubscriptionInsights() {
     }
 
     return result.slice(0, 4);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscriptions, ratesData, selectedCurrency, t, locale, currencySymbol]);
 
   if (hideInsights)
@@ -250,7 +250,7 @@ export function SubscriptionInsights() {
             {insights.map((insight) => (
               <li
                 key={insight.id}
-                className="bg-muted/40 flex items-start gap-3 rounded-lg p-3"
+                className="flex items-start gap-3 rounded-lg bg-muted/40 p-3"
               >
                 <span
                   className={cn(
@@ -260,18 +260,18 @@ export function SubscriptionInsights() {
                 >
                   <insight.icon className="size-4" />
                 </span>
-                <p className="text-foreground text-sm leading-snug text-pretty">
+                <p className="text-pretty text-foreground text-sm leading-snug">
                   {insight.text}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center rounded-full">
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
               <LayersIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">
+            <p className="font-medium text-sm">
               {t("dashboard.insights.empty")}
             </p>
           </div>

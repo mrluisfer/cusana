@@ -1,10 +1,10 @@
+import type { NextRequest } from "next/server";
 import {
   getDeactivationDates,
   getSubscriptionsForTrend,
 } from "@/lib/queries/monthly-trend";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import type { RouteContext } from "@/types/route-context";
-import type { NextRequest } from "next/server";
 
 type MonthData = {
   month: string;

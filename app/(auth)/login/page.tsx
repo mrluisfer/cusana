@@ -1,5 +1,9 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthError } from "@/components/auth/auth-error";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -7,10 +11,6 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { signIn } from "@/lib/auth-client";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -69,7 +69,7 @@ export default function LoginPage() {
           trailingLabel={
             <Link
               href="/forgot-password"
-              className="text-muted-foreground hover:text-primary text-xs underline-offset-4 transition-colors hover:underline"
+              className="text-muted-foreground text-xs underline-offset-4 transition-colors hover:text-primary hover:underline"
             >
               {t("auth.login.forgotPassword")}
             </Link>
@@ -77,7 +77,7 @@ export default function LoginPage() {
         />
         <Button
           type="submit"
-          className="group shadow-primary/20 w-full shadow-lg"
+          className="group w-full shadow-lg shadow-primary/20"
           disabled={isPending}
         >
           {isPending ? (
@@ -99,11 +99,11 @@ export default function LoginPage() {
 
       <OAuthButtons />
 
-      <p className="text-muted-foreground mt-6 text-center text-sm">
+      <p className="mt-6 text-center text-muted-foreground text-sm">
         {t("auth.login.noAccount")}{" "}
         <Link
           href="/register"
-          className="text-foreground hover:text-primary font-medium underline-offset-4 transition-colors hover:underline"
+          className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
         >
           {t("auth.login.registerCta")}
         </Link>

@@ -1,8 +1,8 @@
 import type { CategoryKey } from "@/constants/chart-colors";
 import {
-  serviceIcons,
   type ServiceCategory,
   type ServiceKey,
+  serviceIcons,
 } from "@/constants/icons";
 import type { Subscription } from "@/lib/schema";
 import type { FrankfurterRates } from "@/types/frankfurter";

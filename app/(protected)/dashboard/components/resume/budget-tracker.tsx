@@ -1,5 +1,10 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { Loader2, PencilIcon, SparklesIcon, WalletIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { BudgetResponse } from "@/app/api/[userid]/[currency]/budget/route";
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
@@ -18,11 +23,6 @@ import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import { computeCategoryBreakdown } from "@/utils/subscription-insights";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { Loader2, PencilIcon, SparklesIcon, WalletIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -201,7 +201,7 @@ export function BudgetTracker() {
                 className="h-9"
                 disabled={saveMutation.isPending}
               />
-              <span className="text-muted-foreground text-xs font-medium">
+              <span className="font-medium text-muted-foreground text-xs">
                 {selectedCurrency}
               </span>
             </div>
@@ -249,7 +249,7 @@ export function BudgetTracker() {
         ) : (
           <div className="space-y-2.5">
             <div className="flex items-baseline justify-between">
-              <span className="font-mono text-lg font-semibold tabular-nums">
+              <span className="font-mono font-semibold text-lg tabular-nums">
                 {formatMoney(total)}
               </span>
               <span className="text-muted-foreground text-xs">
@@ -280,8 +280,8 @@ export function BudgetTracker() {
               </span>
             </div>
             {inherited && (
-              <div className="border-border/60 flex items-center justify-between gap-2 border-t pt-2">
-                <span className="text-muted-foreground inline-flex items-center gap-1.5 text-[11px]">
+              <div className="flex items-center justify-between gap-2 border-border/60 border-t pt-2">
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <SparklesIcon className="size-3" />
                   {t("dashboard.budget.inherited")}
                 </span>

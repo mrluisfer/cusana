@@ -39,13 +39,19 @@ for (const file of files) {
     continue;
   }
 
-  const prefix = file.replace(/\.tsx$/, "").replace(/-/g, "_") + "_";
+  const prefix = `${file.replace(/\.tsx$/, "").replace(/-/g, "_")}_`;
   let out = src;
   for (const id of shortIds) {
     const safe = id.replace(/[$()*+.?[\\\]^{|}]/g, "\\$&");
     out = out.replace(new RegExp(`id="${safe}"`, "g"), `id="${prefix}${id}"`);
-    out = out.replace(new RegExp(`url\\(#${safe}\\)`, "g"), `url(#${prefix}${id})`);
-    out = out.replace(new RegExp(`href="#${safe}"`, "g"), `href="#${prefix}${id}"`);
+    out = out.replace(
+      new RegExp(`url\\(#${safe}\\)`, "g"),
+      `url(#${prefix}${id})`,
+    );
+    out = out.replace(
+      new RegExp(`href="#${safe}"`, "g"),
+      `href="#${prefix}${id}"`,
+    );
     out = out.replace(
       new RegExp(`xlinkHref="#${safe}"`, "g"),
       `xlinkHref="#${prefix}${id}"`,
@@ -62,7 +68,7 @@ for (const file of files) {
 if (CHECK_ONLY) {
   if (offenders.length > 0) {
     console.error("\n✗ Iconos SVG con IDs sin prefijar (riesgo de colisión):");
-    for (const line of offenders) console.error("  - " + line);
+    for (const line of offenders) console.error(`  - ${line}`);
     console.error("\nCorrígelos con: node scripts/namespace-svg-ids.mjs");
     process.exit(1);
   }

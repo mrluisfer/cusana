@@ -22,7 +22,10 @@ export const privacyDoc: LocalizedLegalDoc = {
         id: "informacion-recopilada",
         title: "2. Información que recopilamos",
         blocks: [
-          { type: "p", text: "Recopilamos la siguiente información cuando usas Cusana:" },
+          {
+            type: "p",
+            text: "Recopilamos la siguiente información cuando usas Cusana:",
+          },
           { type: "h3", text: "Información de la cuenta" },
           {
             type: "ul",
@@ -165,7 +168,10 @@ export const privacyDoc: LocalizedLegalDoc = {
         id: "cookies",
         title: "8. Cookies y tecnologías similares",
         blocks: [
-          { type: "p", text: "Cusana utiliza cookies y almacenamiento local estrictamente necesarios para:" },
+          {
+            type: "p",
+            text: "Cusana utiliza cookies y almacenamiento local estrictamente necesarios para:",
+          },
           {
             type: "ul",
             items: [
@@ -280,7 +286,10 @@ export const privacyDoc: LocalizedLegalDoc = {
         id: "informacion-recopilada",
         title: "2. Information we collect",
         blocks: [
-          { type: "p", text: "We collect the following information when you use Cusana:" },
+          {
+            type: "p",
+            text: "We collect the following information when you use Cusana:",
+          },
           { type: "h3", text: "Account information" },
           {
             type: "ul",
@@ -423,7 +432,10 @@ export const privacyDoc: LocalizedLegalDoc = {
         id: "cookies",
         title: "8. Cookies and similar technologies",
         blocks: [
-          { type: "p", text: "Cusana uses strictly necessary cookies and local storage to:" },
+          {
+            type: "p",
+            text: "Cusana uses strictly necessary cookies and local storage to:",
+          },
           {
             type: "ul",
             items: [

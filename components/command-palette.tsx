@@ -1,5 +1,24 @@
 "use client";
 
+import { useAtom, useSetAtom } from "jotai";
+import {
+  CommandIcon,
+  DollarSignIcon,
+  ExternalLinkIcon,
+  FileJsonIcon,
+  FileSpreadsheetIcon,
+  FileTextIcon,
+  HomeIcon,
+  MonitorIcon,
+  MoonIcon,
+  ShieldIcon,
+  SparklesIcon,
+  SunIcon,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useTranslation } from "react-i18next";
 import { aiChatOpenAtom, commandOpenAtom, currencyAtom } from "@/atoms";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Button } from "@/components/ui/button";
@@ -19,8 +38,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Currency, currencyArray, currencySymbols } from "@/constants/currency";
-import { type ServiceKey } from "@/constants/icons";
+import {
+  type Currency,
+  currencyArray,
+  currencySymbols,
+} from "@/constants/currency";
+import type { ServiceKey } from "@/constants/icons";
 import { PLATFORM_URLS } from "@/constants/platform-urls";
 import { useSubscriptions } from "@/hooks/use-subscriptions";
 import type { Subscription } from "@/lib/schema";
@@ -30,25 +53,6 @@ import {
   exportToExcel,
   exportToJSON,
 } from "@/utils/export-subscriptions";
-import { useSetAtom, useAtom } from "jotai";
-import {
-  CommandIcon,
-  DollarSignIcon,
-  ExternalLinkIcon,
-  FileJsonIcon,
-  FileSpreadsheetIcon,
-  FileTextIcon,
-  HomeIcon,
-  MonitorIcon,
-  MoonIcon,
-  ShieldIcon,
-  SparklesIcon,
-  SunIcon,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
-import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { useTranslation } from "react-i18next";
 
 const emptySubscribe = () => () => {};
 
@@ -81,9 +85,7 @@ export function CommandMenuButton() {
         }
       >
         <CommandIcon className="size-4" />
-        {modifier && (
-          <Kbd className="hidden sm:inline-flex">{modifier} K</Kbd>
-        )}
+        {modifier && <Kbd className="hidden sm:inline-flex">{modifier} K</Kbd>}
       </TooltipTrigger>
       <TooltipContent>{t("command.trigger")}</TooltipContent>
     </Tooltip>

@@ -1,8 +1,9 @@
 // hooks/use-subscriptions.ts
-import { QueryKeys } from "@/constants/query-keys";
-import { useSession } from "@/lib/auth-client";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
+import { QueryKeys } from "@/constants/query-keys";
+import { useSession } from "@/lib/auth-client";
 
 // Función de fetch extraída para evitar closures
 async function fetchUserSubscriptions(userId: string) {

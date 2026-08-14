@@ -1,9 +1,9 @@
 "use client";
 
-import { getI18n } from "@/lib/i18n/client";
-import { defaultLocale, type Locale } from "@/lib/i18n/settings";
 import { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
+import { getI18n } from "@/lib/i18n/client";
+import { defaultLocale, type Locale } from "@/lib/i18n/settings";
 
 export function I18nProvider({
   initialLanguage,

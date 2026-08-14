@@ -1,10 +1,10 @@
-import type { Subscription } from "@/lib/schema";
-import { currencySymbols } from "@/constants/currency";
 import { useTranslation } from "react-i18next";
-import { useLanguage } from "@/lib/i18n/use-language";
-import { ServiceKey } from "@/constants/icons";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
+import { currencySymbols } from "@/constants/currency";
+import type { ServiceKey } from "@/constants/icons";
 import { toIntlLocale } from "@/lib/i18n/format";
+import { useLanguage } from "@/lib/i18n/use-language";
+import type { Subscription } from "@/lib/schema";
 
 export function DayPopoverContent({
   day,
@@ -46,14 +46,14 @@ export function DayPopoverContent({
             >
               <ServiceIcon service={platform} size="xs" className="shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium capitalize">
+                <p className="truncate font-medium text-sm capitalize">
                   {payment.name}
                 </p>
-                <p className="text-muted-foreground text-[11px]">
+                <p className="text-[11px] text-muted-foreground">
                   {t(`dashboard.billing.${payment.billingCycle}`)}
                 </p>
               </div>
-              <span className="font-mono text-sm font-semibold tabular-nums">
+              <span className="font-mono font-semibold text-sm tabular-nums">
                 {symbol}
                 {price.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 2,
@@ -71,7 +71,7 @@ export function DayPopoverContent({
             <span className="text-muted-foreground text-sm">
               {t("dashboard.calendar.total")}
             </span>
-            <span className="font-mono text-sm font-bold tabular-nums">
+            <span className="font-bold font-mono text-sm tabular-nums">
               $
               {total.toLocaleString(toIntlLocale(language), {
                 minimumFractionDigits: 2,

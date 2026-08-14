@@ -1,5 +1,9 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { Archive, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,13 +25,9 @@ import {
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { formatCurrency } from "@/utils/format-currency";
-import { useQuery } from "@tanstack/react-query";
-import { Archive, RotateCcwIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import type { Subscription } from "./columns";
 import { DeleteForeverSubscription } from "./actions/delete-forever-subscription";
 import { ReactivateSubscription } from "./actions/reactivate-subscription";
+import type { Subscription } from "./columns";
 
 async function fetchInactiveSubscriptions(userId: string) {
   const res = await fetch(`/api/${userId}/subscription?status=inactive`);
@@ -73,10 +73,10 @@ export default function InactiveSubscriptionsTable() {
 
   return (
     <section className="mt-8 min-w-0 space-y-4">
-      <Card className="bg-muted/20 border-dashed">
+      <Card className="border-dashed bg-muted/20">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <span className="bg-muted text-muted-foreground rounded-md p-1.5">
+            <span className="rounded-md bg-muted p-1.5 text-muted-foreground">
               <Archive className="size-4" />
             </span>
             <div>
@@ -91,20 +91,20 @@ export default function InactiveSubscriptionsTable() {
         </CardHeader>
 
         <CardContent>
-          <div className="border-border/60 overflow-hidden rounded-md border">
+          <div className="overflow-hidden rounded-md border border-border/60">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  <TableHead className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                     {t("dashboard.columns.service")}
                   </TableHead>
-                  <TableHead className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                     {t("dashboard.columns.price")}
                   </TableHead>
-                  <TableHead className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
                     {t("dashboard.inactive.status")}
                   </TableHead>
-                  <TableHead className="text-right text-xs font-semibold tracking-wider uppercase">
+                  <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">
                     <span className="sr-only">
                       {t("dashboard.columns.actions")}
                     </span>
@@ -124,7 +124,7 @@ export default function InactiveSubscriptionsTable() {
                           size="xs"
                         />
                         <div className="flex flex-col">
-                          <span className="text-foreground font-medium">
+                          <span className="font-medium text-foreground">
                             {subscription.name}
                           </span>
                           <span className="text-muted-foreground text-xs capitalize">
@@ -144,7 +144,7 @@ export default function InactiveSubscriptionsTable() {
                     <TableCell className="py-3">
                       <Badge
                         variant="outline"
-                        className="text-muted-foreground border-dashed"
+                        className="border-dashed text-muted-foreground"
                       >
                         {t("dashboard.inactive.inactiveBadge")}
                       </Badge>

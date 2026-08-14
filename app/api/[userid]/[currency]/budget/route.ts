@@ -1,12 +1,12 @@
-import { currencyArray, type Currency } from "@/constants/currency";
+import type { NextRequest } from "next/server";
+import { type Currency, currencyArray } from "@/constants/currency";
+import { normalizePeriod } from "@/lib/period";
 import {
   getBudgetForPeriod,
   getLatestBudgetBefore,
   upsertBudget,
 } from "@/lib/queries/budgets";
-import { normalizePeriod } from "@/lib/period";
 import type { RouteContext } from "@/types/route-context";
-import type { NextRequest } from "next/server";
 
 export type BudgetResponse = {
   /** Monto del presupuesto, o null si nunca se ha definido uno. */
@@ -64,7 +64,12 @@ export async function GET(
 
   // 3. Nunca se ha definido un presupuesto.
   return Response.json(
-    { budget: null, period, currency, inherited: false } satisfies BudgetResponse,
+    {
+      budget: null,
+      period,
+      currency,
+      inherited: false,
+    } satisfies BudgetResponse,
     { status: 200 },
   );
 }

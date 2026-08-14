@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { IconProps } from "@/types/icon-props";
+import type { IconProps } from "@/types/icon-props";
 
 export const Amazon = ({ size = 24, className, ...props }: IconProps) => (
   <svg

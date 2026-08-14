@@ -1,7 +1,7 @@
 "use client";
 
-import { aiChatOpenAtom } from "@/atoms";
 import { useAtomValue } from "jotai";
+import { aiChatOpenAtom } from "@/atoms";
 import { AiChatPanel } from "./ai-chat-panel";
 
 export function AiChatLayout({ children }: { children: React.ReactNode }) {

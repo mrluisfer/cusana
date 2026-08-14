@@ -1,5 +1,9 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -7,12 +11,8 @@ import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { CalendarSkeleton } from "./CalendarSkeleton";
 import { CalendarDay } from "./CalendarDay";
+import { CalendarSkeleton } from "./CalendarSkeleton";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
   const response = await fetch(`/api/${userId}/subscription`);
@@ -106,13 +106,13 @@ export function BillingCalendar() {
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <h2 className="text-lg font-semibold tracking-tight">
-          <span className="hover:text-primary capitalize transition">
+        <h2 className="font-semibold text-lg tracking-tight">
+          <span className="capitalize transition hover:text-primary">
             {monthName}
           </span>{" "}
-          <span className="text-muted-foreground font-normal">{yearLabel}</span>
+          <span className="font-normal text-muted-foreground">{yearLabel}</span>
         </h2>
-        <div className="flex items-center gap-1.5 select-none">
+        <div className="flex select-none items-center gap-1.5">
           <Button
             type="button"
             onClick={() => setMonthOffset(0)}
@@ -150,9 +150,9 @@ export function BillingCalendar() {
                 key={day}
                 role="columnheader"
                 className={cn(
-                  "flex h-8 items-center justify-center text-xs font-medium",
+                  "flex h-8 items-center justify-center font-medium text-xs",
                   isCurrentMonth && i === currentDayOfWeekIndex
-                    ? "text-primary font-semibold"
+                    ? "font-semibold text-primary"
                     : "text-muted-foreground",
                 )}
               >

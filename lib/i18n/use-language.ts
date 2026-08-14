@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import {
   defaultLocale,
   isLocale,
-  languageStorageKey,
   type Locale,
+  languageStorageKey,
 } from "./settings";
 
 const ONE_YEAR = 60 * 60 * 24 * 365;

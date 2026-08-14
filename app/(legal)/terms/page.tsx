@@ -1,7 +1,11 @@
-import { LegalDocView } from "@/components/legal/legal-doc";
-import { defaultLocale, isLocale, languageStorageKey } from "@/lib/i18n/settings";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { LegalDocView } from "@/components/legal/legal-doc";
+import {
+  defaultLocale,
+  isLocale,
+  languageStorageKey,
+} from "@/lib/i18n/settings";
 
 const meta = {
   es: {

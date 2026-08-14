@@ -1,13 +1,13 @@
 "use client";
 
-import { LanguageToggle } from "@/components/language-toggle";
-import { Logo } from "@/components/logo";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { LanguageToggle } from "@/components/language-toggle";
+import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function LegalLayout({
   children,
@@ -33,17 +33,20 @@ export default function LegalLayout({
       <main className="pb-16">{children}</main>
 
       <footer className="border-border border-t py-8">
-        <div className="text-muted-foreground flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
-          <nav className="flex gap-6" aria-label={t("landing.footer.legalLabel")}>
+        <div className="flex flex-col items-center justify-between gap-4 text-muted-foreground text-sm sm:flex-row">
+          <nav
+            className="flex gap-6"
+            aria-label={t("landing.footer.legalLabel")}
+          >
             <Link
               href="/privacy"
-              className="hover:text-foreground transition-colors"
+              className="transition-colors hover:text-foreground"
             >
               {t("legal.privacy")}
             </Link>
             <Link
               href="/terms"
-              className="hover:text-foreground transition-colors"
+              className="transition-colors hover:text-foreground"
             >
               {t("legal.terms")}
             </Link>

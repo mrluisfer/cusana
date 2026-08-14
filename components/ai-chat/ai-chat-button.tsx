@@ -1,5 +1,8 @@
 "use client";
 
+import { useAtom } from "jotai";
+import { MessageCircleIcon, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { aiChatOpenAtom } from "@/atoms";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,9 +10,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAtom } from "jotai";
-import { MessageCircleIcon, XIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 export function AiChatButton({
   triggerClassName,

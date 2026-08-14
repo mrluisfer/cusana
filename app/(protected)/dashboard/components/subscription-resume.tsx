@@ -15,7 +15,7 @@ export default async function SubscriptionResume() {
       <HeroSummary />
 
       <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
-        <div className="bg-card rounded-2xl border p-4 shadow-sm sm:p-6">
+        <div className="rounded-2xl border bg-card p-4 shadow-sm sm:p-6">
           <BillingCalendar />
         </div>
         <div className="space-y-4">

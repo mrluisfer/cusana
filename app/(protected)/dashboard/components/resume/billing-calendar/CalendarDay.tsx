@@ -1,16 +1,16 @@
-import { DayPopoverContent } from "./DayPopoverContent";
+import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
+import { calendarHoverPreviewAtom } from "@/atoms";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
-import { type ServiceKey } from "@/constants/icons";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { calendarHoverPreviewAtom } from "@/atoms";
+import type { ServiceKey } from "@/constants/icons";
 import type { Subscription } from "@/lib/schema";
-import { useAtomValue } from "jotai";
-import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { DayPopoverContent } from "./DayPopoverContent";
 
 export type CalendarDayProps = {
   day: number;
@@ -39,9 +39,9 @@ export function CalendarDay({
       aria-label={`${day}${isToday ? `, ${t("dashboard.calendar.today")}` : ""}${hasPayments ? `, ${t("dashboard.calendar.charges", { count: payments.length })}` : ""}`}
       aria-current={isToday ? "date" : undefined}
       className={cn(
-        "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
-        isToday && "ring-primary text-primary font-bold ring-2",
-        hasPayments && "bg-muted/50 hover:bg-muted cursor-pointer",
+        "relative flex aspect-square select-none flex-col items-center justify-center rounded-2xl text-sm transition-all",
+        isToday && "font-bold text-primary ring-2 ring-primary",
+        hasPayments && "cursor-pointer bg-muted/50 hover:bg-muted",
         !isToday && !hasPayments && isPast && "text-muted-foreground/30",
         !isToday && !hasPayments && !isPast && "text-muted-foreground/60",
       )}
@@ -57,16 +57,16 @@ export function CalendarDay({
               />
             ))}
             {payments.length > 2 && (
-              <span className="text-muted-foreground text-[10px] font-medium tabular-nums">
+              <span className="font-medium text-[10px] text-muted-foreground tabular-nums">
                 +{payments.length - 2}
               </span>
             )}
           </div>
-          <span className="text-foreground/70 mt-0.5 text-[10px] tabular-nums">
+          <span className="mt-0.5 text-[10px] text-foreground/70 tabular-nums">
             {day}
           </span>
           {payments.some((p) => p.billingCycle === "monthly") && (
-            <span className="bg-foreground/40 absolute bottom-1.5 size-1 rounded-full" />
+            <span className="absolute bottom-1.5 size-1 rounded-full bg-foreground/40" />
           )}
         </>
       ) : (

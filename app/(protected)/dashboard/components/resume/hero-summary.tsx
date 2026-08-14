@@ -1,5 +1,9 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { AlertTriangleIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { ResumeTotalResponse } from "@/app/api/[userid]/[currency]/resume-total/route";
 import { currencyAtom } from "@/atoms";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,10 +14,6 @@ import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { AlertTriangleIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { AddSubscription } from "../subscriptions/actions/add-subscription";
 
 async function fetchStats(
@@ -60,18 +60,18 @@ export function HeroSummary() {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
           {t("dashboard.hero.monthlySpend")}
         </p>
         {isPending ? (
           <Skeleton className="mt-2 h-10 w-44" />
         ) : (
-          <p className="mt-1 font-mono text-4xl font-bold tracking-tight">
+          <p className="mt-1 font-bold font-mono text-4xl tracking-tight">
             {symbol}
             {formatAmount(total)}
           </p>
         )}
-        <p className="text-muted-foreground mt-1 text-sm">
+        <p className="mt-1 text-muted-foreground text-sm">
           {t("dashboard.hero.activeSubscriptions", {
             count: subscriptionCount,
           })}
@@ -104,23 +104,23 @@ export function HeroSummary() {
       <div className="flex items-center gap-6">
         <AddSubscription triggerProps={{ size: "lg" }} />
         <div className="sm:text-right">
-          <p className="text-muted-foreground text-[11px] font-medium">
+          <p className="font-medium text-[11px] text-muted-foreground">
             {t("dashboard.hero.yearlyProjection")}
           </p>
           {isPending ? (
             <Skeleton className="mt-1 h-5 w-20" />
           ) : (
-            <p className="font-mono text-lg font-semibold tabular-nums">
+            <p className="font-mono font-semibold text-lg tabular-nums">
               {symbol}
               {formatAmount(yearlyProjection, 0)}
             </p>
           )}
         </div>
         <div className="sm:text-right">
-          <p className="text-muted-foreground text-[11px] font-medium">
+          <p className="font-medium text-[11px] text-muted-foreground">
             {t("dashboard.hero.currency")}
           </p>
-          <p className="font-mono text-lg font-semibold">{currency}</p>
+          <p className="font-mono font-semibold text-lg">{currency}</p>
         </div>
       </div>
     </div>

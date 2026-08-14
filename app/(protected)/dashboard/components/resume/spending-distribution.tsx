@@ -1,7 +1,13 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { AlertTriangleIcon, PieChartIcon, TrendingUpIcon } from "lucide-react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
+import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -11,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ServiceIcon } from "@/components/dashboard/service-icon";
 import {
   Item,
   ItemActions,
@@ -33,7 +38,7 @@ import {
   STATUS_CLASSES,
 } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
-import { serviceIcons, type ServiceKey } from "@/constants/icons";
+import { type ServiceKey, serviceIcons } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
@@ -41,11 +46,6 @@ import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { AlertTriangleIcon, PieChartIcon, TrendingUpIcon } from "lucide-react";
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 function DistributionSkeleton() {
   return (
@@ -220,7 +220,7 @@ export function SpendingDistribution() {
               <p className="text-muted-foreground text-xs">
                 {t("dashboard.distribution.totalMonthly")}
               </p>
-              <p className="font-mono text-lg font-semibold tracking-tight">
+              <p className="font-mono font-semibold text-lg tracking-tight">
                 {currencySymbol}
                 {totalSpending.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 0,
@@ -262,7 +262,7 @@ export function SpendingDistribution() {
                     })}
                   </span>
                 </div>
-                <div className="bg-muted/50 flex h-5 w-full gap-px overflow-hidden p-0.5">
+                <div className="flex h-5 w-full gap-px overflow-hidden bg-muted/50 p-0.5">
                   {sortedPlatforms.map(([platform, data]) => {
                     const percentage =
                       totalSpending > 0
@@ -296,7 +296,7 @@ export function SpendingDistribution() {
                               )}{" "}
                               {t("dashboard.distribution.perMonth")}
                             </p>
-                            <p className="text-xs font-medium">
+                            <p className="font-medium text-xs">
                               {t("dashboard.distribution.ofTotal", {
                                 percent: percentage.toFixed(1),
                               })}
@@ -335,7 +335,7 @@ export function SpendingDistribution() {
                           <Badge
                             variant="secondary"
                             className={cn(
-                              "h-5 gap-1 px-1.5 text-[10px] font-medium",
+                              "h-5 gap-1 px-1.5 font-medium text-[10px]",
                               STATUS_CLASSES.warning.tone,
                             )}
                           >
@@ -352,7 +352,7 @@ export function SpendingDistribution() {
                     </ItemContent>
                     <ItemActions>
                       <div className="text-right">
-                        <p className="font-mono text-sm font-semibold tabular-nums">
+                        <p className="font-mono font-semibold text-sm tabular-nums">
                           {currencySymbol}
                           {data.convertedTotal.toLocaleString(
                             toIntlLocale(language),
@@ -363,7 +363,7 @@ export function SpendingDistribution() {
                           )}{" "}
                           <span className="text-xs">{selectedCurrency}</span>
                         </p>
-                        <p className="text-muted-foreground text-[10px]">
+                        <p className="text-[10px] text-muted-foreground">
                           {t("dashboard.distribution.perMonth")}
                         </p>
                       </div>
@@ -382,11 +382,11 @@ export function SpendingDistribution() {
             </ItemGroup>
           </div>
         ) : (
-          <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
-            <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center">
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <PieChartIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">
+            <p className="font-medium text-sm">
               {t("dashboard.distribution.emptyTitle")}
             </p>
             <p className="mt-1 text-xs opacity-70">

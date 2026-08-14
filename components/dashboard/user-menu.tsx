@@ -1,11 +1,7 @@
 "use client";
 
-import { calendarHoverPreviewAtom } from "@/atoms";
-import { signOut, useSession } from "@/lib/auth-client";
 import Avatar from "boring-avatars";
 import { useAtom } from "jotai";
-import { locales, localeLabels } from "@/lib/i18n/settings";
-import { useLanguage } from "@/lib/i18n/use-language";
 import {
   FileTextIcon,
   LanguagesIcon,
@@ -18,11 +14,15 @@ import {
   SunIcon,
   UserIcon,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { calendarHoverPreviewAtom } from "@/atoms";
+import { signOut, useSession } from "@/lib/auth-client";
+import { localeLabels, locales } from "@/lib/i18n/settings";
+import { useLanguage } from "@/lib/i18n/use-language";
 import { ErrorStateInline } from "../error-state";
 import { Loader } from "../loader";
 import {
@@ -73,7 +73,7 @@ export const UserMenu = () => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger className="focus-visible:ring-ring rounded-full outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
+        <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           <Avatar name={user?.name || "User"} variant="beam" size={32} square />
         </DropdownMenuTrigger>
 
@@ -88,10 +88,10 @@ export const UserMenu = () => {
                 square
               />
               <div className="min-w-0 flex-1">
-                <p className="text-foreground truncate text-sm font-medium">
+                <p className="truncate font-medium text-foreground text-sm">
                   {user?.name}
                 </p>
-                <p className="text-muted-foreground truncate text-xs">
+                <p className="truncate text-muted-foreground text-xs">
                   {user?.email}
                 </p>
               </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import type { ServiceKey } from "@/constants/icons";
 import { PieChartIcon, PlusIcon, SignalHigh, Wifi } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import type { ServiceKey } from "@/constants/icons";
 import { ServiceIcon } from "../dashboard/service-icon";
 import { Button } from "../ui/button";
 
@@ -42,7 +42,7 @@ export default function PhoneMockup() {
           {/* Screen */}
           <div className="relative overflow-hidden rounded-[2.65rem] bg-linear-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
             {/* Status bar */}
-            <div className="relative flex items-center justify-between px-7 pt-3 pb-2 text-[11px] font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="relative flex items-center justify-between px-7 pt-3 pb-2 font-semibold text-[11px] text-zinc-900 dark:text-zinc-100">
               <span className="tabular-nums">9:41</span>
               <div className="flex items-center gap-1">
                 <SignalHigh className="size-3" aria-hidden="true" />
@@ -69,7 +69,7 @@ export default function PhoneMockup() {
             {/* Screen content */}
             <div className="space-y-3 px-4 pt-3 pb-8">
               {/* Profile / total card */}
-              <div className="from-primary/95 to-primary shadow-primary/20 relative overflow-hidden rounded-2xl bg-linear-to-br p-4 shadow-lg">
+              <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary/95 to-primary p-4 shadow-lg shadow-primary/20">
                 <div
                   aria-hidden="true"
                   className="absolute -top-6 -right-6 size-24 rounded-full bg-white/10 blur-2xl"
@@ -82,18 +82,18 @@ export default function PhoneMockup() {
                   <div className="flex items-center gap-2.5">
                     <div className="size-9 rounded-full bg-linear-to-br from-sky-300 via-violet-300 to-fuchsia-400 ring-2 ring-white/30" />
                     <div>
-                      <p className="text-primary-foreground/80 text-[10px] font-medium tracking-wider uppercase">
+                      <p className="font-medium text-[10px] text-primary-foreground/80 uppercase tracking-wider">
                         {t("landing.phoneMockup.monthlySpend")}
                       </p>
-                      <p className="text-primary-foreground text-xl leading-tight font-bold">
+                      <p className="font-bold text-primary-foreground text-xl leading-tight">
                         $42
-                        <span className="text-sm font-normal opacity-80">
+                        <span className="font-normal text-sm opacity-80">
                           .96
                         </span>
                       </p>
                     </div>
                   </div>
-                  <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur">
+                  <span className="rounded-full bg-white/15 px-2 py-0.5 font-semibold text-[10px] text-white backdrop-blur">
                     {t("landing.phoneMockup.active", {
                       count: mockSubscriptions.length,
                     })}
@@ -120,10 +120,10 @@ export default function PhoneMockup() {
               {/* Subscriptions list */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400">
+                  <p className="font-semibold text-[10px] text-zinc-500 uppercase tracking-wider dark:text-zinc-400">
                     {t("landing.phoneMockup.activeSubscriptions")}
                   </p>
-                  <p className="text-primary text-[10px] font-medium">
+                  <p className="font-medium text-[10px] text-primary">
                     {t("landing.phoneMockup.seeAll")}
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function PhoneMockup() {
                     <div className="flex items-center gap-2.5">
                       <ServiceIcon service={sub.name} size="sm" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-semibold text-zinc-900 capitalize dark:text-zinc-100">
+                        <span className="font-semibold text-xs text-zinc-900 capitalize dark:text-zinc-100">
                           {sub.name}
                         </span>
                         <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
@@ -144,7 +144,7 @@ export default function PhoneMockup() {
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-zinc-700 tabular-nums dark:text-zinc-200">
+                    <span className="font-semibold text-xs text-zinc-700 tabular-nums dark:text-zinc-200">
                       {sub.price}
                     </span>
                   </div>
@@ -170,7 +170,7 @@ export default function PhoneMockup() {
       {/* Ambient glow */}
       <div
         aria-hidden="true"
-        className="from-primary/25 absolute -inset-8 -z-10 rounded-[4rem] bg-linear-to-br via-fuchsia-500/15 to-sky-500/20 blur-3xl"
+        className="absolute -inset-8 -z-10 rounded-[4rem] bg-linear-to-br from-primary/25 via-fuchsia-500/15 to-sky-500/20 blur-3xl"
       />
     </div>
   );

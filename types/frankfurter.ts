@@ -1,4 +1,4 @@
-import { Currency } from "@/constants/currency";
+import type { Currency } from "@/constants/currency";
 
 export type FrankfurterRates = {
   EUR?: number;

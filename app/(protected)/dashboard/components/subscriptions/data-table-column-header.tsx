@@ -1,6 +1,6 @@
-import { type Column, type RowData } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown, EyeOff } from "lucide-react";
-
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,13 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useCallback } from "react";
 import type { SubscriptionTableFeatures } from "./table-features";
 
-interface DataTableColumnHeaderProps<
-  TData extends RowData,
-  TValue,
-> extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableColumnHeaderProps<TData extends RowData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<SubscriptionTableFeatures, TData, TValue>;
   title: string;
   triggerClassName?: string;
@@ -55,7 +52,7 @@ export function DataTableColumnHeader<TData extends RowData, TValue>({
               variant="ghost"
               size="sm"
               className={cn(
-                "data-[state=open]:bg-accent -ml-3 h-8",
+                "-ml-3 h-8 data-[state=open]:bg-accent",
                 triggerClassName,
               )}
             ></Button>

@@ -1,5 +1,8 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2, RotateCcwIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,9 +16,6 @@ import {
 } from "@/components/ui/dialog";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2, RotateCcwIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import type { Subscription } from "../columns";
 
 async function reactivateSubscriptionApi(
@@ -76,10 +76,10 @@ export function ReactivateSubscription({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="bg-muted/50 flex items-center gap-3 rounded-lg p-3">
+        <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-3">
           <ServiceIcon service={subscription.platform} size="sm" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">{subscription.name}</p>
+            <p className="truncate font-medium text-sm">{subscription.name}</p>
             <p className="text-muted-foreground text-xs capitalize">
               {subscription.platform}
             </p>

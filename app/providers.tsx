@@ -1,13 +1,13 @@
 "use client";
 
-import { I18nProvider } from "@/components/i18n-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import type { Locale } from "@/lib/i18n/settings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "next-themes";
 import { useState } from "react";
+import { I18nProvider } from "@/components/i18n-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import type { Locale } from "@/lib/i18n/settings";
 
 export default function Providers({
   initialLanguage,

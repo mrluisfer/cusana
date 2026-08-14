@@ -1,9 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
+import { DollarSignIcon } from "lucide-react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
-
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import {
   Field,
@@ -27,12 +30,8 @@ import {
 import { allowedPlatformsArray } from "@/constants/allowed-platforms";
 import { billingCycleArray } from "@/constants/billing-cycle";
 import { currencyArray, currencySymbols } from "@/constants/currency";
-import { serviceIcons, type ServiceKey } from "@/constants/icons";
+import { type ServiceKey, serviceIcons } from "@/constants/icons";
 import { monthLabels, monthsArray } from "@/constants/months";
-import { DollarSignIcon } from "lucide-react";
-import { useEffect, useMemo } from "react";
-import { type TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
 
 // ============================================
 // Schema
@@ -109,11 +108,11 @@ export function SubscriptionForm({
   });
 
   // Reset form when resetKey changes (useful for edit mode)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: el reset debe dispararse solo cuando cambia resetKey, no cuando cambian form o defaultValues.
   useEffect(() => {
     if (resetKey !== undefined) {
       form.reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
   // Live values para la tarjeta de preview y el helper de promedio mensual.
@@ -345,10 +344,10 @@ export function SubscriptionForm({
         {/* Helper: promedio mensual cuando es anual */}
         {selectedCycle === "yearly" && validPrice && (
           <p
-            className="bg-primary/5 text-muted-foreground rounded-lg px-3 py-2 text-xs"
+            className="rounded-lg bg-primary/5 px-3 py-2 text-muted-foreground text-xs"
             aria-live="polite"
           >
-            <span className="text-foreground font-medium">
+            <span className="font-medium text-foreground">
               {currencySymbols[selectedCurrency]}
               {(priceNumber / 12).toLocaleString("es-MX", {
                 minimumFractionDigits: 2,
@@ -368,7 +367,7 @@ export function SubscriptionForm({
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>
                   {t("dashboard.form.billingMonth")}{" "}
-                  <span className="text-muted-foreground font-normal">
+                  <span className="font-normal text-muted-foreground">
                     {t("dashboard.form.optional")}
                   </span>
                 </FieldLabel>
@@ -430,7 +429,7 @@ function LivePreview({
 
   return (
     <div className="px-6 pt-5 pb-4" aria-live="polite">
-      <div className="border-border/60 bg-card/40 supports-[backdrop-filter]:bg-card/30 relative flex items-center gap-3 overflow-hidden rounded-2xl border p-3 backdrop-blur-xl">
+      <div className="relative flex items-center gap-3 overflow-hidden rounded-2xl border border-border/60 bg-card/40 p-3 backdrop-blur-xl supports-[backdrop-filter]:bg-card/30">
         {/* Accent gradient teñido por color de marca */}
         <div
           aria-hidden="true"
@@ -447,7 +446,7 @@ function LivePreview({
           className="relative shrink-0"
         />
         <div className="relative min-w-0 flex-1">
-          <p className="text-foreground truncate text-sm font-semibold">
+          <p className="truncate font-semibold text-foreground text-sm">
             {displayName}
           </p>
           <p className="text-muted-foreground text-xs">
@@ -456,7 +455,7 @@ function LivePreview({
           </p>
         </div>
         <p className="relative shrink-0 text-right">
-          <span className="text-foreground font-mono text-base font-bold tabular-nums">
+          <span className="font-bold font-mono text-base text-foreground tabular-nums">
             {symbol}
             {price !== null
               ? price.toLocaleString("es-MX", {
@@ -465,7 +464,7 @@ function LivePreview({
                 })
               : "—"}
           </span>
-          <span className="text-muted-foreground ml-0.5 text-[10px]">
+          <span className="ml-0.5 text-[10px] text-muted-foreground">
             {cycleSuffix}
           </span>
         </p>
