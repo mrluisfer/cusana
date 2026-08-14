@@ -84,7 +84,7 @@ export function AiChatMessages({
 
   if (messages.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 overflow-y-auto p-6 text-center">
         <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
           <BotIcon className="size-6 text-primary" />
         </div>
@@ -122,7 +122,7 @@ export function AiChatMessages({
   }
 
   return (
-    <div className="flex-1 space-y-3 overflow-y-auto p-4">
+    <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
       {messages.map((message, index) => (
         <MessageBubble
           key={message.id}

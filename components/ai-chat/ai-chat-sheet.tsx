@@ -27,13 +27,13 @@ export function AiChatSheet() {
   } = useAiChat();
   const setOpen = useSetAtom(aiChatOpenAtom);
 
-  if (!hasToken) {
-    return <AiChatTokenSetup onSaveTokenAction={saveToken} />;
-  }
-
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b px-4 py-3">
+    <div className="flex min-h-0 flex-1 flex-col">
+      {/*
+        El header es chrome del panel, no del chat: se renderiza también sin
+        clave para que siempre haya forma de cerrar.
+      */}
+      <div className="flex shrink-0 items-center justify-between border-b px-4 py-3">
         <div>
           <h2 className="font-semibold text-base">{t("aiChat.title")}</h2>
           <p className="text-muted-foreground text-xs">
@@ -41,7 +41,7 @@ export function AiChatSheet() {
           </p>
         </div>
         <div className="flex items-center gap-1">
-          {messages.length > 0 && (
+          {hasToken && messages.length > 0 && (
             <Button
               variant="ghost"
               size="icon-xs"
@@ -51,14 +51,16 @@ export function AiChatSheet() {
               <Trash2Icon className="size-3.5" />
             </Button>
           )}
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={removeToken}
-            aria-label={t("aiChat.changeKey")}
-          >
-            <KeyIcon className="size-3.5" />
-          </Button>
+          {hasToken && (
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              onClick={removeToken}
+              aria-label={t("aiChat.changeKey")}
+            >
+              <KeyIcon className="size-3.5" />
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon-xs"
@@ -70,28 +72,34 @@ export function AiChatSheet() {
         </div>
       </div>
 
-      <AiChatMessages
-        messages={messages}
-        isStreaming={isStreaming}
-        onSuggestionAction={sendMessage}
-      />
-
-      {error && (
+      {hasToken ? (
         <>
-          <Separator />
-          <div className="px-4 py-2">
-            <Badge variant="destructive" className="text-xs">
-              {error}
-            </Badge>
-          </div>
-        </>
-      )}
+          <AiChatMessages
+            messages={messages}
+            isStreaming={isStreaming}
+            onSuggestionAction={sendMessage}
+          />
 
-      <AiChatInput
-        onSendAction={sendMessage}
-        onCancelAction={cancelStream}
-        isStreaming={isStreaming}
-      />
+          {error && (
+            <>
+              <Separator />
+              <div className="px-4 py-2">
+                <Badge variant="destructive" className="text-xs">
+                  {error}
+                </Badge>
+              </div>
+            </>
+          )}
+
+          <AiChatInput
+            onSendAction={sendMessage}
+            onCancelAction={cancelStream}
+            isStreaming={isStreaming}
+          />
+        </>
+      ) : (
+        <AiChatTokenSetup onSaveTokenAction={saveToken} />
+      )}
     </div>
   );
 }

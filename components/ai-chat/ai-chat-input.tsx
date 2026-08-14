@@ -39,7 +39,7 @@ export function AiChatInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center gap-2 border-t p-3"
+      className="flex shrink-0 items-center gap-2 border-t p-3"
     >
       <Input
         value={value}

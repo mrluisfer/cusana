@@ -34,7 +34,7 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 p-6">
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 overflow-y-auto p-6">
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="flex size-12 items-center justify-center bg-primary/10">
           <KeyIcon className="size-6 text-primary" />
