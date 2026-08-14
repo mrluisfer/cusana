@@ -76,9 +76,10 @@ export type SubscriptionFormValues = z.infer<
   ReturnType<typeof createSubscriptionFormSchema>
 >;
 
-/** Platform label, translating the generic "otros" entry which is the only localized one. */
+/** Platform label. Las entradas genéricas son las únicas localizadas — el resto son marcas. */
 function getPlatformDisplayLabel(platform: ServiceKey, t: TFunction): string {
   if (platform === "otros") return t("dashboard.form.platformOther");
+  if (platform === "servicios") return t("dashboard.form.platformServices");
   return serviceIcons[platform]?.label ?? platform;
 }
 

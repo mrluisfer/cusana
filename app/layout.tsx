@@ -7,22 +7,19 @@ import { siteConfig, siteKeywords } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import Providers from "./providers";
 
-const geistMonoHeading = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
+const jetbrainsMonoHeading = JetBrains_Mono({subsets:['latin'],variable:'--font-heading'});
 
 const geistMono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const metadataBase = new URL(siteConfig.url);
 
@@ -109,13 +106,13 @@ export default async function RootLayout({
       className={cn(
         "overflow-x-hidden",
         "font-sans",
-        geist.variable,
-        geistMonoHeading.variable,
+        inter.variable,
+        jetbrainsMonoHeading.variable,
       )}
       suppressHydrationWarning
     >
       <body
-        className={`${geistMono.variable} ${geist.variable} overflow-x-hidden antialiased`}
+        className={`${geistMono.variable} ${inter.variable} overflow-x-hidden antialiased`}
       >
         <Providers initialLanguage={initialLanguage}>{children}</Providers>
       </body>

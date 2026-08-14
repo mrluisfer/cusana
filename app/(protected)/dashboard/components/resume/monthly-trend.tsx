@@ -20,6 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -290,7 +291,12 @@ export function MonthlyTrend() {
 
       <CardContent>
         {!isPending && missingRates.length > 0 && (
-          <p className="mb-3 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <p
+            className={cn(
+              "mb-3 inline-flex items-center gap-1.5 text-xs",
+              STATUS_CLASSES.warning.text,
+            )}
+          >
             <AlertTriangleIcon className="size-3.5" />
             {t("dashboard.fxWarning.excluded", {
               count: skippedCount,

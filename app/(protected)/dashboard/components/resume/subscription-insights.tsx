@@ -2,14 +2,17 @@
 
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
+import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -33,9 +36,10 @@ import {
   LightbulbIcon,
   Trash2Icon,
   TrendingUpIcon,
+  XIcon,
   type LucideIcon,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type InsightTone = "info" | "warning" | "success";
@@ -48,9 +52,9 @@ type Insight = {
 };
 
 const toneStyles: Record<InsightTone, string> = {
-  info: "bg-primary/10 text-primary",
-  warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  success: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  info: STATUS_CLASSES.info.tone,
+  warning: STATUS_CLASSES.warning.tone,
+  success: STATUS_CLASSES.ok.tone,
 };
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
@@ -88,6 +92,7 @@ export function SubscriptionInsights() {
   const { language } = useLanguage();
   const { data: session } = useSession();
   const selectedCurrency = useAtomValue(currencyAtom);
+  const [hideInsights, setHideInsights] = useState(false);
 
   const { data: subscriptions, isPending: isLoadingSubscriptions } = useQuery<
     Subscription[]
@@ -211,6 +216,16 @@ export function SubscriptionInsights() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscriptions, ratesData, selectedCurrency, t, locale, currencySymbol]);
 
+  if (hideInsights)
+    return (
+      <div className="flex items-start justify-end">
+        <Button onClick={() => setHideInsights(false)}>
+          <LightbulbIcon />
+          Show insights
+        </Button>
+      </div>
+    );
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -219,6 +234,11 @@ export function SubscriptionInsights() {
           {t("dashboard.insights.title")}
         </CardTitle>
         <CardDescription>{t("dashboard.insights.subtitle")}</CardDescription>
+        <CardAction>
+          <Button onClick={() => setHideInsights(true)} size={"icon"}>
+            <XIcon />
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent>
         {isPending ? (
@@ -249,7 +269,9 @@ export function SubscriptionInsights() {
             <div className="bg-muted/50 mb-4 flex size-16 items-center justify-center rounded-full">
               <LayersIcon className="size-8 opacity-40" />
             </div>
-            <p className="text-sm font-medium">{t("dashboard.insights.empty")}</p>
+            <p className="text-sm font-medium">
+              {t("dashboard.insights.empty")}
+            </p>
           </div>
         )}
       </CardContent>

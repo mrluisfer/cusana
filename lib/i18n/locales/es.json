@@ -149,6 +149,7 @@
       "store": "Tiendas",
       "device": "Dispositivos",
       "finance": "Finanzas",
+      "services": "Servicios",
       "other": "Otros"
     },
     "budget": {
@@ -251,6 +252,7 @@
       "previewName": "Tu suscripción",
       "previewPlatform": "Plataforma",
       "platformOther": "Otros (Puedes modificarlo después)",
+      "platformServices": "Servicios (internet, cable, luz…)",
       "errors": {
         "nameMin": "El nombre debe tener al menos 2 caracteres",
         "nameMax": "El nombre no puede exceder 100 caracteres",
@@ -534,28 +536,64 @@
       "available": {
         "title": "Disponible hoy",
         "items": {
-          "manual": { "title": "Registro manual de suscripciones", "description": "Agrega cualquier servicio recurrente con precio, moneda y fecha de cobro." },
-          "catalog": { "title": "Catálogo de servicios", "description": "Reconocimiento visual para los servicios más comunes en streaming, música y software." },
-          "summary": { "title": "Resumen mensual", "description": "Total mensual consolidado y desglose por servicio para tomar decisiones." },
-          "themes": { "title": "Modo claro y oscuro", "description": "Interfaz responsive con tema sincronizado al sistema." }
+          "manual": {
+            "title": "Registro manual de suscripciones",
+            "description": "Agrega cualquier servicio recurrente con precio, moneda y fecha de cobro."
+          },
+          "catalog": {
+            "title": "Catálogo de servicios",
+            "description": "Reconocimiento visual para los servicios más comunes en streaming, música y software."
+          },
+          "summary": {
+            "title": "Resumen mensual",
+            "description": "Total mensual consolidado y desglose por servicio para tomar decisiones."
+          },
+          "themes": {
+            "title": "Modo claro y oscuro",
+            "description": "Interfaz responsive con tema sincronizado al sistema."
+          }
         }
       },
       "soon": {
         "title": "En camino",
         "items": {
-          "excel": { "title": "Exportar a Excel", "description": "Descarga el historial completo en .xlsx para tu contabilidad personal." },
-          "categories": { "title": "Categorías personalizadas", "description": "Agrupa servicios por categoría (entretenimiento, productividad, hogar…)." },
-          "alerts": { "title": "Alertas previas al cobro", "description": "Recordatorios configurables antes de cada renovación." },
-          "ai": { "title": "Asistente con IA", "description": "Conversa con tus datos: '¿qué suscripciones puedo cancelar?'" }
+          "excel": {
+            "title": "Exportar a Excel",
+            "description": "Descarga el historial completo en .xlsx para tu contabilidad personal."
+          },
+          "categories": {
+            "title": "Categorías personalizadas",
+            "description": "Agrupa servicios por categoría (entretenimiento, productividad, hogar…)."
+          },
+          "alerts": {
+            "title": "Alertas previas al cobro",
+            "description": "Recordatorios configurables antes de cada renovación."
+          },
+          "ai": {
+            "title": "Asistente con IA",
+            "description": "Conversa con tus datos: '¿qué suscripciones puedo cancelar?'"
+          }
         }
       },
       "planned": {
         "title": "En el horizonte",
         "items": {
-          "family": { "title": "Modo familiar / compartido", "description": "Comparte suscripciones con tu pareja o familia y divide gastos." },
-          "email": { "title": "Detección desde el correo", "description": "Importa recibos opcionalmente desde Gmail o Outlook con tu permiso." },
-          "mobile": { "title": "App móvil nativa", "description": "Versión instalable con notificaciones push y widget de gasto." },
-          "currency": { "title": "Multi-moneda y conversión", "description": "Para quienes pagan servicios en USD pero viven con otra moneda." }
+          "family": {
+            "title": "Modo familiar / compartido",
+            "description": "Comparte suscripciones con tu pareja o familia y divide gastos."
+          },
+          "email": {
+            "title": "Detección desde el correo",
+            "description": "Importa recibos opcionalmente desde Gmail o Outlook con tu permiso."
+          },
+          "mobile": {
+            "title": "App móvil nativa",
+            "description": "Versión instalable con notificaciones push y widget de gasto."
+          },
+          "currency": {
+            "title": "Multi-moneda y conversión",
+            "description": "Para quienes pagan servicios en USD pero viven con otra moneda."
+          }
         }
       }
     },
@@ -565,10 +603,22 @@
       "contactLead": "¿No encuentras lo que buscas?",
       "contactCta": "Escríbenos",
       "items": {
-        "bank": { "q": "¿Cusana se conecta con mi banco?", "a": "No. Cusana funciona con registro manual: tú decides qué suscripciones agregar. Nunca pedimos credenciales bancarias ni tokens de tu banco." },
-        "price": { "q": "¿Cuánto cuesta?", "a": "Mientras estamos en beta abierta, el acceso es gratuito. Cuando salgamos de beta tendremos un plan gratuito y uno de pago con funciones avanzadas." },
-        "stable": { "q": "¿Qué tan estable es?", "a": "Cusana es un proyecto activo en desarrollo. Las funciones publicadas en el roadmap como 'Disponible hoy' están operativas; el resto aún no." },
-        "devices": { "q": "¿En qué dispositivos funciona?", "a": "En cualquier navegador moderno —desktop, tablet o móvil— con una experiencia totalmente responsive y modo oscuro." }
+        "bank": {
+          "q": "¿Cusana se conecta con mi banco?",
+          "a": "No. Cusana funciona con registro manual: tú decides qué suscripciones agregar. Nunca pedimos credenciales bancarias ni tokens de tu banco."
+        },
+        "price": {
+          "q": "¿Cuánto cuesta?",
+          "a": "Mientras estamos en beta abierta, el acceso es gratuito. Cuando salgamos de beta tendremos un plan gratuito y uno de pago con funciones avanzadas."
+        },
+        "stable": {
+          "q": "¿Qué tan estable es?",
+          "a": "Cusana es un proyecto activo en desarrollo. Las funciones publicadas en el roadmap como 'Disponible hoy' están operativas; el resto aún no."
+        },
+        "devices": {
+          "q": "¿En qué dispositivos funciona?",
+          "a": "En cualquier navegador moderno —desktop, tablet o móvil— con una experiencia totalmente responsive y modo oscuro."
+        }
       }
     },
     "cta": {

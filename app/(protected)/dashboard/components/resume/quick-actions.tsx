@@ -1,12 +1,7 @@
 "use client";
 
 import { currencyAtom, defaultFilters, filtersAtom } from "@/atoms";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
   ItemActions,

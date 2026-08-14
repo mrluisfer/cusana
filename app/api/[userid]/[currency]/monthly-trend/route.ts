@@ -1,4 +1,7 @@
-import { getSubscriptionsForTrend } from "@/lib/queries/monthly-trend";
+import {
+  getDeactivationDates,
+  getSubscriptionsForTrend,
+} from "@/lib/queries/monthly-trend";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import type { RouteContext } from "@/types/route-context";
 import type { NextRequest } from "next/server";
@@ -24,74 +27,129 @@ export type MonthlyTrendResponse = {
 };
 
 const MONTH_NAMES = [
-  "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
 ];
 
-/**
- * Determines if a subscription was active during a given month.
- *
- * - It must have been created on or before the last day of the month.
- * - If it's currently inactive, it must have been deactivated AFTER the
- *   first day of the month (updatedAt is used as proxy for deactivation date).
- */
-function wasActiveInMonth(
-  sub: { createdAt: Date; active: boolean; updatedAt: Date },
-  monthStart: Date,
-  monthEnd: Date,
-): boolean {
-  // Not yet created
-  if (sub.createdAt > monthEnd) return false;
+type TrendSubscription = {
+  id: string;
+  price: string;
+  currency: string;
+  billingCycle: string;
+  billingDay: number;
+  billingMonth: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+  active: boolean;
+};
 
-  // Still active — was definitely active in this month
-  if (sub.active) return true;
-
-  // Inactive — check if it was deactivated after this month started
-  // (updatedAt >= monthStart means it was still active at the start of the month)
-  return sub.updatedAt >= monthStart;
+/** Medianoche del día — todas las comparaciones son a nivel día, no timestamp. */
+function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 /**
- * For a given subscription and target month, returns the actual amount
- * the user would pay that month:
- *
- * - Monthly subs: full price every month
- * - Yearly subs: full price only in the billing month, $0 otherwise
+ * Fecha en que la suscripción dejó de existir, o `null` si sigue activa.
+ * Preferimos el evento `deleted` del audit log; `updatedAt` sólo es fallback
+ * para datos viejos sin evento (es impreciso: cualquier edición lo mueve).
  */
-function getMonthlyAmount(
-  sub: {
-    price: string;
-    billingCycle: string;
-    billingMonth: number | null;
-    createdAt: Date;
-    currency: string;
-  },
+function getDeactivationDate(
+  sub: TrendSubscription,
+  deactivations: Map<string, Date>,
+): Date | null {
+  if (sub.active) return null;
+  return deactivations.get(sub.id) ?? sub.updatedAt;
+}
+
+/**
+ * ¿La suscripción seguía viva al cerrar el mes? Se usa sólo para el conteo del
+ * tooltip — el monto se decide con la fecha de cobro (ver `getChargeDate`).
+ *
+ * Medir al cierre (y no "en algún momento del mes") hace que el mes en curso
+ * coincida con el contador de suscripciones activas del encabezado.
+ */
+function wasActiveAtMonthEnd(
+  sub: TrendSubscription,
+  deactivatedAt: Date | null,
+  monthEnd: Date,
+): boolean {
+  // Not yet created
+  if (startOfDay(sub.createdAt) > monthEnd) return false;
+
+  // Still active — was definitely active in this month
+  if (!deactivatedAt) return true;
+
+  return deactivatedAt > monthEnd;
+}
+
+/**
+ * Fecha exacta del cobro dentro del mes objetivo, o `null` si ese mes no hay
+ * cobro para esta suscripción.
+ *
+ * - Mensuales: cobran el `billingDay` de cada mes (clamp al último día).
+ * - Anuales: sólo cobran en su `billingMonth`.
+ */
+function getChargeDate(
+  sub: TrendSubscription,
+  targetYear: number,
   targetMonth: number,
+): Date | null {
+  if (sub.billingCycle === "yearly") {
+    const billingMonth = sub.billingMonth
+      ? sub.billingMonth - 1 // 1-12 → 0-11
+      : new Date(sub.createdAt).getMonth();
+
+    if (billingMonth !== targetMonth) return null;
+  }
+
+  const lastDay = new Date(targetYear, targetMonth + 1, 0).getDate();
+  const day = Math.min(Math.max(sub.billingDay || 1, 1), lastDay);
+
+  return new Date(targetYear, targetMonth, day);
+}
+
+/**
+ * ¿Ese cobro realmente ocurrió? Debe caer dentro de la vida de la suscripción:
+ * después de darla de alta y no después de darla de baja.
+ *
+ * Esto es lo que evita que una sub cancelada el día 1 siga sumando el mes
+ * completo cuando su cobro caía el día 8.
+ */
+function chargeHappened(
+  chargeDate: Date,
+  sub: TrendSubscription,
+  deactivatedAt: Date | null,
+): boolean {
+  if (chargeDate < startOfDay(sub.createdAt)) return false;
+  if (deactivatedAt && chargeDate > startOfDay(deactivatedAt)) return false;
+  return true;
+}
+
+/** Precio de la suscripción convertido a la moneda objetivo. */
+function convertPrice(
+  sub: TrendSubscription,
   targetCurrency: string,
   rates: FrankfurterRatesResponse["rates"],
 ): number | null {
   const price = Number.parseFloat(String(sub.price)) || 0;
   const subCurrency = String(sub.currency).toUpperCase();
 
-  let converted = price;
-  if (subCurrency !== targetCurrency) {
-    const rate = rates?.[subCurrency as keyof typeof rates];
-    if (!rate || rate <= 0) return null;
-    converted = price / rate;
-  }
+  if (subCurrency === targetCurrency) return price;
 
-  if (sub.billingCycle === "yearly") {
-    // Determine which month the yearly payment falls on
-    const billingMonth = sub.billingMonth
-      ? sub.billingMonth - 1 // 1-12 → 0-11
-      : new Date(sub.createdAt).getMonth();
+  const rate = rates?.[subCurrency as keyof typeof rates];
+  if (!rate || rate <= 0) return null;
 
-    // Only charge in the billing month
-    return targetMonth === billingMonth ? converted : 0;
-  }
-
-  // Monthly: full price
-  return converted;
+  return price / rate;
 }
 
 export async function GET(
@@ -106,7 +164,10 @@ export async function GET(
     12,
   );
 
-  const subscriptions = await getSubscriptionsForTrend(userid);
+  const [subscriptions, deactivations] = await Promise.all([
+    getSubscriptionsForTrend(userid),
+    getDeactivationDates(userid),
+  ]);
 
   if (subscriptions.length === 0) {
     return Response.json(
@@ -142,30 +203,32 @@ export async function GET(
     const targetMonth = targetDate.getMonth();
     const targetYear = targetDate.getFullYear();
 
-    const monthStart = new Date(targetYear, targetMonth, 1);
     const monthEnd = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59);
 
     let monthlyAmount = 0;
     let activeCount = 0;
 
     for (const sub of subscriptions) {
-      if (!wasActiveInMonth(sub, monthStart, monthEnd)) continue;
+      const deactivatedAt = getDeactivationDate(sub, deactivations);
 
-      const amount = getMonthlyAmount(
-        sub,
-        targetMonth,
-        targetCurrency,
-        ratesData.rates,
-      );
+      const chargeDate = getChargeDate(sub, targetYear, targetMonth);
+      const charged =
+        chargeDate !== null && chargeHappened(chargeDate, sub, deactivatedAt);
+      const aliveAtEnd = wasActiveAtMonthEnd(sub, deactivatedAt, monthEnd);
 
-      if (amount === null) {
+      // Ni cobró ni existía al cierre → ese mes no aporta nada.
+      if (!charged && !aliveAtEnd) continue;
+
+      const price = convertPrice(sub, targetCurrency, ratesData.rates);
+
+      if (price === null) {
         missingRates.add(String(sub.currency).toUpperCase());
         skippedSubs.add(sub.id);
         continue;
       }
 
       activeCount++;
-      monthlyAmount += amount;
+      if (charged) monthlyAmount += price;
     }
 
     trend.push({

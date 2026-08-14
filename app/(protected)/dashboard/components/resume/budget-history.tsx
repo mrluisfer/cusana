@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -108,12 +109,12 @@ function HistoryBar({
       : 0;
 
   const fillClass = !hasBudget
-    ? "bg-muted-foreground/30"
+    ? STATUS_CLASSES.neutral.bar
     : isOver
-      ? "bg-destructive"
+      ? STATUS_CLASSES.over.bar
       : isNear
-        ? "bg-amber-500"
-        : "bg-emerald-500";
+        ? STATUS_CLASSES.warning.bar
+        : STATUS_CLASSES.ok.bar;
 
   const diff = hasBudget ? (row.budget as number) - row.spent : 0;
 
@@ -134,7 +135,9 @@ function HistoryBar({
         />
       </div>
       <span className="text-muted-foreground min-w-20 text-right font-mono text-xs tabular-nums">
-        {hasBudget ? `${fmt(row.spent)} / ${fmt(row.budget as number)}` : fmt(row.spent)}
+        {hasBudget
+          ? `${fmt(row.spent)} / ${fmt(row.budget as number)}`
+          : fmt(row.spent)}
       </span>
     </div>
   );
@@ -158,9 +161,7 @@ function HistoryBar({
               <p
                 className={cn(
                   "text-xs",
-                  isOver
-                    ? "text-destructive"
-                    : "text-emerald-600 dark:text-emerald-400",
+                  isOver ? STATUS_CLASSES.over.text : STATUS_CLASSES.ok.text,
                 )}
               >
                 {isOver

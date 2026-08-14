@@ -4,15 +4,11 @@ import type { BudgetResponse } from "@/app/api/[userid]/[currency]/budget/route"
 import { currencyAtom } from "@/atoms";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
@@ -113,8 +109,11 @@ export function BudgetTracker() {
 
   const total = useMemo(
     () =>
-      computeCategoryBreakdown(subscriptions, selectedCurrency, ratesData?.rates)
-        .total,
+      computeCategoryBreakdown(
+        subscriptions,
+        selectedCurrency,
+        ratesData?.rates,
+      ).total,
     [subscriptions, ratesData, selectedCurrency],
   );
 
@@ -146,10 +145,10 @@ export function BudgetTracker() {
   const isNear = percent >= 80 && percent <= 100;
 
   const indicatorClass = isOver
-    ? "[&_[data-slot=progress-indicator]]:bg-destructive"
+    ? STATUS_CLASSES.over.progress
     : isNear
-      ? "[&_[data-slot=progress-indicator]]:bg-amber-500"
-      : "[&_[data-slot=progress-indicator]]:bg-emerald-500";
+      ? STATUS_CLASSES.warning.progress
+      : STATUS_CLASSES.ok.progress;
 
   const statusKey = isOver
     ? "dashboard.budget.overLimit"
@@ -158,10 +157,10 @@ export function BudgetTracker() {
       : "dashboard.budget.onTrack";
 
   const statusClass = isOver
-    ? "text-destructive"
+    ? STATUS_CLASSES.over.text
     : isNear
-      ? "text-amber-600 dark:text-amber-400"
-      : "text-emerald-600 dark:text-emerald-400";
+      ? STATUS_CLASSES.warning.text
+      : STATUS_CLASSES.ok.text;
 
   return (
     <Card>

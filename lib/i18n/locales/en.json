@@ -149,6 +149,7 @@
       "store": "Stores",
       "device": "Devices",
       "finance": "Finance",
+      "services": "Utilities",
       "other": "Other"
     },
     "budget": {
@@ -251,6 +252,7 @@
       "previewName": "Your subscription",
       "previewPlatform": "Platform",
       "platformOther": "Other (you can change it later)",
+      "platformServices": "Utilities (internet, cable, power…)",
       "errors": {
         "nameMin": "Name must be at least 2 characters",
         "nameMax": "Name cannot exceed 100 characters",
@@ -534,17 +536,35 @@
       "available": {
         "title": "Available today",
         "items": {
-          "manual": { "title": "Manual subscription tracking", "description": "Add any recurring service with its price, currency and billing date." },
-          "catalog": { "title": "Service catalog", "description": "Visual recognition for the most common streaming, music and software services." },
-          "summary": { "title": "Monthly summary", "description": "Consolidated monthly total and per-service breakdown to make decisions." },
-          "themes": { "title": "Light and dark mode", "description": "Responsive interface with a theme synced to your system." }
+          "manual": {
+            "title": "Manual subscription tracking",
+            "description": "Add any recurring service with its price, currency and billing date."
+          },
+          "catalog": {
+            "title": "Service catalog",
+            "description": "Visual recognition for the most common streaming, music and software services."
+          },
+          "summary": {
+            "title": "Monthly summary",
+            "description": "Consolidated monthly total and per-service breakdown to make decisions."
+          },
+          "themes": {
+            "title": "Light and dark mode",
+            "description": "Responsive interface with a theme synced to your system."
+          }
         }
       },
       "soon": {
         "title": "On the way",
         "items": {
-          "excel": { "title": "Export to Excel", "description": "Download your full history as .xlsx for your personal accounting." },
-          "categories": { "title": "Custom categories", "description": "Group services by category (entertainment, productivity, home…)." },
+          "excel": {
+            "title": "Export to Excel",
+            "description": "Download your full history as .xlsx for your personal accounting."
+          },
+          "categories": {
+            "title": "Custom categories",
+            "description": "Group services by category (entertainment, productivity, home…)."
+          },
           "alerts": { "title": "Pre-charge alerts", "description": "Configurable reminders before each renewal." },
           "ai": { "title": "AI assistant", "description": "Chat with your data: 'which subscriptions can I cancel?'" }
         }
@@ -552,10 +572,22 @@
       "planned": {
         "title": "On the horizon",
         "items": {
-          "family": { "title": "Family / shared mode", "description": "Share subscriptions with your partner or family and split costs." },
-          "email": { "title": "Detection from email", "description": "Optionally import receipts from Gmail or Outlook with your permission." },
-          "mobile": { "title": "Native mobile app", "description": "Installable version with push notifications and a spending widget." },
-          "currency": { "title": "Multi-currency and conversion", "description": "For those who pay for services in USD but live with another currency." }
+          "family": {
+            "title": "Family / shared mode",
+            "description": "Share subscriptions with your partner or family and split costs."
+          },
+          "email": {
+            "title": "Detection from email",
+            "description": "Optionally import receipts from Gmail or Outlook with your permission."
+          },
+          "mobile": {
+            "title": "Native mobile app",
+            "description": "Installable version with push notifications and a spending widget."
+          },
+          "currency": {
+            "title": "Multi-currency and conversion",
+            "description": "For those who pay for services in USD but live with another currency."
+          }
         }
       }
     },
@@ -565,10 +597,22 @@
       "contactLead": "Can't find what you're looking for?",
       "contactCta": "Write to us",
       "items": {
-        "bank": { "q": "Does Cusana connect to my bank?", "a": "No. Cusana works with manual tracking: you decide which subscriptions to add. We never ask for banking credentials or your bank's tokens." },
-        "price": { "q": "How much does it cost?", "a": "While we're in open beta, access is free. When we leave beta we'll have a free plan and a paid one with advanced features." },
-        "stable": { "q": "How stable is it?", "a": "Cusana is an actively developed project. Features listed on the roadmap as 'Available today' are operational; the rest are not yet." },
-        "devices": { "q": "What devices does it work on?", "a": "On any modern browser —desktop, tablet or mobile— with a fully responsive experience and dark mode." }
+        "bank": {
+          "q": "Does Cusana connect to my bank?",
+          "a": "No. Cusana works with manual tracking: you decide which subscriptions to add. We never ask for banking credentials or your bank's tokens."
+        },
+        "price": {
+          "q": "How much does it cost?",
+          "a": "While we're in open beta, access is free. When we leave beta we'll have a free plan and a paid one with advanced features."
+        },
+        "stable": {
+          "q": "How stable is it?",
+          "a": "Cusana is an actively developed project. Features listed on the roadmap as 'Available today' are operational; the rest are not yet."
+        },
+        "devices": {
+          "q": "What devices does it work on?",
+          "a": "On any modern browser —desktop, tablet or mobile— with a fully responsive experience and dark mode."
+        }
       }
     },
     "cta": {

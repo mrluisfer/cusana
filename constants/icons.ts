@@ -31,6 +31,7 @@ import { PhotoshopExpress } from "@/assets/icons/photoshop-express";
 import { PolarShLight } from "@/assets/icons/polar";
 import { PolarShDark } from "@/assets/icons/polar-dark";
 import { Primevideo } from "@/assets/icons/prime-video";
+import { Services } from "@/assets/icons/services";
 import { SoundcloudLogo } from "@/assets/icons/soundcloud";
 import { SoundcloudLogoDark } from "@/assets/icons/soundcloud-dark";
 import { Spotify } from "@/assets/icons/spotify";
@@ -58,7 +59,8 @@ type ServiceCategory =
   | "social"
   | "store"
   | "device"
-  | "finance";
+  | "finance"
+  | "services";
 
 type ServiceIcon = {
   name: AllowedPlatforms;
@@ -237,6 +239,14 @@ export const serviceIcons = {
     category: "social",
     icon: XformerlyTwitter,
     darkIcon: DarkXformerlyTwitter,
+  },
+  servicios: {
+    name: AllowedPlatforms.SERVICIOS,
+    label: "Servicios",
+    color: "#0D9488",
+    bgColor: withAlpha("#0D9488"),
+    category: "services",
+    icon: Services,
   },
   otros: {
     name: AllowedPlatforms.OTROS,
@@ -422,9 +432,13 @@ export type { ServiceCategory };
 // Todas las keys, tipadas. `Object.keys` devuelve `string[]` por default.
 export const serviceKeys = Object.keys(serviceIcons) as ServiceKey[];
 
-// Excluye el placeholder "otros" — útil para showcases, marquees y catálogos.
+// Entradas genéricas (no son marcas): fuera de showcases, marquees y catálogos.
+const GENERIC_KEYS = ["otros", "servicios"] as const;
+type GenericKey = (typeof GENERIC_KEYS)[number];
+
 export const realServiceKeys = serviceKeys.filter(
-  (key): key is Exclude<ServiceKey, "otros"> => key !== "otros",
+  (key): key is Exclude<ServiceKey, GenericKey> =>
+    !GENERIC_KEYS.includes(key as GenericKey),
 );
 
 // Filtra por categoría — para secciones tipo "Solo streaming" o "Música".

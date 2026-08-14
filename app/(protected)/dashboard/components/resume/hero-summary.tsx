@@ -3,11 +3,13 @@
 import type { ResumeTotalResponse } from "@/app/api/[userid]/[currency]/resume-total/route";
 import { currencyAtom } from "@/atoms";
 import { Skeleton } from "@/components/ui/skeleton";
+import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { AlertTriangleIcon } from "lucide-react";
@@ -70,7 +72,9 @@ export function HeroSummary() {
           </p>
         )}
         <p className="text-muted-foreground mt-1 text-sm">
-          {t("dashboard.hero.activeSubscriptions", { count: subscriptionCount })}
+          {t("dashboard.hero.activeSubscriptions", {
+            count: subscriptionCount,
+          })}
           {subscriptionCount > 0 && (
             <span className="ml-1 text-xs">
               ({t("dashboard.hero.monthly", { count: monthlySubs })}
@@ -82,7 +86,12 @@ export function HeroSummary() {
           )}
         </p>
         {missingRates.length > 0 && (
-          <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <p
+            className={cn(
+              "mt-2 inline-flex items-center gap-1.5 text-xs",
+              STATUS_CLASSES.warning.text,
+            )}
+          >
             <AlertTriangleIcon className="size-3.5" />
             {t("dashboard.fxWarning.excluded", {
               count: skippedCount,

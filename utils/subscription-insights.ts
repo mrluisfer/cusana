@@ -1,26 +1,14 @@
-import { serviceIcons, type ServiceCategory, type ServiceKey } from "@/constants/icons";
+import type { CategoryKey } from "@/constants/chart-colors";
+import {
+  serviceIcons,
+  type ServiceCategory,
+  type ServiceKey,
+} from "@/constants/icons";
 import type { Subscription } from "@/lib/schema";
 import type { FrankfurterRates } from "@/types/frankfurter";
 
-export type CategoryKey = ServiceCategory | "other";
-
-/** Stable display order + brand-ish color per category (used by the donut + insights). */
-export const CATEGORY_META: Record<CategoryKey, { color: string }> = {
-  streaming: { color: "#E50914" },
-  music: { color: "#1DB954" },
-  ai: { color: "#F97316" },
-  developer: { color: "#6366F1" },
-  productivity: { color: "#0EA5E9" },
-  gaming: { color: "#8B5CF6" },
-  transport: { color: "#334155" },
-  marketplace: { color: "#FBBF24" },
-  creator: { color: "#EC4899" },
-  social: { color: "#3B82F6" },
-  store: { color: "#14B8A6" },
-  device: { color: "#64748B" },
-  finance: { color: "#10B981" },
-  other: { color: "#94A3B8" },
-};
+// Los colores viven en `@/constants/chart-colors` — ver CATEGORY_COLORS.
+export type { CategoryKey };
 
 export function getServiceCategory(platform: string): CategoryKey {
   const service = serviceIcons[platform as ServiceKey] as
@@ -139,6 +127,50 @@ export function computeCategoryBreakdown(
 }
 
 /**
+ * Deja las `max` categorías más grandes y pliega la cola en "Otros".
+ *
+ * La paleta categórica solo puede separar 8 marcas a la vez; más allá de eso
+ * los colores dejan de distinguirse y la gráfica miente. Plegar la cola es la
+ * salida correcta — no inventar hues nuevos.
+ *
+ * Si la cola es una sola categoría no se pliega: sustituir su nombre por
+ * "Otros" pierde información sin ganar nada.
+ */
+export function foldToTopCategories(
+  categories: CategoryDatum[],
+  max: number,
+): CategoryDatum[] {
+  if (categories.length <= max + 1) return categories;
+
+  const head = categories.slice(0, max);
+  const tail = categories.slice(max);
+
+  const folded: CategoryDatum = {
+    category: "other",
+    total: tail.reduce((sum, c) => sum + c.total, 0),
+    count: tail.reduce((sum, c) => sum + c.count, 0),
+    platforms: tail.reduce((sum, c) => sum + c.platforms, 0),
+    percent: tail.reduce((sum, c) => sum + c.percent, 0),
+  };
+
+  // La cola puede traer ya un "other" propio; el reduce de arriba lo absorbe.
+  const existing = head.findIndex((c) => c.category === "other");
+  if (existing >= 0) {
+    const merged = head[existing];
+    head[existing] = {
+      ...merged,
+      total: merged.total + folded.total,
+      count: merged.count + folded.count,
+      platforms: merged.platforms + folded.platforms,
+      percent: merged.percent + folded.percent,
+    };
+    return head.sort((a, b) => b.total - a.total);
+  }
+
+  return [...head, folded];
+}
+
+/**
  * Builds a compact, language-agnostic snapshot of the user's subscriptions for
  * the AI assistant. Totals are reported per original currency (no FX needed) so
  * the model has accurate figures regardless of exchange-rate availability.
@@ -150,7 +182,9 @@ export function buildAiSubscriptionContext(
 
   const active = subscriptions.filter(isActive);
   const inactive = subscriptions.length - active.length;
-  const monthlyCount = active.filter((s) => s.billingCycle === "monthly").length;
+  const monthlyCount = active.filter(
+    (s) => s.billingCycle === "monthly",
+  ).length;
   const yearlyCount = active.filter((s) => s.billingCycle === "yearly").length;
 
   // Monthly-equivalent totals grouped by original currency.

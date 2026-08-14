@@ -28,6 +28,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  FALLBACK_SERIES_COLOR,
+  STATUS_CLASSES,
+} from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { serviceIcons, type ServiceKey } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
@@ -229,7 +233,12 @@ export function SpendingDistribution() {
       </CardHeader>
       <CardContent>
         {!isPending && missingRates.length > 0 && (
-          <p className="mb-3 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <p
+            className={cn(
+              "mb-3 inline-flex items-center gap-1.5 text-xs",
+              STATUS_CLASSES.warning.text,
+            )}
+          >
             <AlertTriangleIcon className="size-3.5" />
             {t("dashboard.fxWarning.excluded", {
               count: skippedCount,
@@ -260,7 +269,7 @@ export function SpendingDistribution() {
                         ? (data.convertedTotal / totalSpending) * 100
                         : 0;
                     const service = getPlatformIcon(platform);
-                    const color = service?.color ?? "#64748B";
+                    const color = service?.color ?? FALLBACK_SERIES_COLOR;
 
                     return (
                       <Tooltip key={platform}>
@@ -325,7 +334,10 @@ export function SpendingDistribution() {
                         {isTopSpender && (
                           <Badge
                             variant="secondary"
-                            className="h-5 gap-1 bg-amber-500/10 px-1.5 text-[10px] font-medium text-amber-600 dark:text-amber-400"
+                            className={cn(
+                              "h-5 gap-1 px-1.5 text-[10px] font-medium",
+                              STATUS_CLASSES.warning.tone,
+                            )}
                           >
                             <TrendingUpIcon className="size-3" />
                             {t("dashboard.distribution.top")}

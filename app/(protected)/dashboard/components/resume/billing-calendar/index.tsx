@@ -102,6 +102,7 @@ export function BillingCalendar() {
           onClick={() => setMonthOffset((prev) => prev - 1)}
           aria-label={t("dashboard.calendar.prevMonth")}
           variant="outline"
+          size="icon"
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
@@ -127,6 +128,7 @@ export function BillingCalendar() {
             disabled={monthOffset >= 4}
             aria-label={t("dashboard.calendar.nextMonth")}
             variant="outline"
+            size="icon"
           >
             <ChevronRightIcon className="size-4" />
           </Button>

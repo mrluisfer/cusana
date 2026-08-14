@@ -16,17 +16,23 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  type CategoryKey,
+  MAX_CHART_SLICES,
+  seriesColor,
+  STATUS_CLASSES,
+} from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
+import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
 import {
-  CATEGORY_META,
-  type CategoryKey,
   computeCategoryBreakdown,
+  foldToTopCategories,
 } from "@/utils/subscription-insights";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -87,7 +93,7 @@ export function SpendingByCategory() {
       staleTime: 1000 * 60 * 30,
     });
 
-  const { categories, total, missingRates, skippedCount } = useMemo(
+  const breakdown = useMemo(
     () =>
       computeCategoryBreakdown(
         subscriptions,
@@ -96,26 +102,41 @@ export function SpendingByCategory() {
       ),
     [subscriptions, ratesData, selectedCurrency],
   );
+  const { total, missingRates, skippedCount } = breakdown;
+
+  // Máx. 8 marcas en pantalla: más allá de eso la paleta ya no las separa.
+  const categories = useMemo(
+    () => foldToTopCategories(breakdown.categories, MAX_CHART_SLICES),
+    [breakdown.categories],
+  );
+
+  // El color sale del slot, no de la categoría: las categorías del catálogo son
+  // 15 y ninguna paleta separa 15 marcas. Van ordenadas de mayor a menor, así
+  // que el slot 1 siempre es el gasto más grande.
+  const colorOf = (category: CategoryKey, index: number) =>
+    seriesColor(index, category);
 
   const chartData = useMemo(
     () =>
-      categories.map((c) => ({
+      categories.map((c, i) => ({
         category: c.category,
         total: Math.round(c.total),
         count: c.count,
-        fill: CATEGORY_META[c.category].color,
+        fill: colorOf(c.category, i),
       })),
     [categories],
   );
 
   const chartConfig = useMemo<ChartConfig>(() => {
-    const config: ChartConfig = { total: { label: t("dashboard.categoryChart.total") } };
-    for (const c of categories) {
+    const config: ChartConfig = {
+      total: { label: t("dashboard.categoryChart.total") },
+    };
+    categories.forEach((c, i) => {
       config[c.category] = {
         label: t(`dashboard.categories.${c.category}`),
-        color: CATEGORY_META[c.category].color,
+        color: colorOf(c.category, i),
       };
-    }
+    });
     return config;
   }, [categories, t]);
 
@@ -133,12 +154,19 @@ export function SpendingByCategory() {
           {t("dashboard.categoryChart.title")}
         </CardTitle>
         <CardDescription>
-          {t("dashboard.categoryChart.subtitle", { currency: selectedCurrency })}
+          {t("dashboard.categoryChart.subtitle", {
+            currency: selectedCurrency,
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {!isPending && missingRates.length > 0 && (
-          <p className="mb-3 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <p
+            className={cn(
+              "mb-3 inline-flex items-center gap-1.5 text-xs",
+              STATUS_CLASSES.warning.text,
+            )}
+          >
             <AlertTriangleIcon className="size-3.5" />
             {t("dashboard.fxWarning.excluded", {
               count: skippedCount,
@@ -167,7 +195,7 @@ export function SpendingByCategory() {
                             className="size-2.5 shrink-0 rounded-[2px]"
                             style={{
                               backgroundColor:
-                                CATEGORY_META[name as CategoryKey]?.color,
+                                chartConfig[name as string]?.color,
                             }}
                           />
                           {chartConfig[name as string]?.label ?? name}
@@ -240,14 +268,14 @@ export function SpendingByCategory() {
 
         {!isPending && chartData.length > 0 && (
           <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
-            {categories.map((c) => (
+            {categories.map((c, i) => (
               <div
                 key={c.category}
                 className="text-muted-foreground flex items-center gap-1.5 text-xs"
               >
                 <span
                   className="size-2.5 shrink-0 rounded-[2px]"
-                  style={{ backgroundColor: CATEGORY_META[c.category].color }}
+                  style={{ backgroundColor: colorOf(c.category, i) }}
                 />
                 <span className="text-foreground font-medium">
                   {t(`dashboard.categories.${c.category}`)}

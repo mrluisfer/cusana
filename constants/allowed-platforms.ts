@@ -18,6 +18,7 @@ export enum AllowedPlatforms {
   MERCADO_LIBRE = "mercado_libre",
   PATREON = "patreon",
   TWITTER = "twitter",
+  SERVICIOS = "servicios",
   OTROS = "otros",
   AMAZON = "amazon",
   HBO = "hbo",
