@@ -6,6 +6,7 @@ import { AlertTriangleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ResumeTotalResponse } from "@/app/api/[userid]/[currency]/resume-total/route";
 import { currencyAtom } from "@/atoms";
+import { AiChatButton } from "@/components/ai-chat/ai-chat-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { STATUS_CLASSES } from "@/constants/chart-colors";
 import { currencySymbols } from "@/constants/currency";
@@ -102,7 +103,10 @@ export function HeroSummary() {
       </div>
 
       <div className="flex items-center gap-6">
-        <AddSubscription triggerProps={{ size: "lg" }} />
+        <div className="flex items-center justify-end gap-2">
+          <AddSubscription triggerProps={{ size: "lg" }} />
+          <AiChatButton />
+        </div>
         <div className="sm:text-right">
           <p className="font-medium text-[11px] text-muted-foreground">
             {t("dashboard.hero.yearlyProjection")}

@@ -280,3 +280,18 @@ Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 [ 1975667ms] [LOG] [Fast Refresh] done in 25ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
 [ 1977464ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
 [ 1977624ms] [LOG] [Fast Refresh] done in 261ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2306549ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2308334ms] [LOG] [Fast Refresh] done in 1886ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2309000ms] [LOG] [Fast Refresh] done in 1886ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2309134ms] [WARNING] %c%s%c [33m[1m⚠[22m[39m Unsupported metadata themeColor is configured in metadata export in /login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2330846ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2331205ms] [LOG] [Fast Refresh] done in 429ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2331399ms] [WARNING] %c%s%c [33m[1m⚠[22m[39m Unsupported metadata themeColor is configured in metadata export in /login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2331400ms] [LOG] [Fast Refresh] done in 429ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2333108ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2333137ms] [LOG] [Fast Refresh] done in 26ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2333210ms] [WARNING] %c%s%c [33m[1m⚠[22m[39m Unsupported metadata themeColor is configured in metadata export in /login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
+[ 2333249ms] [LOG] [Fast Refresh] done in 26ms @ http://localhost:3000/_next/static/chunks/15qz_next_dist_01uwv2q._.js:776
