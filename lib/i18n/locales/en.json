@@ -155,6 +155,17 @@
       "services": "Utilities",
       "other": "Other"
     },
+    "payments": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Not paid",
+      "paidOn": "Paid on {{date}}",
+      "auto": "automatic",
+      "manual": "manual",
+      "markPaid": "Mark as paid",
+      "markUnpaid": "Mark as pending",
+      "allPaid": "all paid"
+    },
     "budget": {
       "title": "Monthly budget",
       "setPrompt": "Set a monthly limit to keep your spending in check.",
@@ -169,8 +180,7 @@
       "onTrack": "You're on track with your budget",
       "nearLimit": "You're close to your limit",
       "overLimit": "You went over your budget",
-      "inherited": "Carried over from last month",
-      "keepForMonth": "Keep for this month"
+      "appliesFromNow": "Applies to this month and the following ones."
     },
     "budgetHistory": {
       "title": "Budget history",

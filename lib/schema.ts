@@ -91,6 +91,7 @@ export const userRelations = relations(user, ({ many }) => ({
   subscriptions: many(subscriptions),
   subscriptionEvents: many(subscriptionEvents),
   budgets: many(budgets),
+  subscriptionPayments: many(subscriptionPayments),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -319,3 +320,78 @@ export const budgetsRelations = relations(budgets, ({ one }) => ({
 
 export type Budget = typeof budgets.$inferSelect;
 export type NewBudget = typeof budgets.$inferInsert;
+
+// ─── Pagos / cobros de suscripciones ──────────────────────────────────
+
+export const paymentStatusEnum = pgEnum("payment_status", ["paid", "unpaid"]);
+export const paymentSourceEnum = pgEnum("payment_source", ["auto", "manual"]);
+
+/**
+ * Historial de cobros: una fila por ocurrencia (suscripción + fecha de cobro).
+ *
+ * - Las ocurrencias cuya fecha ya llegó se registran solas como `paid` con
+ *   `source: "auto"` (ver `syncAutoPayments`). Nunca pisan una fila existente,
+ *   así que una corrección manual siempre gana.
+ * - El usuario puede marcar una ocurrencia como pagada o pendiente
+ *   (`source: "manual"`), incluso por adelantado.
+ * - `amount` y `currency` son una foto del precio al registrar el cobro, para
+ *   que el historial no cambie si después se edita la suscripción.
+ * - `subscriptionId` no es FK (igual que en `subscription_events`): el
+ *   historial sobrevive a un hard delete de la suscripción.
+ */
+export const subscriptionPayments = pgTable(
+  "subscription_payments",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+
+    subscriptionId: text("subscription_id").notNull(),
+
+    // Fecha en que corresponde el cobro (YYYY-MM-DD)
+    dueDate: date("due_date").notNull(),
+
+    status: paymentStatusEnum("status").notNull(),
+    source: paymentSourceEnum("source").notNull(),
+
+    // Día en que se pagó (YYYY-MM-DD); null mientras está pendiente
+    paidOn: date("paid_on"),
+
+    amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+    currency: currencyEnum("currency").notNull(),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("sub_payments_subscription_due_idx").on(
+      table.subscriptionId,
+      table.dueDate,
+    ),
+    index("sub_payments_user_due_idx").on(table.userId, table.dueDate),
+  ],
+);
+
+export const subscriptionPaymentsRelations = relations(
+  subscriptionPayments,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [subscriptionPayments.userId],
+      references: [user.id],
+    }),
+    subscription: one(subscriptions, {
+      fields: [subscriptionPayments.subscriptionId],
+      references: [subscriptions.id],
+    }),
+  }),
+);
+
+export type SubscriptionPayment = typeof subscriptionPayments.$inferSelect;
+export type NewSubscriptionPayment = typeof subscriptionPayments.$inferInsert;

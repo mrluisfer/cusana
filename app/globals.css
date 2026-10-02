@@ -73,6 +73,35 @@
   --color-destructive-foreground: var(--destructive-foreground);
 }
 
+/* Animaciones del landing. Viven en el tema para que Tailwind genere las
+   utilidades animate-* y funcionen con variantes como motion-safe:. */
+@theme {
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-float-delayed: float 3s ease-in-out 1.5s infinite;
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Se desplaza la mitad del ancho: la lista va duplicada, así que al llegar
+     a -50% la copia ocupa exactamente la posición inicial. */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
 :root {
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);

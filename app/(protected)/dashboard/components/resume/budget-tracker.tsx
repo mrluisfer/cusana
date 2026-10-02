@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { Loader2, PencilIcon, SparklesIcon, WalletIcon } from "lucide-react";
+import { Loader2, PencilIcon, WalletIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { BudgetResponse } from "@/app/api/[userid]/[currency]/budget/route";
@@ -19,6 +19,7 @@ import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
+import { currentPeriod } from "@/lib/period";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import type { FrankfurterRatesResponse } from "@/types/frankfurter";
@@ -41,15 +42,21 @@ async function fetchExchangeRates(
   return response.json();
 }
 
+// El mes se calcula en el cliente: el servidor corre en UTC y, cerca del fin
+// de mes, su "mes actual" puede no coincidir con el del usuario.
 async function fetchBudget(
   userId: string,
   currency: string,
 ): Promise<BudgetResponse> {
-  const response = await fetch(`/api/${userId}/${currency}/budget`);
+  const response = await fetch(
+    `/api/${userId}/${currency}/budget?period=${currentPeriod()}`,
+  );
   if (!response.ok) throw new Error("Failed to fetch budget");
   return response.json();
 }
 
+// Guarda el presupuesto del mes actual. Los meses siguientes lo heredan hasta
+// que el usuario lo vuelva a cambiar.
 async function saveBudgetApi(
   userId: string,
   currency: string,
@@ -58,7 +65,7 @@ async function saveBudgetApi(
   const response = await fetch(`/api/${userId}/${currency}/budget`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount }),
+    body: JSON.stringify({ amount, period: currentPeriod() }),
   });
   if (!response.ok) throw new Error("Failed to save budget");
   return response.json();
@@ -122,7 +129,6 @@ export function BudgetTracker() {
   const currencySymbol =
     currencySymbols[selectedCurrency as keyof typeof currencySymbols] || "$";
   const budget = budgetData?.budget ?? null;
-  const inherited = budgetData?.inherited ?? false;
 
   const formatMoney = (amount: number) =>
     `${currencySymbol}${Math.round(amount).toLocaleString(locale, {
@@ -205,6 +211,9 @@ export function BudgetTracker() {
                 {selectedCurrency}
               </span>
             </div>
+            <p className="text-xs text-muted-foreground">
+              {t("dashboard.budget.appliesFromNow")}
+            </p>
             <div className="flex justify-end gap-2">
               <Button
                 variant="ghost"
@@ -279,26 +288,6 @@ export function BudgetTracker() {
                     })}
               </span>
             </div>
-            {inherited && (
-              <div className="flex items-center justify-between gap-2 border-t border-border/60 pt-2">
-                <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                  <SparklesIcon className="size-3" />
-                  {t("dashboard.budget.inherited")}
-                </span>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="h-6 px-2 text-[11px]"
-                  onClick={() => saveMutation.mutate(budget)}
-                  disabled={saveMutation.isPending}
-                >
-                  {saveMutation.isPending && (
-                    <Loader2 className="size-3 animate-spin" />
-                  )}
-                  {t("dashboard.budget.keepForMonth")}
-                </Button>
-              </div>
-            )}
           </div>
         )}
       </CardContent>

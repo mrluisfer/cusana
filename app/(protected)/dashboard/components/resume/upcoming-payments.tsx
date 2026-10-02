@@ -5,6 +5,10 @@ import { CalendarIcon, ClockIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CardHeaderIcon } from "@/components/card-header-icon";
+import {
+  PaymentStatusButton,
+  PaymentStatusLabel,
+} from "@/components/dashboard/payment-status";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +17,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { currencySymbols } from "@/constants/currency";
 import type { serviceIcons } from "@/constants/icons";
 import { QueryKeys } from "@/constants/query-keys";
+import {
+  getPaymentState,
+  paymentKey,
+  usePayments,
+} from "@/hooks/use-subscription-payments";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
@@ -20,6 +29,7 @@ import type { Subscription } from "@/lib/schema";
 import {
   getNextBillingDate,
   getNextBillingDateFull,
+  toISODate,
 } from "@/utils/get-next-billing-date";
 
 // Función de fetch extraída para evitar closures
@@ -67,6 +77,15 @@ export function UpcomingPayments() {
     enabled: !!userId,
     staleTime: 1000 * 60 * 5,
   });
+
+  const todayISO = toISODate(today);
+  // Un año cubre el próximo cobro de cualquier suscripción, incluidas las anuales.
+  const { data: paymentRecords } = usePayments(
+    todayISO,
+    toISODate(
+      new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()),
+    ),
+  );
 
   // Sort by actual next billing date (supports yearly cycles)
   const sortedSubscriptions = subscriptions
@@ -127,48 +146,81 @@ export function UpcomingPayments() {
             <UpcomingPaymentSkeleton />
           </>
         ) : sortedSubscriptions && sortedSubscriptions.length > 0 ? (
-          sortedSubscriptions.map((subscription, index) => (
-            <div key={subscription.id}>
-              <div className="flex items-center justify-between gap-2 py-2.5">
-                <div className="flex min-w-0 flex-1 items-center gap-2.5">
-                  <ServiceIcon
-                    service={subscription.platform as keyof typeof serviceIcons}
-                    size="xs"
-                    className="shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">
-                      {subscription.name}
-                    </p>
-                    <p className="truncate text-[11px] text-muted-foreground">
-                      {getNextBillingDate(
-                        {
-                          billingDay: subscription.billingDay,
-                          billingCycle: subscription.billingCycle,
-                          createdAt: subscription.createdAt,
-                          billingMonth: subscription.billingMonth,
-                        },
-                        language,
-                      )}
-                    </p>
+          sortedSubscriptions.map((subscription, index) => {
+            const dueDate = toISODate(
+              getNextBillingDateFull({
+                billingDay: subscription.billingDay,
+                billingCycle: subscription.billingCycle,
+                createdAt: subscription.createdAt,
+                billingMonth: subscription.billingMonth,
+              }),
+            );
+            const record = paymentRecords?.get(
+              paymentKey(subscription.id, dueDate),
+            );
+            const state = getPaymentState({
+              record,
+              dueDate,
+              today: todayISO,
+              createdAt: subscription.createdAt,
+            });
+
+            return (
+              <div key={subscription.id}>
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                  <div className="flex min-w-0 flex-1 items-center gap-2.5">
+                    <ServiceIcon
+                      service={
+                        subscription.platform as keyof typeof serviceIcons
+                      }
+                      size="xs"
+                      className="shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {subscription.name}
+                      </p>
+                      <p className="truncate text-[11px] text-muted-foreground">
+                        {getNextBillingDate(
+                          {
+                            billingDay: subscription.billingDay,
+                            billingCycle: subscription.billingCycle,
+                            createdAt: subscription.createdAt,
+                            billingMonth: subscription.billingMonth,
+                          },
+                          language,
+                        )}
+                        {/* Los próximos cobros están pendientes por defecto;
+                            solo se anota cuando ya se marcó como pagado. */}
+                        {state === "paid" && (
+                          <>
+                            {" · "}
+                            <PaymentStatusLabel state={state} record={record} />
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <Badge variant={getUrgencyColor(subscription)}>
+                      {currencySymbols[subscription.currency]}
+                      {(
+                        parseFloat(String(subscription.price)) || 0
+                      ).toLocaleString(toIntlLocale(language), {
+                        minimumFractionDigits: 2,
+                      })}
+                    </Badge>
+                    <PaymentStatusButton
+                      subscriptionId={subscription.id}
+                      dueDate={dueDate}
+                      state={state}
+                    />
                   </div>
                 </div>
-                <Badge
-                  variant={getUrgencyColor(subscription)}
-                  className="shrink-0"
-                >
-                  {currencySymbols[subscription.currency]}
-                  {(parseFloat(String(subscription.price)) || 0).toLocaleString(
-                    toIntlLocale(language),
-                    {
-                      minimumFractionDigits: 2,
-                    },
-                  )}
-                </Badge>
+                {index < sortedSubscriptions.length - 1 && <Separator />}
               </div>
-              {index < sortedSubscriptions.length - 1 && <Separator />}
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="py-6 text-center text-muted-foreground">
             <CalendarIcon className="mx-auto mb-2 size-6 opacity-40" />

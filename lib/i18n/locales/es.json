@@ -155,6 +155,17 @@
       "services": "Servicios",
       "other": "Otros"
     },
+    "payments": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "overdue": "Sin pagar",
+      "paidOn": "Pagado el {{date}}",
+      "auto": "automático",
+      "manual": "manual",
+      "markPaid": "Marcar como pagado",
+      "markUnpaid": "Marcar como pendiente",
+      "allPaid": "todo pagado"
+    },
     "budget": {
       "title": "Presupuesto mensual",
       "setPrompt": "Define un límite mensual para controlar tu gasto.",
@@ -169,8 +180,7 @@
       "onTrack": "Vas bien con tu presupuesto",
       "nearLimit": "Estás cerca de tu límite",
       "overLimit": "Superaste tu presupuesto",
-      "inherited": "Heredado del mes anterior",
-      "keepForMonth": "Fijar para este mes"
+      "appliesFromNow": "Se aplica a este mes y a los siguientes."
     },
     "budgetHistory": {
       "title": "Historial de presupuesto",

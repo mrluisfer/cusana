@@ -6,13 +6,22 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { QueryKeys } from "@/constants/query-keys";
+import {
+  getPaymentState,
+  paymentKey,
+  usePayments,
+} from "@/hooks/use-subscription-payments";
 import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+import {
+  getBillingDateInMonth,
+  toISODate,
+} from "@/utils/get-next-billing-date";
 import { placeholderKeys } from "@/utils/placeholder-keys";
-import { CalendarDay } from "./CalendarDay";
+import { CalendarDay, type DayPayment } from "./CalendarDay";
 import { CalendarSkeleton } from "./CalendarSkeleton";
 
 async function fetchSubscriptions(userId: string): Promise<Subscription[]> {
@@ -29,6 +38,14 @@ export function BillingCalendar() {
   const { language } = useLanguage();
   const { data: session } = useSession();
   const [monthOffset, setMonthOffset] = useState(0);
+  // Solo un popover abierto a la vez: con "abrir al pasar el cursor", un día
+  // fijado con clic no debe quedarse abierto al pasar sobre otro.
+  const [openDay, setOpenDay] = useState<number | null>(null);
+
+  const changeMonth = (offset: number) => {
+    setMonthOffset(offset);
+    setOpenDay(null);
+  };
 
   const weekDays = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(toIntlLocale(language), {
@@ -68,24 +85,44 @@ export function BillingCalendar() {
   });
   const yearLabel = viewDate.getFullYear();
 
+  const todayISO = toISODate(now);
+  const { data: paymentRecords } = usePayments(
+    toISODate(viewDate),
+    toISODate(
+      new Date(viewDate.getFullYear(), viewDate.getMonth(), daysInMonth),
+    ),
+  );
+
   const billingDays = useMemo(() => {
-    const map = new Map<number, Subscription[]>();
-    const viewMonth = viewDate.getMonth();
+    const map = new Map<number, DayPayment[]>();
 
     subscriptions?.forEach((sub) => {
-      if (sub.billingCycle === "yearly") {
-        const resolvedMonth = sub.billingMonth
-          ? sub.billingMonth - 1
-          : new Date(sub.createdAt).getMonth();
-        if (resolvedMonth !== viewMonth) return;
-      }
+      const date = getBillingDateInMonth(
+        sub,
+        viewDate.getFullYear(),
+        viewDate.getMonth(),
+      );
+      if (!date) return;
 
-      const day = Math.min(sub.billingDay, daysInMonth);
-      const existing = map.get(day) ?? [];
-      map.set(day, [...existing, sub]);
+      const dueDate = toISODate(date);
+      const record = paymentRecords?.get(paymentKey(sub.id, dueDate));
+      const payment: DayPayment = {
+        subscription: sub,
+        dueDate,
+        record,
+        state: getPaymentState({
+          record,
+          dueDate,
+          today: todayISO,
+          createdAt: sub.createdAt,
+        }),
+      };
+
+      const day = date.getDate();
+      map.set(day, [...(map.get(day) ?? []), payment]);
     });
     return map;
-  }, [subscriptions, daysInMonth, viewDate]);
+  }, [subscriptions, viewDate, paymentRecords, todayISO]);
 
   const getDayOfWeek = (day: number) => {
     const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
@@ -100,7 +137,7 @@ export function BillingCalendar() {
       <div className="flex items-center justify-between">
         <Button
           type="button"
-          onClick={() => setMonthOffset((prev) => prev - 1)}
+          onClick={() => changeMonth(monthOffset - 1)}
           aria-label={t("dashboard.calendar.prevMonth")}
           variant="outline"
           size="icon"
@@ -116,7 +153,7 @@ export function BillingCalendar() {
         <div className="flex items-center gap-1.5 select-none">
           <Button
             type="button"
-            onClick={() => setMonthOffset(0)}
+            onClick={() => changeMonth(0)}
             size={"lg"}
             disabled={isCurrentMonth}
             variant={isCurrentMonth ? "secondary" : "default"}
@@ -125,7 +162,7 @@ export function BillingCalendar() {
           </Button>
           <Button
             type="button"
-            onClick={() => setMonthOffset((prev) => prev + 1)}
+            onClick={() => changeMonth(monthOffset + 1)}
             disabled={monthOffset >= 4}
             aria-label={t("dashboard.calendar.nextMonth")}
             variant="outline"
@@ -183,6 +220,12 @@ export function BillingCalendar() {
                   payments={payments}
                   monthName={monthName}
                   dayOfWeek={getDayOfWeek(day)}
+                  open={openDay === day}
+                  onOpenChange={(open) =>
+                    setOpenDay((current) =>
+                      open ? day : current === day ? null : current,
+                    )
+                  }
                 />
               );
             })}

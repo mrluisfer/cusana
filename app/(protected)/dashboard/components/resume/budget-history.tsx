@@ -212,9 +212,14 @@ export function BudgetHistory() {
 
   const rows = useMemo<Row[]>(() => {
     const trend = trendData?.trend ?? [];
-    const budgetByPeriod = new Map(
-      (budgetHistory?.history ?? []).map((b) => [b.period, b.amount]),
+    // Cada fila guardada marca un cambio de presupuesto: aplica a ese mes y se
+    // hereda a los siguientes hasta el próximo cambio. Los periodos
+    // (YYYY-MM-01) se ordenan correctamente como texto.
+    const changes = (budgetHistory?.history ?? []).toSorted((a, b) =>
+      a.period.localeCompare(b.period),
     );
+    const budgetFor = (period: string) =>
+      changes.findLast((change) => change.period <= period)?.amount ?? null;
 
     return trend.map((item) => {
       const period = toPeriod(item.year, item.monthIndex + 1);
@@ -223,7 +228,7 @@ export function BudgetHistory() {
         month: item.month,
         year: item.year,
         spent: item.amount,
-        budget: budgetByPeriod.get(period) ?? null,
+        budget: budgetFor(period),
         isCurrent: item.isCurrent,
       };
     });
