@@ -15,8 +15,8 @@ import {
   SparklesIcon,
   SunIcon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import { aiChatOpenAtom, commandOpenAtom, currencyAtom } from "@/atoms";

@@ -110,7 +110,7 @@ export default function RegisterPage() {
           {perkIds.map((perk) => (
             <li
               key={perk}
-              className="flex items-center gap-1 text-muted-foreground text-xs"
+              className="flex items-center gap-1 text-xs text-muted-foreground"
             >
               <span className="inline-flex size-3.5 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Check className="size-2.5" aria-hidden="true" />
@@ -120,7 +120,7 @@ export default function RegisterPage() {
           ))}
         </ul>
 
-        <p className="text-center text-muted-foreground text-xs leading-relaxed">
+        <p className="text-center text-xs leading-relaxed text-muted-foreground">
           {t("auth.register.termsLead")}{" "}
           <Link
             href="/terms"
@@ -141,7 +141,7 @@ export default function RegisterPage() {
 
       <OAuthButtons />
 
-      <p className="mt-6 text-center text-muted-foreground text-sm">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         {t("auth.register.haveAccount")}{" "}
         <Link
           href="/login"

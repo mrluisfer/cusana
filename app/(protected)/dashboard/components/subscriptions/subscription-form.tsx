@@ -108,12 +108,13 @@ export function SubscriptionForm({
   });
 
   // Reset form when resetKey changes (useful for edit mode)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: el reset debe dispararse solo cuando cambia resetKey, no cuando cambian form o defaultValues.
+  // oxlint-disable react-hooks/exhaustive-deps -- el reset debe dispararse solo cuando cambia resetKey, no cuando cambian form o defaultValues.
   useEffect(() => {
     if (resetKey !== undefined) {
       form.reset(defaultValues);
     }
   }, [resetKey]);
+  // oxlint-enable react-hooks/exhaustive-deps
 
   // Live values para la tarjeta de preview y el helper de promedio mensual.
   const watched = useWatch({ control: form.control });
@@ -344,7 +345,7 @@ export function SubscriptionForm({
         {/* Helper: promedio mensual cuando es anual */}
         {selectedCycle === "yearly" && validPrice && (
           <p
-            className="rounded-lg bg-primary/5 px-3 py-2 text-muted-foreground text-xs"
+            className="rounded-lg bg-primary/5 px-3 py-2 text-xs text-muted-foreground"
             aria-live="polite"
           >
             <span className="font-medium text-foreground">
@@ -446,16 +447,16 @@ function LivePreview({
           className="relative shrink-0"
         />
         <div className="relative min-w-0 flex-1">
-          <p className="truncate font-semibold text-foreground text-sm">
+          <p className="truncate text-sm font-semibold text-foreground">
             {displayName}
           </p>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-muted-foreground">
             {platformLabel}
             {cycle ? ` · ${t(`dashboard.billing.${cycle}`)}` : ""}
           </p>
         </div>
         <p className="relative shrink-0 text-right">
-          <span className="font-bold font-mono text-base text-foreground tabular-nums">
+          <span className="font-mono text-base font-bold text-foreground tabular-nums">
             {symbol}
             {price !== null
               ? price.toLocaleString("es-MX", {

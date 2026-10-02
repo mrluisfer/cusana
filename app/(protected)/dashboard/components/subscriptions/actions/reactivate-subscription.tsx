@@ -55,11 +55,15 @@ export function ReactivateSubscription({
       reactivateSubscriptionApi(session!.user.id, subscription.id),
     onSuccess: () => {
       // La suscripción vuelve a estar activa: refrescar ambas tablas.
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
+        queryKey: [QueryKeys.SUBSCRIPTIONS],
+      });
+      void queryClient.invalidateQueries({
         queryKey: [QueryKeys.INACTIVE_SUBSCRIPTIONS],
       });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.RESUME_TOTAL] });
+      void queryClient.invalidateQueries({
+        queryKey: [QueryKeys.RESUME_TOTAL],
+      });
       onOpenChangeAction(false);
     },
   });
@@ -79,8 +83,8 @@ export function ReactivateSubscription({
         <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-3">
           <ServiceIcon service={subscription.platform} size="sm" />
           <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-sm">{subscription.name}</p>
-            <p className="text-muted-foreground text-xs capitalize">
+            <p className="truncate text-sm font-medium">{subscription.name}</p>
+            <p className="text-xs text-muted-foreground capitalize">
               {subscription.platform}
             </p>
           </div>

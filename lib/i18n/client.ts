@@ -8,7 +8,7 @@ import { defaultLocale, type Locale, locales } from "./settings";
 function createI18n(initialLanguage: Locale): I18nInstance {
   const instance = i18next.createInstance();
 
-  instance.use(initReactI18next).init({
+  void instance.use(initReactI18next).init({
     resources,
     defaultNS,
     lng: initialLanguage,

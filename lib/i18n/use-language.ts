@@ -23,7 +23,7 @@ export function useLanguage() {
 
   const setLanguage = (next: Locale) => {
     if (next === language) return;
-    i18n.changeLanguage(next);
+    void i18n.changeLanguage(next);
     document.cookie = `${languageStorageKey}=${next};path=/;max-age=${ONE_YEAR};samesite=lax`;
     try {
       localStorage.setItem(languageStorageKey, next);

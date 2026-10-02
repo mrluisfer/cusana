@@ -90,13 +90,13 @@ export function AiChatMessages({
         </div>
         <div>
           <p className="font-medium">{t("aiChat.emptyTitle")}</p>
-          <p className="mt-1 text-muted-foreground text-sm">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t("aiChat.emptySubtitle")}
           </p>
         </div>
         {onSuggestionAction && (
           <div className="w-full max-w-xs space-y-2">
-            <p className="flex items-center justify-center gap-1.5 font-medium text-muted-foreground text-xs">
+            <p className="flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground">
               <SparklesIcon className="size-3.5" />
               {t("aiChat.suggestionsLabel")}
             </p>
@@ -108,7 +108,7 @@ export function AiChatMessages({
                     key={key}
                     type="button"
                     onClick={() => onSuggestionAction(text)}
-                    className="rounded-lg border border-border/60 bg-card px-3 py-2 text-left text-foreground text-sm transition-colors hover:border-border hover:bg-muted"
+                    className="rounded-lg border border-border/60 bg-card px-3 py-2 text-left text-sm text-foreground transition-colors hover:border-border hover:bg-muted"
                   >
                     {text}
                   </button>

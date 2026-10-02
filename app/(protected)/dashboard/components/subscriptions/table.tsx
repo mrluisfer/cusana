@@ -15,6 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryKeys } from "@/constants/query-keys";
 import { useSession } from "@/lib/auth-client";
+import { placeholderKeys } from "@/utils/placeholder-keys";
 import { AddSubscription } from "./actions/add-subscription";
 import { useSubscriptionColumns } from "./columns";
 import { DataTable } from "./data-table";
@@ -77,6 +78,9 @@ export default function SubscriptionTable() {
   );
 }
 
+const SKELETON_COLUMN_KEYS = placeholderKeys("column", 4);
+const SKELETON_ROW_KEYS = placeholderKeys("row", 5);
+
 function TableSkeleton() {
   return (
     <div className="space-y-4">
@@ -90,17 +94,17 @@ function TableSkeleton() {
       <div className="rounded-md border">
         <div className="border-b bg-muted/50 p-4">
           <div className="flex gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="h-4 flex-1" />
+            {SKELETON_COLUMN_KEYS.map((key) => (
+              <Skeleton key={key} className="h-4 flex-1" />
             ))}
           </div>
         </div>
 
-        {[...Array(5)].map((_, rowIndex) => (
-          <div key={rowIndex} className="border-b p-4 last:border-b-0">
+        {SKELETON_ROW_KEYS.map((rowKey) => (
+          <div key={rowKey} className="border-b p-4 last:border-b-0">
             <div className="flex gap-4">
-              {[...Array(4)].map((_, colIndex) => (
-                <Skeleton key={colIndex} className="h-4 flex-1" />
+              {SKELETON_COLUMN_KEYS.map((colKey) => (
+                <Skeleton key={colKey} className="h-4 flex-1" />
               ))}
             </div>
           </div>

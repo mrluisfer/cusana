@@ -35,11 +35,15 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user?.name ?? "");
   const [isSaving, setIsSaving] = useState(false);
+  const [syncedName, setSyncedName] = useState(user?.name);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  // Sincroniza el input cuando cambia el nombre de la sesión, ajustando el
+  // estado durante el render en vez de en un efecto (react/set-state-in-effect).
+  if (user?.name !== syncedName) {
+    setSyncedName(user?.name);
     if (user?.name) setName(user.name);
-  }, [user?.name]);
+  }
 
   useEffect(() => {
     if (isEditing) {
@@ -69,7 +73,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") handleSave();
+      if (e.key === "Enter") void handleSave();
       if (e.key === "Escape") {
         setIsEditing(false);
         setName(user?.name ?? "");
@@ -139,7 +143,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               onClick={() => setIsEditing(true)}
               className="group flex items-center gap-1.5 rounded-md px-2 py-1 transition-colors hover:bg-muted"
             >
-              <span className="font-medium text-base text-foreground">
+              <span className="text-base font-medium text-foreground">
                 {user?.name}
               </span>
               <PencilIcon className="size-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
@@ -156,8 +160,8 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               <MailIcon className="size-4 text-muted-foreground" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-muted-foreground text-xs">Correo</p>
-              <p className="truncate text-foreground text-sm">{user?.email}</p>
+              <p className="text-xs text-muted-foreground">Correo</p>
+              <p className="truncate text-sm text-foreground">{user?.email}</p>
             </div>
           </div>
 
@@ -166,7 +170,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               <ShieldCheckIcon className="size-4 text-muted-foreground" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-muted-foreground text-xs">
+              <p className="text-xs text-muted-foreground">
                 Verificación de correo
               </p>
               <div className="mt-0.5">
@@ -189,8 +193,8 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                 <CalendarIcon className="size-4 text-muted-foreground" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-muted-foreground text-xs">Miembro desde</p>
-                <p className="text-foreground text-sm">{createdAt}</p>
+                <p className="text-xs text-muted-foreground">Miembro desde</p>
+                <p className="text-sm text-foreground">{createdAt}</p>
               </div>
             </div>
           )}

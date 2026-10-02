@@ -4,8 +4,16 @@ import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { defaultLocale, isLocale } from "@/lib/i18n/settings";
 import { getLegalDoc, LEGAL_LAST_UPDATED, type LegalDocId } from "@/lib/legal";
-import type { LegalSection } from "@/lib/legal/types";
+import type { LegalBlock, LegalSection } from "@/lib/legal/types";
 import { RichText } from "./rich-text";
+
+// El copy legal es estático y cada bloque es único dentro de su sección, así
+// que su contenido sirve como key estable.
+function blockKey(block: LegalBlock) {
+  return block.type === "ul"
+    ? `ul:${block.items.join("\n")}`
+    : `${block.type}:${block.text}`;
+}
 
 function SectionBlocks({ section }: { section: LegalSection }) {
   return (
@@ -16,24 +24,30 @@ function SectionBlocks({ section }: { section: LegalSection }) {
     >
       <h2
         id={`${section.id}-heading`}
-        className="mb-3 font-semibold text-foreground text-xl"
+        className="mb-3 text-xl font-semibold text-foreground"
       >
         {section.title}
       </h2>
-      <div className="space-y-3 text-muted-foreground leading-relaxed">
-        {section.blocks.map((block, i) => {
+      <div className="space-y-3 leading-relaxed text-muted-foreground">
+        {section.blocks.map((block) => {
           if (block.type === "h3") {
             return (
-              <h3 key={i} className="mt-4 font-medium text-foreground">
+              <h3
+                key={blockKey(block)}
+                className="mt-4 font-medium text-foreground"
+              >
                 {block.text}
               </h3>
             );
           }
           if (block.type === "ul") {
             return (
-              <ul key={i} className="list-inside list-disc space-y-1 pl-4">
-                {block.items.map((item, j) => (
-                  <li key={j}>
+              <ul
+                key={blockKey(block)}
+                className="list-inside list-disc space-y-1 pl-4"
+              >
+                {block.items.map((item) => (
+                  <li key={item}>
                     <RichText text={item} />
                   </li>
                 ))}
@@ -41,7 +55,7 @@ function SectionBlocks({ section }: { section: LegalSection }) {
             );
           }
           return (
-            <p key={i}>
+            <p key={blockKey(block)}>
               <RichText text={block.text} />
             </p>
           );
@@ -66,23 +80,23 @@ export function LegalDocView({ doc: docId }: { doc: LegalDocId }) {
   return (
     <article className="space-y-10">
       <header className="space-y-4 pt-8">
-        <h1 className="font-semibold text-3xl text-foreground tracking-tight md:text-4xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
           {doc.title}
         </h1>
         {doc.intro && (
           <p className="text-pretty text-muted-foreground">{doc.intro}</p>
         )}
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           {doc.updatedLabel} {updated}
         </p>
         <Separator />
       </header>
 
       <nav aria-label={doc.tocLabel} className="space-y-2">
-        <h2 className="font-semibold text-foreground text-sm uppercase tracking-wider">
+        <h2 className="text-sm font-semibold tracking-wider text-foreground uppercase">
           {doc.tocLabel}
         </h2>
-        <ol className="list-inside list-decimal space-y-1 text-muted-foreground text-sm">
+        <ol className="list-inside list-decimal space-y-1 text-sm text-muted-foreground">
           {doc.sections.map((section) => (
             <li key={section.id}>
               <a

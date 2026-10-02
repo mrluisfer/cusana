@@ -120,7 +120,7 @@ export function SubscriptionInsights() {
       maximumFractionDigits: 0,
     })}`;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: formatMoney se recrea en cada render; sus entradas reales (locale, currencySymbol) ya están en la lista.
+  // oxlint-disable react-hooks/exhaustive-deps -- formatMoney se recrea en cada render; sus entradas reales (locale, currencySymbol) ya están en la lista.
   const insights = useMemo<Insight[]>(() => {
     if (!subscriptions || !ratesData) return [];
 
@@ -215,6 +215,7 @@ export function SubscriptionInsights() {
 
     return result.slice(0, 4);
   }, [subscriptions, ratesData, selectedCurrency, t, locale, currencySymbol]);
+  // oxlint-enable react-hooks/exhaustive-deps
 
   if (hideInsights)
     return (
@@ -260,7 +261,7 @@ export function SubscriptionInsights() {
                 >
                   <insight.icon className="size-4" />
                 </span>
-                <p className="text-pretty text-foreground text-sm leading-snug">
+                <p className="text-sm leading-snug text-pretty text-foreground">
                   {insight.text}
                 </p>
               </li>
@@ -271,7 +272,7 @@ export function SubscriptionInsights() {
             <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
               <LayersIcon className="size-8 opacity-40" />
             </div>
-            <p className="font-medium text-sm">
+            <p className="text-sm font-medium">
               {t("dashboard.insights.empty")}
             </p>
           </div>

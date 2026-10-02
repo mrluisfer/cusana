@@ -74,7 +74,9 @@ export function EditSubscription({
     mutationFn: (payload: { id: string } & Record<string, unknown>) =>
       updateSubscriptionApi(session!.user.id, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
+      void queryClient.invalidateQueries({
+        queryKey: [QueryKeys.SUBSCRIPTIONS],
+      });
       onOpenChangeAction(false);
     },
   });

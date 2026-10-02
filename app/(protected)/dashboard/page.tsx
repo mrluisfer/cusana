@@ -24,7 +24,7 @@ export default async function DashboardPage() {
 
       <main
         id="dashboard-main"
-        className="motion-safe:fade-in-50 space-y-12 pb-16 motion-safe:animate-in motion-safe:duration-500"
+        className="space-y-12 pb-16 motion-safe:animate-in motion-safe:duration-500 motion-safe:fade-in-50"
       >
         <section aria-labelledby="resume-heading" className="scroll-mt-6">
           <DashboardSectionHeader id="resume-heading" section="resume" />

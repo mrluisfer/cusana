@@ -99,7 +99,7 @@ export function FilterSubscriptions({
 
         {/* Ciclo de facturación */}
         <div className="space-y-2">
-          <p className="font-medium text-muted-foreground text-xs uppercase">
+          <p className="text-xs font-medium text-muted-foreground uppercase">
             {t("dashboard.filters.cycle")}
           </p>
           <div className="space-y-1.5">
@@ -126,7 +126,7 @@ export function FilterSubscriptions({
 
         {/* Moneda */}
         <div className="space-y-2">
-          <p className="font-medium text-muted-foreground text-xs uppercase">
+          <p className="text-xs font-medium text-muted-foreground uppercase">
             {t("dashboard.filters.currency")}
           </p>
           <div className="space-y-1.5">
@@ -146,7 +146,7 @@ export function FilterSubscriptions({
 
         {/* Estado */}
         <div className="space-y-2">
-          <p className="font-medium text-muted-foreground text-xs uppercase">
+          <p className="text-xs font-medium text-muted-foreground uppercase">
             {t("dashboard.filters.status")}
           </p>
           <div className="space-y-1.5">

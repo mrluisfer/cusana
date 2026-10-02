@@ -61,18 +61,18 @@ export function HeroSummary() {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
+        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
           {t("dashboard.hero.monthlySpend")}
         </p>
         {isPending ? (
           <Skeleton className="mt-2 h-10 w-44" />
         ) : (
-          <p className="mt-1 font-bold font-mono text-4xl tracking-tight">
+          <p className="mt-1 font-mono text-4xl font-bold tracking-tight">
             {symbol}
             {formatAmount(total)}
           </p>
         )}
-        <p className="mt-1 text-muted-foreground text-sm">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t("dashboard.hero.activeSubscriptions", {
             count: subscriptionCount,
           })}
@@ -108,23 +108,23 @@ export function HeroSummary() {
           <AiChatButton />
         </div>
         <div className="sm:text-right">
-          <p className="font-medium text-[11px] text-muted-foreground">
+          <p className="text-[11px] font-medium text-muted-foreground">
             {t("dashboard.hero.yearlyProjection")}
           </p>
           {isPending ? (
             <Skeleton className="mt-1 h-5 w-20" />
           ) : (
-            <p className="font-mono font-semibold text-lg tabular-nums">
+            <p className="font-mono text-lg font-semibold tabular-nums">
               {symbol}
               {formatAmount(yearlyProjection, 0)}
             </p>
           )}
         </div>
         <div className="sm:text-right">
-          <p className="font-medium text-[11px] text-muted-foreground">
+          <p className="text-[11px] font-medium text-muted-foreground">
             {t("dashboard.hero.currency")}
           </p>
-          <p className="font-mono font-semibold text-lg">{currency}</p>
+          <p className="font-mono text-lg font-semibold">{currency}</p>
         </div>
       </div>
     </div>

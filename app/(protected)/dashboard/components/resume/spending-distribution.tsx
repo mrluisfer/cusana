@@ -217,10 +217,10 @@ export function SpendingDistribution() {
         {!isPending && sortedPlatforms.length > 0 && (
           <CardAction>
             <div className="text-right">
-              <p className="text-muted-foreground text-xs">
+              <p className="text-xs text-muted-foreground">
                 {t("dashboard.distribution.totalMonthly")}
               </p>
-              <p className="font-mono font-semibold text-lg tracking-tight">
+              <p className="font-mono text-lg font-semibold tracking-tight">
                 {currencySymbol}
                 {totalSpending.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 0,
@@ -296,7 +296,7 @@ export function SpendingDistribution() {
                               )}{" "}
                               {t("dashboard.distribution.perMonth")}
                             </p>
-                            <p className="font-medium text-xs">
+                            <p className="text-xs font-medium">
                               {t("dashboard.distribution.ofTotal", {
                                 percent: percentage.toFixed(1),
                               })}
@@ -335,7 +335,7 @@ export function SpendingDistribution() {
                           <Badge
                             variant="secondary"
                             className={cn(
-                              "h-5 gap-1 px-1.5 font-medium text-[10px]",
+                              "h-5 gap-1 px-1.5 text-[10px] font-medium",
                               STATUS_CLASSES.warning.tone,
                             )}
                           >
@@ -352,7 +352,7 @@ export function SpendingDistribution() {
                     </ItemContent>
                     <ItemActions>
                       <div className="text-right">
-                        <p className="font-mono font-semibold text-sm tabular-nums">
+                        <p className="font-mono text-sm font-semibold tabular-nums">
                           {currencySymbol}
                           {data.convertedTotal.toLocaleString(
                             toIntlLocale(language),
@@ -386,7 +386,7 @@ export function SpendingDistribution() {
             <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <PieChartIcon className="size-8 opacity-40" />
             </div>
-            <p className="font-medium text-sm">
+            <p className="text-sm font-medium">
               {t("dashboard.distribution.emptyTitle")}
             </p>
             <p className="mt-1 text-xs opacity-70">

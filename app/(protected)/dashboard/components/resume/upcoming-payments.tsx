@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon, ClockIcon } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CardHeaderIcon } from "@/components/card-header-icon";
 import { ServiceIcon } from "@/components/dashboard/service-icon";
@@ -31,6 +32,12 @@ async function fetchSubscriptionsList(userId: string): Promise<Subscription[]> {
   return data.subscriptions ?? [];
 }
 
+function startOfToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
 function UpcomingPaymentSkeleton() {
   return (
     <div className="flex items-center justify-between py-3">
@@ -51,6 +58,8 @@ export function UpcomingPayments() {
   const { language } = useLanguage();
   const { data: session } = useSession();
   const userId = session?.user.id;
+  // Se fija al montar: leer la fecha en cada render es impuro (react/purity).
+  const [today] = useState(startOfToday);
 
   const { data: subscriptions, isPending } = useQuery<Subscription[]>({
     queryKey: [QueryKeys.SUBSCRIPTIONS, "list"],
@@ -86,8 +95,6 @@ export function UpcomingPayments() {
       createdAt: sub.createdAt,
       billingMonth: sub.billingMonth,
     });
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const daysUntil = Math.ceil(
       (nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
     );
@@ -130,7 +137,7 @@ export function UpcomingPayments() {
                     className="shrink-0"
                   />
                   <div className="min-w-0">
-                    <p className="truncate font-medium text-sm">
+                    <p className="truncate text-sm font-medium">
                       {subscription.name}
                     </p>
                     <p className="truncate text-[11px] text-muted-foreground">

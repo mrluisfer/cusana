@@ -195,7 +195,7 @@ export function DataTable<TData extends RowData>({
       {/* Active filters indicator */}
       {activeFilterCount > 0 && (
         <div className="flex items-center gap-2">
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-muted-foreground">
             {t("dashboard.table.results", {
               count: table.getFilteredRowModel().rows.length,
             })}
@@ -209,7 +209,7 @@ export function DataTable<TData extends RowData>({
                 active: [],
               })
             }
-            className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
             <XIcon className="size-3" />
             {t("dashboard.table.clearFilters")}
@@ -228,7 +228,7 @@ export function DataTable<TData extends RowData>({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="font-semibold text-muted-foreground text-xs uppercase tracking-wider"
+                    className="text-xs font-semibold tracking-wider text-muted-foreground uppercase"
                   >
                     {header.isPlaceholder
                       ? null
@@ -280,7 +280,7 @@ export function DataTable<TData extends RowData>({
       {/* Paginación */}
       {table.getPageCount() > 1 && (
         <div className="flex items-center justify-between px-2">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             {t("dashboard.table.showing", {
               from:
                 table.state.pagination.pageIndex *
@@ -318,16 +318,16 @@ export function DataTable<TData extends RowData>({
             </Button>
 
             <div className="mx-2 flex items-center gap-1">
-              <span className="text-muted-foreground text-sm">
+              <span className="text-sm text-muted-foreground">
                 {t("dashboard.table.page")}
               </span>
-              <span className="font-medium text-sm">
+              <span className="text-sm font-medium">
                 {table.state.pagination.pageIndex + 1}
               </span>
-              <span className="text-muted-foreground text-sm">
+              <span className="text-sm text-muted-foreground">
                 {t("dashboard.table.of")}
               </span>
-              <span className="font-medium text-sm">
+              <span className="text-sm font-medium">
                 {table.getPageCount()}
               </span>
             </div>

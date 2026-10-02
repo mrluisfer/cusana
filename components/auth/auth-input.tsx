@@ -56,7 +56,7 @@ export function AuthInput({
                 : t("auth.input.showPassword")
             }
             aria-pressed={revealed}
-            className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-md text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-md text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           >
             {revealed ? (
               <EyeOff className="size-4" aria-hidden="true" />
@@ -67,7 +67,7 @@ export function AuthInput({
         )}
       </div>
       {hint && (
-        <p id={hintId} className="text-muted-foreground text-xs">
+        <p id={hintId} className="text-xs text-muted-foreground">
           {hint}
         </p>
       )}

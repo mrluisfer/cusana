@@ -9,6 +9,10 @@ import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 
+// El año se calcula una vez al cargar el módulo: leer la fecha en cada render
+// es impuro (react/purity).
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function LegalLayout({
   children,
 }: Readonly<{
@@ -32,8 +36,8 @@ export default function LegalLayout({
 
       <main className="pb-16">{children}</main>
 
-      <footer className="border-border border-t py-8">
-        <div className="flex flex-col items-center justify-between gap-4 text-muted-foreground text-sm sm:flex-row">
+      <footer className="border-t border-border py-8">
+        <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
           <nav
             className="flex gap-6"
             aria-label={t("landing.footer.legalLabel")}
@@ -51,7 +55,7 @@ export default function LegalLayout({
               {t("legal.terms")}
             </Link>
           </nav>
-          <p>&copy; {new Date().getFullYear()} Cusana</p>
+          <p>&copy; {CURRENT_YEAR} Cusana</p>
         </div>
       </footer>
     </div>

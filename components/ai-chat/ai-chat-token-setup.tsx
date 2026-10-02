@@ -39,10 +39,10 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
         <div className="flex size-12 items-center justify-center bg-primary/10">
           <KeyIcon className="size-6 text-primary" />
         </div>
-        <h3 className="font-semibold text-lg">
+        <h3 className="text-lg font-semibold">
           {t("aiChat.tokenSetup.title")}
         </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className="text-sm leading-relaxed text-muted-foreground">
           {t("aiChat.tokenSetup.instructions")}{" "}
           <a
             href="https://platform.openai.com/api-keys"
@@ -63,14 +63,14 @@ export function AiChatTokenSetup({ onSaveTokenAction }: AiChatTokenSetupProps) {
           placeholder="sk-..."
           autoComplete="off"
         />
-        {error && <p className="text-destructive text-xs">{error}</p>}
+        {error && <p className="text-xs text-destructive">{error}</p>}
         <Button type="submit" className="w-full">
           <SaveIcon />
           {t("aiChat.tokenSetup.save")}
         </Button>
       </form>
 
-      <p className="flex items-center gap-1.5 text-muted-foreground text-xs">
+      <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <ShieldCheckIcon className="size-3.5" />
         {t("aiChat.tokenSetup.security")}
       </p>

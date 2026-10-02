@@ -14,12 +14,9 @@ export default function LabsPage() {
           <ThemeToggle variant="outline" />
 
           <div>
-            <ul className="mt-2 flex flex-wrap items-center gap-4 motion-safe:animate-marquee motion-safe:group-hover:[animation-play-state:paused]">
-              {[...realServiceKeys].map((service, i) => (
-                <li
-                  key={`${service}-${i}`}
-                  aria-hidden={i >= realServiceKeys.length ? "true" : undefined}
-                >
+            <ul className="motion-safe:animate-marquee mt-2 flex flex-wrap items-center gap-4 motion-safe:group-hover:[animation-play-state:paused]">
+              {realServiceKeys.map((service) => (
+                <li key={service}>
                   <ServiceIcon
                     service={service}
                     className="shadow-sm ring-1 ring-border/50 transition-transform hover:-translate-y-0.5 hover:scale-110"

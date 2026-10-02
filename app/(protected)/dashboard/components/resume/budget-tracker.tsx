@@ -102,7 +102,7 @@ export function BudgetTracker() {
     mutationFn: (amount: number) =>
       saveBudgetApi(session!.user.id, selectedCurrency, amount),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.BUDGET] });
+      void queryClient.invalidateQueries({ queryKey: [QueryKeys.BUDGET] });
       setIsEditing(false);
     },
   });
@@ -201,7 +201,7 @@ export function BudgetTracker() {
                 className="h-9"
                 disabled={saveMutation.isPending}
               />
-              <span className="font-medium text-muted-foreground text-xs">
+              <span className="text-xs font-medium text-muted-foreground">
                 {selectedCurrency}
               </span>
             </div>
@@ -233,7 +233,7 @@ export function BudgetTracker() {
           </div>
         ) : !budget ? (
           <div className="space-y-3">
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               {t("dashboard.budget.setPrompt")}
             </p>
             <Button
@@ -249,10 +249,10 @@ export function BudgetTracker() {
         ) : (
           <div className="space-y-2.5">
             <div className="flex items-baseline justify-between">
-              <span className="font-mono font-semibold text-lg tabular-nums">
+              <span className="font-mono text-lg font-semibold tabular-nums">
                 {formatMoney(total)}
               </span>
-              <span className="text-muted-foreground text-xs">
+              <span className="text-xs text-muted-foreground">
                 {t("dashboard.budget.ofBudget", {
                   budget: formatMoney(budget),
                 })}
@@ -280,7 +280,7 @@ export function BudgetTracker() {
               </span>
             </div>
             {inherited && (
-              <div className="flex items-center justify-between gap-2 border-border/60 border-t pt-2">
+              <div className="flex items-center justify-between gap-2 border-t border-border/60 pt-2">
                 <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <SparklesIcon className="size-3" />
                   {t("dashboard.budget.inherited")}

@@ -31,6 +31,7 @@ import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { toPeriod } from "@/lib/period";
 import { cn } from "@/lib/utils";
+import { placeholderKeys } from "@/utils/placeholder-keys";
 
 const MONTHS_TO_SHOW = 6;
 
@@ -63,11 +64,13 @@ type Row = {
   isCurrent: boolean;
 };
 
+const SKELETON_ROW_KEYS = placeholderKeys("history-row", MONTHS_TO_SHOW);
+
 function HistorySkeleton() {
   return (
     <div className="space-y-3">
-      {Array.from({ length: MONTHS_TO_SHOW }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3">
+      {SKELETON_ROW_KEYS.map((key) => (
+        <div key={key} className="flex items-center gap-3">
           <Skeleton className="h-4 w-8" />
           <Skeleton className="h-7 flex-1" />
           <Skeleton className="h-4 w-16" />
@@ -122,7 +125,7 @@ function HistoryBar({
     <div className="flex items-center gap-3">
       <span
         className={cn(
-          "w-8 text-right font-medium text-xs",
+          "w-8 text-right text-xs font-medium",
           row.isCurrent ? "font-bold text-primary" : "text-muted-foreground",
         )}
       >
@@ -134,7 +137,7 @@ function HistoryBar({
           style={{ width: `${Math.max(fillPercent, 3)}%` }}
         />
       </div>
-      <span className="min-w-20 text-right font-mono text-muted-foreground text-xs tabular-nums">
+      <span className="min-w-20 text-right font-mono text-xs text-muted-foreground tabular-nums">
         {hasBudget
           ? `${fmt(row.spent)} / ${fmt(row.budget as number)}`
           : fmt(row.spent)}
@@ -170,7 +173,7 @@ function HistoryBar({
               </p>
             </>
           ) : (
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               {t("dashboard.budgetHistory.noBudget")}
             </p>
           )}
@@ -267,7 +270,7 @@ export function BudgetHistory() {
             <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <HistoryIcon className="size-8 opacity-40" />
             </div>
-            <p className="font-medium text-sm">
+            <p className="text-sm font-medium">
               {t("dashboard.budgetHistory.empty")}
             </p>
             <p className="mt-1 text-xs opacity-70">

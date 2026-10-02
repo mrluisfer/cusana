@@ -38,11 +38,11 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       <main className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="w-full max-w-md rounded-3xl border border-border/60 bg-card/60 p-8 shadow-2xl shadow-primary/5 backdrop-blur-xl supports-[backdrop-filter]:bg-card/40 md:p-10">
           <div className="mb-7 space-y-2 text-center">
-            <h1 className="text-balance font-semibold text-2xl text-foreground tracking-tight md:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-balance text-foreground md:text-3xl">
               {title}
             </h1>
             {subtitle && (
-              <p className="text-pretty text-muted-foreground text-sm">
+              <p className="text-sm text-pretty text-muted-foreground">
                 {subtitle}
               </p>
             )}

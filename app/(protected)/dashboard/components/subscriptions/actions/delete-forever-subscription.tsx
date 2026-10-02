@@ -54,7 +54,7 @@ export function DeleteForeverSubscription({
     mutationFn: () =>
       hardDeleteSubscriptionApi(session!.user.id, subscription.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
         queryKey: [QueryKeys.INACTIVE_SUBSCRIPTIONS],
       });
       onOpenChangeAction(false);
@@ -81,8 +81,8 @@ export function DeleteForeverSubscription({
         <div className="flex items-center gap-3 bg-muted/50 p-3">
           <ServiceIcon service={subscription.platform} size="sm" />
           <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-sm">{subscription.name}</p>
-            <p className="text-muted-foreground text-xs capitalize">
+            <p className="truncate text-sm font-medium">{subscription.name}</p>
+            <p className="text-xs text-muted-foreground capitalize">
               {subscription.platform}
             </p>
           </div>

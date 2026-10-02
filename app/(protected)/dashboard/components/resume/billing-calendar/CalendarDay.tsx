@@ -39,7 +39,7 @@ export function CalendarDay({
       aria-label={`${day}${isToday ? `, ${t("dashboard.calendar.today")}` : ""}${hasPayments ? `, ${t("dashboard.calendar.charges", { count: payments.length })}` : ""}`}
       aria-current={isToday ? "date" : undefined}
       className={cn(
-        "relative flex aspect-square select-none flex-col items-center justify-center rounded-2xl text-sm transition-all",
+        "relative flex aspect-square flex-col items-center justify-center rounded-2xl text-sm transition-all select-none",
         isToday && "font-bold text-primary ring-2 ring-primary",
         hasPayments && "cursor-pointer bg-muted/50 hover:bg-muted",
         !isToday && !hasPayments && isPast && "text-muted-foreground/30",
@@ -57,7 +57,7 @@ export function CalendarDay({
               />
             ))}
             {payments.length > 2 && (
-              <span className="font-medium text-[10px] text-muted-foreground tabular-nums">
+              <span className="text-[10px] font-medium text-muted-foreground tabular-nums">
                 +{payments.length - 2}
               </span>
             )}

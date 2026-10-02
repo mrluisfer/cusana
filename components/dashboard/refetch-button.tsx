@@ -18,7 +18,7 @@ export const RefetchButton = () => {
 
   // useCallback para evitar recrear la función en cada render
   const handleRefetch = useCallback(() => {
-    queryClient.invalidateQueries(SUBSCRIPTIONS_QUERY_KEY);
+    void queryClient.invalidateQueries(SUBSCRIPTIONS_QUERY_KEY);
   }, [queryClient]);
 
   return (

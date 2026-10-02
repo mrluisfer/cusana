@@ -14,16 +14,16 @@ export function DashboardSectionHeader({
 
   return (
     <header className="mb-5 flex flex-col gap-1">
-      <p className="font-semibold text-primary text-xs uppercase tracking-wider">
+      <p className="text-xs font-semibold tracking-wider text-primary uppercase">
         {t(`dashboard.${section}.eyebrow`)}
       </p>
       <h2
         id={id}
-        className="text-balance font-semibold text-foreground text-xl tracking-tight md:text-2xl"
+        className="text-xl font-semibold tracking-tight text-balance text-foreground md:text-2xl"
       >
         {t(`dashboard.${section}.title`)}
       </h2>
-      <p className="text-pretty text-muted-foreground text-sm">
+      <p className="text-sm text-pretty text-muted-foreground">
         {t(`dashboard.${section}.description`)}
       </p>
     </header>

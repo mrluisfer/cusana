@@ -12,8 +12,10 @@ import {
 import { cn } from "@/lib/utils";
 import type { SubscriptionTableFeatures } from "./table-features";
 
-interface DataTableColumnHeaderProps<TData extends RowData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableColumnHeaderProps<
+  TData extends RowData,
+  TValue,
+> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<SubscriptionTableFeatures, TData, TValue>;
   title: string;
   triggerClassName?: string;

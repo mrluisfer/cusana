@@ -34,7 +34,7 @@ export default function DashboardLayout({
       {/* Skip link para teclado / screen readers */}
       <a
         href="#dashboard-main"
-        className="sr-only bg-primary text-primary-foreground focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="sr-only bg-primary text-primary-foreground focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
         Saltar al contenido
       </a>
