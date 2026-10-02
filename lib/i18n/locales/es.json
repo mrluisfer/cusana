@@ -169,8 +169,7 @@
       "onTrack": "Vas bien con tu presupuesto",
       "nearLimit": "Estás cerca de tu límite",
       "overLimit": "Superaste tu presupuesto",
-      "inherited": "Heredado del mes anterior",
-      "keepForMonth": "Fijar para este mes"
+      "appliesFromNow": "Se aplica a este mes y a los siguientes."
     },
     "budgetHistory": {
       "title": "Historial de presupuesto",

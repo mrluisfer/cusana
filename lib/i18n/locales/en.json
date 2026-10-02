@@ -169,8 +169,7 @@
       "onTrack": "You're on track with your budget",
       "nearLimit": "You're close to your limit",
       "overLimit": "You went over your budget",
-      "inherited": "Carried over from last month",
-      "keepForMonth": "Keep for this month"
+      "appliesFromNow": "Applies to this month and the following ones."
     },
     "budgetHistory": {
       "title": "Budget history",
