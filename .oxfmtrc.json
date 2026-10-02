@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "useTabs": false,
+  "tabWidth": 2,
+  "printWidth": 80,
+  "endOfLine": "lf",
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "quoteProps": "as-needed",
+  "trailingComma": "all",
+  "semi": true,
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "singleAttributePerLine": false,
+  "sortImports": {
+    "newlinesBetween": false,
+    "partitionByNewline": true,
+    "groups": ["builtin", "external", "internal", ["parent", "sibling", "index"], "unknown"]
+  },
+  "sortTailwindcss": {
+    "stylesheet": "./app/globals.css",
+    "attributes": ["triggerClassName"],
+    "functions": ["cn", "clsx", "cva", "twMerge"]
+  },
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "**/drizzle",
+    "**/dist",
+    "**/pnpm-lock.yaml",
+    "**/pnpm-workspace.yaml",
+    "**/.playwright-mcp",
+    "**/.claude"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.json", "**/*.jsonc"],
+      "options": {
+        "printWidth": 120
+      }
+    }
+  ]
+}

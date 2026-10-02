@@ -69,7 +69,7 @@ export default function LoginPage() {
           trailingLabel={
             <Link
               href="/forgot-password"
-              className="text-muted-foreground text-xs underline-offset-4 transition-colors hover:text-primary hover:underline"
+              className="text-xs text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
             >
               {t("auth.login.forgotPassword")}
             </Link>
@@ -99,7 +99,7 @@ export default function LoginPage() {
 
       <OAuthButtons />
 
-      <p className="mt-6 text-center text-muted-foreground text-sm">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         {t("auth.login.noAccount")}{" "}
         <Link
           href="/register"

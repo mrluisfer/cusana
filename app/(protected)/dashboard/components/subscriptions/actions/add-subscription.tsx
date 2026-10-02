@@ -86,7 +86,9 @@ export const AddSubscription = ({
           name: payload.name,
         }),
       });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.SUBSCRIPTIONS] });
+      void queryClient.invalidateQueries({
+        queryKey: [QueryKeys.SUBSCRIPTIONS],
+      });
       setIsOpen(false);
     },
     onError: (error) => {
@@ -131,7 +133,7 @@ export const AddSubscription = ({
       </SheetTrigger>
 
       <SheetContent className="flex flex-col gap-0 p-0 sm:max-w-md">
-        <SheetHeader className="border-border/60 border-b px-6 py-5">
+        <SheetHeader className="border-b border-border/60 px-6 py-5">
           <div className="flex items-center gap-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
               <SparklesIcon className="size-5" aria-hidden="true" />
@@ -154,7 +156,7 @@ export const AddSubscription = ({
           resetKey={isOpen}
         />
 
-        <SheetFooter className="border-border/60 border-t bg-background/80 px-6 py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+        <SheetFooter className="border-t border-border/60 bg-background/80 px-6 py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
           <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <SheetClose
               render={

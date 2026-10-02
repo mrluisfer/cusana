@@ -33,6 +33,25 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { realServiceKeys } from "@/constants/icons";
 
+// El año se calcula una vez al cargar el módulo: leer la fecha en cada render
+// es impuro (react/purity).
+const CURRENT_YEAR = new Date().getFullYear();
+
+// El marquee repite la lista para hacer loop sin salto; la copia se oculta a
+// lectores de pantalla.
+const marqueeItems = [
+  ...realServiceKeys.map((service) => ({
+    service,
+    key: service,
+    clone: false,
+  })),
+  ...realServiceKeys.map((service) => ({
+    service,
+    key: `${service}-clone`,
+    clone: true,
+  })),
+];
+
 // Visual metadata kept static; text comes from translations keyed by `id`.
 const featureMeta = [
   {
@@ -145,7 +164,7 @@ export default function LandingPage() {
           }}
         />
 
-        <div className="viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>')] absolute inset-0 opacity-[0.03] mix-blend-overlay [background-image:url('data:image/svg+xml;utf8,<svg" />
+        <div className="absolute inset-0 [background-image:url('data:image/svg+xml;utf8,<svg%20viewBox=%220%200%20200%20200%22%20xmlns=%22http://www.w3.org/2000/svg%22><filter%20id=%22n%22><feTurbulence%20type=%22fractalNoise%22%20baseFrequency=%220.9%22/></filter><rect%20width=%22100%25%22%20height=%22100%25%22%20filter=%22url(%23n)%22/></svg>')] opacity-[0.03] mix-blend-overlay" />
       </div>
 
       <div className="container mx-auto max-w-6xl px-4">
@@ -179,7 +198,7 @@ export default function LandingPage() {
             <div className="space-y-7">
               <Link
                 href="#roadmap"
-                className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 py-1.5 pr-3 pl-1.5 text-sm shadow-sm backdrop-blur transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 py-1.5 pr-3 pl-1.5 text-sm shadow-sm backdrop-blur transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 <Badge>
                   <Sparkles className="size-3" aria-hidden="true" />
@@ -196,7 +215,7 @@ export default function LandingPage() {
 
               <h1
                 id="hero-heading"
-                className="text-balance font-semibold text-5xl text-foreground leading-[1.05] tracking-tight md:text-6xl lg:text-7xl"
+                className="text-5xl leading-[1.05] font-semibold tracking-tight text-balance text-foreground md:text-6xl lg:text-7xl"
               >
                 {t("landing.hero.titleLead")}{" "}
                 <span className="relative inline-block bg-linear-to-br from-primary via-fuchsia-500 to-sky-500 bg-clip-text text-transparent">
@@ -219,7 +238,7 @@ export default function LandingPage() {
                 .
               </h1>
 
-              <p className="max-w-lg text-pretty text-lg text-muted-foreground leading-relaxed">
+              <p className="max-w-lg text-lg leading-relaxed text-pretty text-muted-foreground">
                 {t("landing.hero.subtitle")}
               </p>
 
@@ -252,7 +271,7 @@ export default function LandingPage() {
                 {benefitIds.map((benefit) => (
                   <li
                     key={benefit}
-                    className="flex items-center gap-1.5 text-muted-foreground text-sm"
+                    className="flex items-center gap-1.5 text-sm text-muted-foreground"
                   >
                     <span className="inline-flex size-4 items-center justify-center rounded-full bg-primary/15 text-primary">
                       <Check className="size-3" aria-hidden="true" />
@@ -266,15 +285,15 @@ export default function LandingPage() {
             <div className="relative flex justify-center overflow-hidden lg:justify-end lg:overflow-visible">
               <ServiceIcon
                 service="netflix"
-                className="absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
+                className="motion-safe:animate-float absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex"
               />
               <ServiceIcon
                 service="spotify"
-                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-24"
+                className="motion-safe:animate-float-delayed absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex lg:-right-24"
               />
               <ServiceIcon
                 service="disney"
-                className="absolute bottom-12 left-8 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
+                className="motion-safe:animate-float absolute bottom-12 left-8 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex"
               />
               <PhoneMockup />
             </div>
@@ -294,7 +313,7 @@ export default function LandingPage() {
                     key={item.id}
                     className={`px-4 text-center ${
                       index < principleMeta.length - 1
-                        ? "md:border-border/60 md:border-r"
+                        ? "md:border-r md:border-border/60"
                         : ""
                     }`}
                   >
@@ -302,10 +321,10 @@ export default function LandingPage() {
                       <item.icon className="size-4" aria-hidden="true" />
                     </div>
                     <dt className="sr-only">{label}</dt>
-                    <dd className="bg-linear-to-br from-foreground to-foreground/60 bg-clip-text font-bold text-2xl text-transparent md:text-3xl">
+                    <dd className="bg-linear-to-br from-foreground to-foreground/60 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
                       {value}
                     </dd>
-                    <p className="mt-1 text-balance text-muted-foreground text-sm">
+                    <p className="mt-1 text-sm text-balance text-muted-foreground">
                       {label}
                     </p>
                   </div>
@@ -328,14 +347,14 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="features-heading"
-              className="mb-4 text-balance font-semibold text-3xl text-foreground md:text-4xl lg:text-5xl"
+              className="mb-4 text-3xl font-semibold text-balance text-foreground md:text-4xl lg:text-5xl"
             >
               {t("landing.features.titleLead")}{" "}
               <span className="bg-linear-to-r from-primary to-fuchsia-500 bg-clip-text text-transparent">
                 {t("landing.features.titleHighlight")}
               </span>
             </h2>
-            <p className="mx-auto max-w-2xl text-pretty text-lg text-muted-foreground">
+            <p className="mx-auto max-w-2xl text-lg text-pretty text-muted-foreground">
               {t("landing.features.subtitle")}
             </p>
           </div>
@@ -351,14 +370,14 @@ export default function LandingPage() {
                   aria-hidden="true"
                 />
                 <div className="relative flex items-start gap-4">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 transition-all duration-300 group-hover:rotate-3 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 group-hover:bg-primary group-hover:text-primary-foreground">
                     <feature.icon className="size-5" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="mb-1.5 font-semibold text-foreground text-lg">
+                    <h3 className="mb-1.5 text-lg font-semibold text-foreground">
                       {t(`landing.features.${feature.id}.title` as const)}
                     </h3>
-                    <p className="text-pretty text-muted-foreground leading-relaxed">
+                    <p className="leading-relaxed text-pretty text-muted-foreground">
                       {t(`landing.features.${feature.id}.description` as const)}
                     </p>
                   </div>
@@ -376,21 +395,18 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="services-heading"
-              className="text-balance font-semibold text-2xl text-foreground md:text-3xl"
+              className="text-2xl font-semibold text-balance text-foreground md:text-3xl"
             >
               {t("landing.services.title")}
             </h2>
-            <p className="mt-3 text-muted-foreground text-sm">
+            <p className="mt-3 text-sm text-muted-foreground">
               {t("landing.services.subtitle")}
             </p>
           </div>
           <div className="group relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-            <ul className="mt-2 flex w-max items-center gap-4 motion-safe:animate-marquee motion-safe:group-hover:[animation-play-state:paused]">
-              {[...realServiceKeys, ...realServiceKeys].map((service, i) => (
-                <li
-                  key={`${service}-${i}`}
-                  aria-hidden={i >= realServiceKeys.length ? "true" : undefined}
-                >
+            <ul className="motion-safe:animate-marquee mt-2 flex w-max items-center gap-4 motion-safe:group-hover:[animation-play-state:paused]">
+              {marqueeItems.map(({ service, key, clone }) => (
+                <li key={key} aria-hidden={clone ? "true" : undefined}>
                   <ServiceIcon
                     service={service}
                     className="shadow-sm ring-1 ring-border/50 transition-transform hover:-translate-y-0.5 hover:scale-110"
@@ -413,7 +429,7 @@ export default function LandingPage() {
             </Badge>
             <h2
               id="roadmap-heading"
-              className="mb-4 text-balance font-semibold text-3xl text-foreground md:text-4xl"
+              className="mb-4 text-3xl font-semibold text-balance text-foreground md:text-4xl"
             >
               {t("landing.roadmap.titleLead")}{" "}
               <span className="bg-linear-to-r from-primary to-fuchsia-500 bg-clip-text text-transparent">
@@ -463,7 +479,7 @@ export default function LandingPage() {
                             <h3 className="font-semibold text-foreground">
                               {t(`${baseKey}.title` as const)}
                             </h3>
-                            <p className="mt-1 text-pretty text-muted-foreground text-sm leading-relaxed">
+                            <p className="mt-1 text-sm leading-relaxed text-pretty text-muted-foreground">
                               {t(`${baseKey}.description` as const)}
                             </p>
                           </div>
@@ -486,7 +502,7 @@ export default function LandingPage() {
               </Badge>
               <h2
                 id="faq-heading"
-                className="text-balance font-semibold text-3xl text-foreground md:text-4xl"
+                className="text-3xl font-semibold text-balance text-foreground md:text-4xl"
               >
                 {t("landing.faq.title")}
               </h2>
@@ -508,10 +524,10 @@ export default function LandingPage() {
                   value={faqId}
                   className="border-border/60 px-3"
                 >
-                  <AccordionTrigger className="text-left font-medium text-base">
+                  <AccordionTrigger className="text-left text-base font-medium">
                     {t(`landing.faq.items.${faqId}.q` as const)}
                   </AccordionTrigger>
-                  <AccordionContent className="text-pretty text-muted-foreground leading-relaxed">
+                  <AccordionContent className="leading-relaxed text-pretty text-muted-foreground">
                     {t(`landing.faq.items.${faqId}.a` as const)}
                   </AccordionContent>
                 </AccordionItem>
@@ -533,17 +549,17 @@ export default function LandingPage() {
             />
             <div
               aria-hidden="true"
-              className="absolute inset-0 opacity-[0.15] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:24px_24px]"
+              className="absolute inset-0 [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:24px_24px] opacity-[0.15]"
             />
 
             <div className="relative z-10 mx-auto max-w-2xl">
               <h2
                 id="cta-heading"
-                className="mb-4 text-balance font-semibold text-3xl text-primary-foreground md:text-4xl lg:text-5xl"
+                className="mb-4 text-3xl font-semibold text-balance text-primary-foreground md:text-4xl lg:text-5xl"
               >
                 {t("landing.cta.title")}
               </h2>
-              <p className="mb-8 text-pretty text-lg text-primary-foreground/85">
+              <p className="mb-8 text-lg text-pretty text-primary-foreground/85">
                 {t("landing.cta.subtitle")}
               </p>
               <div className="flex flex-col justify-center gap-3 sm:flex-row">
@@ -571,39 +587,39 @@ export default function LandingPage() {
         </section>
 
         {/* Footer */}
-        <footer className="border-border/60 border-t py-10">
+        <footer className="border-t border-border/60 py-10">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-2">
               <FlowerIcon className="size-8" />
-              <span className="font-bold text-lg">Cusana</span>
+              <span className="text-lg font-bold">Cusana</span>
             </div>
 
             <nav
-              className="flex items-center gap-6 text-muted-foreground text-sm"
+              className="flex items-center gap-6 text-sm text-muted-foreground"
               aria-label={t("landing.footer.legalLabel")}
             >
               <Link
                 href="/privacy"
-                className="rounded transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {t("landing.footer.privacy")}
               </Link>
               <Link
                 href="/terms"
-                className="rounded transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {t("landing.footer.terms")}
               </Link>
               <Link
                 href="mailto:lolesuncrak@gmail.com"
-                className="rounded transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {t("landing.footer.contact")}
               </Link>
             </nav>
 
-            <p className="text-muted-foreground text-sm">
-              &copy; {new Date().getFullYear()} Cusana
+            <p className="text-sm text-muted-foreground">
+              &copy; {CURRENT_YEAR} Cusana
             </p>
           </div>
         </footer>

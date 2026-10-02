@@ -29,7 +29,7 @@ function OAuthButton({ provider }: { provider: Provider }) {
 
   const signInWithProvider = useCallback(() => {
     setIsPending(true);
-    signIn.social({ provider: provider.id, callbackURL: "/dashboard" });
+    void signIn.social({ provider: provider.id, callbackURL: "/dashboard" });
   }, [provider.id]);
 
   return (
@@ -53,10 +53,10 @@ export function OAuthButtons() {
     <>
       <div className="relative my-5">
         <div aria-hidden="true" className="absolute inset-0 flex items-center">
-          <div className="w-full border-border/60 border-t" />
+          <div className="w-full border-t border-border/60" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="rounded-full bg-card/60 px-3 py-0.5 font-medium text-muted-foreground uppercase tracking-wide backdrop-blur supports-[backdrop-filter]:bg-card/40">
+          <span className="rounded-full bg-card/60 px-3 py-0.5 font-medium tracking-wide text-muted-foreground uppercase backdrop-blur supports-[backdrop-filter]:bg-card/40">
             {t("auth.oauth.divider")}
           </span>
         </div>

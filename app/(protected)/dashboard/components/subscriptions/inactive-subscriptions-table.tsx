@@ -95,16 +95,16 @@ export default function InactiveSubscriptionsTable() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
+                  <TableHead className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     {t("dashboard.columns.service")}
                   </TableHead>
-                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
+                  <TableHead className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     {t("dashboard.columns.price")}
                   </TableHead>
-                  <TableHead className="font-semibold text-muted-foreground text-xs uppercase tracking-wider">
+                  <TableHead className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     {t("dashboard.inactive.status")}
                   </TableHead>
-                  <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">
+                  <TableHead className="text-right text-xs font-semibold tracking-wider uppercase">
                     <span className="sr-only">
                       {t("dashboard.columns.actions")}
                     </span>
@@ -127,14 +127,14 @@ export default function InactiveSubscriptionsTable() {
                           <span className="font-medium text-foreground">
                             {subscription.name}
                           </span>
-                          <span className="text-muted-foreground text-xs capitalize">
+                          <span className="text-xs text-muted-foreground capitalize">
                             {subscription.platform}
                           </span>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="py-3">
-                      <span className="text-muted-foreground text-sm tabular-nums line-through">
+                      <span className="text-sm text-muted-foreground tabular-nums line-through">
                         {formatCurrency(
                           subscription.price,
                           subscription.currency,

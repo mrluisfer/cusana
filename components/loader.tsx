@@ -16,7 +16,7 @@ export const Loader: React.FC<LoaderProps> = ({ className = "", message }) => {
   return (
     <div
       className={cn(
-        "flex select-none flex-row items-center justify-center gap-2",
+        "flex flex-row items-center justify-center gap-2 select-none",
         className,
       )}
       role="status"

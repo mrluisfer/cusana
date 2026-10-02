@@ -53,7 +53,7 @@ export function ServiceIcon({
           className,
         )}
       >
-        <span aria-hidden="true" className="font-semibold text-sm">
+        <span aria-hidden="true" className="text-sm font-semibold">
           ?
         </span>
       </div>

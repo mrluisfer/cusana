@@ -150,7 +150,7 @@ export function useSubscriptionColumns(): SubscriptionColumnDef[] {
               <span className="font-medium text-foreground">
                 {row.original.name}
               </span>
-              <span className="text-muted-foreground text-xs capitalize">
+              <span className="text-xs text-muted-foreground capitalize">
                 {row.original.platform}
               </span>
             </div>
@@ -170,14 +170,14 @@ export function useSubscriptionColumns(): SubscriptionColumnDef[] {
         cell: ({ row }) => (
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-1.5">
-              <span className="font-semibold text-base text-foreground tabular-nums">
+              <span className="text-base font-semibold text-foreground tabular-nums">
                 {formatCurrency(row.original.price, row.original.currency)}
               </span>
               <Badge variant="default" className="font-mono">
                 {row.original.currency}
               </Badge>
             </div>
-            <span className="text-muted-foreground text-xs">
+            <span className="text-xs text-muted-foreground">
               {row.original.billingCycle === "monthly"
                 ? t("dashboard.billing.perMonthShort")
                 : t("dashboard.billing.perYearShort")}

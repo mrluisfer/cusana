@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "react", "nextjs", "import"],
+  "jsPlugins": ["@shadcn/lint", { "name": "drizzle", "specifier": "./scripts/oxlint-plugin-drizzle.mjs" }],
+  "categories": {
+    "correctness": "error"
+  },
+  "options": {
+    "typeAware": true
+  },
+  "ignorePatterns": ["drizzle/**", "dist/**", ".playwright-mcp/**", ".claude/**"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/no-array-index-key": "warn",
+    "react/no-danger": "error",
+    "react/purity": "warn",
+    "react/set-state-in-effect": "warn",
+    "drizzle/enforce-delete-with-where": ["error", { "drizzleObjectName": ["db"] }],
+    "drizzle/enforce-update-with-where": ["error", { "drizzleObjectName": ["db"] }]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.jsx", "**/*.tsx"],
+      "excludeFiles": ["components/ui/**"],
+      "plugins": ["jsx-a11y"],
+      "rules": {
+        "jsx-a11y/prefer-tag-over-role": "off",
+        "jsx-a11y/interactive-supports-focus": "warn",
+        "jsx-a11y/control-has-associated-label": "warn",
+        "jsx-a11y/no-autofocus": ["error", { "ignoreNonDOM": true }]
+      }
+    },
+    {
+      "files": ["components/ui/**"],
+      "rules": {
+        "react/no-danger": "off",
+        "typescript/restrict-template-expressions": "off"
+      }
+    }
+  ]
+}

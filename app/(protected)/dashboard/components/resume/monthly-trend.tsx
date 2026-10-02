@@ -37,6 +37,7 @@ import { useSession } from "@/lib/auth-client";
 import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import { cn } from "@/lib/utils";
+import { placeholderKeys } from "@/utils/placeholder-keys";
 
 const MONTHS_TO_SHOW = 6;
 
@@ -53,11 +54,13 @@ async function fetchMonthlyTrend(
   return response.json();
 }
 
+const SKELETON_ROW_KEYS = placeholderKeys("trend-row", MONTHS_TO_SHOW);
+
 function TrendSkeleton() {
   return (
     <div className="space-y-3">
-      {Array.from({ length: MONTHS_TO_SHOW }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3">
+      {SKELETON_ROW_KEYS.map((key) => (
+        <div key={key} className="flex items-center gap-3">
           <Skeleton className="h-4 w-8" />
           <Skeleton className="h-7 flex-1" />
         </div>
@@ -137,7 +140,7 @@ function TrendBar({
     >
       <span
         className={cn(
-          "w-8 text-right font-medium text-xs",
+          "w-8 text-right text-xs font-medium",
           isCurrent ? "font-bold text-primary" : "text-muted-foreground",
         )}
         aria-hidden="true"
@@ -172,7 +175,7 @@ function TrendBar({
         </div>
       </div>
       {!showInnerLabel && (
-        <span className="min-w-12 font-mono text-muted-foreground text-xs tabular-nums">
+        <span className="min-w-12 font-mono text-xs text-muted-foreground tabular-nums">
           {isZero ? "—" : `${currencySymbol}${formattedAmount}`}
         </span>
       )}
@@ -187,13 +190,13 @@ function TrendBar({
           <p className="font-medium capitalize">
             {month} {year}
             {isCurrent && (
-              <span className="ml-1 font-normal text-[10px] text-primary">
+              <span className="ml-1 text-[10px] font-normal text-primary">
                 ({t("dashboard.trend.current")})
               </span>
             )}
           </p>
           {isZero ? (
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               {t("dashboard.trend.noCharges")}
             </p>
           ) : (
@@ -206,7 +209,7 @@ function TrendBar({
                 })}
               </p>
               {isAboveAverage && (
-                <p className="text-primary text-xs">
+                <p className="text-xs text-primary">
                   {t("dashboard.trend.aboveAverage")}
                 </p>
               )}
@@ -231,10 +234,10 @@ type StatItemProps = {
 function StatItem({ label, value }: StatItemProps) {
   return (
     <div className="flex-1 text-center">
-      <p className="font-mono font-semibold text-sm tabular-nums sm:text-lg">
+      <p className="font-mono text-sm font-semibold tabular-nums sm:text-lg">
         {value}
       </p>
-      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+      <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
         {label}
       </p>
     </div>
@@ -261,7 +264,7 @@ export function MonthlyTrend() {
 
   const trend = data?.trend ?? [];
   const maxAmount = Math.max(...trend.map((d) => d.amount), 1);
-  const hasData = trend.length > 0 && trend.some((t) => t.amount > 0);
+  const hasData = trend.some((t) => t.amount > 0);
   const average = data?.average ?? 0;
   const missingRates = data?.missingRates ?? [];
   const skippedCount = data?.skippedCount ?? 0;
@@ -358,7 +361,7 @@ export function MonthlyTrend() {
             <div className="mb-4 flex size-16 items-center justify-center bg-muted/50">
               <BarChart3Icon className="size-8 opacity-40" />
             </div>
-            <p className="font-medium text-sm">
+            <p className="text-sm font-medium">
               {t("dashboard.trend.emptyTitle")}
             </p>
             <p className="mt-1 text-xs opacity-70">

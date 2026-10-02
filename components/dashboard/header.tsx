@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSession } from "@/lib/auth-client";
 import { CommandMenuButton } from "../command-palette";
@@ -10,9 +11,10 @@ import { UserMenu } from "./user-menu";
 export default function Header() {
   const { data: session } = useSession();
   const { t } = useTranslation();
+  // La hora se lee al montar; leerla en cada render es impuro (react/purity).
+  const [hour] = useState(() => new Date().getHours());
 
   const getGreeting = () => {
-    const hour = new Date().getHours();
     if (hour < 12) return t("nav.greetingMorning");
     if (hour < 18) return t("nav.greetingAfternoon");
     return t("nav.greetingEvening");
@@ -23,7 +25,7 @@ export default function Header() {
       <div className="flex items-center gap-4">
         <Logo />
         <div className="hidden h-6 w-px bg-border sm:block" />
-        <p className="hidden text-muted-foreground text-sm sm:block">
+        <p className="hidden text-sm text-muted-foreground sm:block">
           {getGreeting()},{" "}
           <span className="font-medium text-foreground capitalize">
             {session?.user.name}

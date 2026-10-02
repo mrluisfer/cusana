@@ -77,18 +77,18 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ## Scripts
 
-| Command            | Description                  |
-| ------------------ | ---------------------------- |
-| `pnpm dev`         | Start development server     |
-| `pnpm build`       | Build for production         |
-| `pnpm start`       | Start production server      |
-| `pnpm lint`        | Run ESLint                   |
-| `pnpm type-check`  | Run TypeScript type checking |
-| `pnpm format`      | Format code with Prettier    |
-| `pnpm db:generate` | Generate Drizzle migrations  |
-| `pnpm db:push`     | Push schema to database      |
-| `pnpm db:migrate`  | Run pending migrations       |
-| `pnpm db:studio`   | Open Drizzle Studio          |
+| Command            | Description                          |
+| ------------------ | ------------------------------------ |
+| `pnpm dev`         | Start development server             |
+| `pnpm build`       | Build for production                 |
+| `pnpm start`       | Start production server              |
+| `pnpm lint`        | Lint (oxlint) + format check (oxfmt) |
+| `pnpm type-check`  | Run TypeScript type checking         |
+| `pnpm format`      | Format code with oxfmt               |
+| `pnpm db:generate` | Generate Drizzle migrations          |
+| `pnpm db:push`     | Push schema to database              |
+| `pnpm db:migrate`  | Run pending migrations               |
+| `pnpm db:studio`   | Open Drizzle Studio                  |
 
 ## Project Structure
 

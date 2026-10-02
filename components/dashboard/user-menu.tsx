@@ -14,9 +14,9 @@ import {
   SunIcon,
   UserIcon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { calendarHoverPreviewAtom } from "@/atoms";
@@ -43,7 +43,7 @@ import {
 import { ProfileDialog } from "./profile-dialog";
 
 export const UserMenu = () => {
-  const { push } = useRouter();
+  const router = useRouter();
   const { data, isPending, error } = useSession();
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
@@ -55,8 +55,8 @@ export const UserMenu = () => {
 
   const handleSignOut = useCallback(async () => {
     await signOut();
-    push("/login");
-  }, [push]);
+    router.push("/login");
+  }, [router]);
 
   const openProfile = useCallback(() => setProfileOpen(true), []);
 
@@ -88,10 +88,10 @@ export const UserMenu = () => {
                 square
               />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-foreground text-sm">
+                <p className="truncate text-sm font-medium text-foreground">
                   {user?.name}
                 </p>
-                <p className="truncate text-muted-foreground text-xs">
+                <p className="truncate text-xs text-muted-foreground">
                   {user?.email}
                 </p>
               </div>

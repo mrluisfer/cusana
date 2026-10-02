@@ -74,10 +74,10 @@ export function ErrorState({
       </div>
 
       {/* Texto */}
-      <h3 className="mb-1 font-semibold text-foreground text-lg">
+      <h3 className="mb-1 text-lg font-semibold text-foreground">
         {resolvedTitle}
       </h3>
-      <p className="mb-6 max-w-sm text-muted-foreground text-sm">
+      <p className="mb-6 max-w-sm text-sm text-muted-foreground">
         {resolvedMessage}
       </p>
 
@@ -126,7 +126,7 @@ export function ErrorStateInline({
     >
       <div className="flex items-center gap-3">
         <AlertCircle className="size-5 shrink-0 text-destructive" />
-        <p className="text-destructive text-sm">
+        <p className="text-sm text-destructive">
           {message ?? t("errorState.inlineMessage")}
         </p>
       </div>

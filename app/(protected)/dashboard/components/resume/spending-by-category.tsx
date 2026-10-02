@@ -200,7 +200,7 @@ export function SpendingByCategory() {
                           />
                           {chartConfig[name as string]?.label ?? name}
                         </span>
-                        <span className="font-medium font-mono text-foreground tabular-nums">
+                        <span className="font-mono font-medium text-foreground tabular-nums">
                           {currencySymbol}
                           {Number(value).toLocaleString(locale, {
                             maximumFractionDigits: 0,
@@ -231,7 +231,7 @@ export function SpendingByCategory() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground font-bold font-mono text-xl"
+                          className="fill-foreground font-mono text-xl font-bold"
                         >
                           {currencySymbol}
                           {Math.round(total).toLocaleString(locale, {
@@ -257,7 +257,7 @@ export function SpendingByCategory() {
             <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50">
               <ChartPieIcon className="size-8 opacity-40" />
             </div>
-            <p className="font-medium text-sm">
+            <p className="text-sm font-medium">
               {t("dashboard.categoryChart.empty")}
             </p>
             <p className="mt-1 text-xs opacity-70">
@@ -271,7 +271,7 @@ export function SpendingByCategory() {
             {categories.map((c, i) => (
               <div
                 key={c.category}
-                className="flex items-center gap-1.5 text-muted-foreground text-xs"
+                className="flex items-center gap-1.5 text-xs text-muted-foreground"
               >
                 <span
                   className="size-2.5 shrink-0 rounded-[2px]"
@@ -287,7 +287,7 @@ export function SpendingByCategory() {
         )}
 
         {!isPending && chartData.length > 0 && (
-          <p className="mt-3 text-center text-muted-foreground text-xs">
+          <p className="mt-3 text-center text-xs text-muted-foreground">
             {t("dashboard.distribution.subscriptions", {
               count: subscriptionCount,
             })}

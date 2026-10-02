@@ -11,6 +11,7 @@ import { toIntlLocale } from "@/lib/i18n/format";
 import { useLanguage } from "@/lib/i18n/use-language";
 import type { Subscription } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+import { placeholderKeys } from "@/utils/placeholder-keys";
 import { CalendarDay } from "./CalendarDay";
 import { CalendarSkeleton } from "./CalendarSkeleton";
 
@@ -46,7 +47,7 @@ export function BillingCalendar() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const now = useMemo(() => new Date(), []);
+  const [now] = useState(() => new Date());
   const viewDate = useMemo(() => {
     return new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
   }, [now, monthOffset]);
@@ -106,13 +107,13 @@ export function BillingCalendar() {
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
-        <h2 className="font-semibold text-lg tracking-tight">
+        <h2 className="text-lg font-semibold tracking-tight">
           <span className="capitalize transition hover:text-primary">
             {monthName}
           </span>{" "}
           <span className="font-normal text-muted-foreground">{yearLabel}</span>
         </h2>
-        <div className="flex select-none items-center gap-1.5">
+        <div className="flex items-center gap-1.5 select-none">
           <Button
             type="button"
             onClick={() => setMonthOffset(0)}
@@ -150,7 +151,7 @@ export function BillingCalendar() {
                 key={day}
                 role="columnheader"
                 className={cn(
-                  "flex h-8 items-center justify-center font-medium text-xs",
+                  "flex h-8 items-center justify-center text-xs font-medium",
                   isCurrentMonth && i === currentDayOfWeekIndex
                     ? "font-semibold text-primary"
                     : "text-muted-foreground",
@@ -163,8 +164,8 @@ export function BillingCalendar() {
 
           {/* Day grid */}
           <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="row">
-            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-              <div key={`e-${i}`} role="gridcell" className="aspect-square" />
+            {placeholderKeys("blank", firstDayOfMonth).map((key) => (
+              <div key={key} aria-hidden="true" className="aspect-square" />
             ))}
 
             {Array.from({ length: daysInMonth }).map((_, i) => {

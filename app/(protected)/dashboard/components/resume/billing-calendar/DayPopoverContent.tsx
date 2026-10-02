@@ -46,14 +46,14 @@ export function DayPopoverContent({
             >
               <ServiceIcon service={platform} size="xs" className="shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-sm capitalize">
+                <p className="truncate text-sm font-medium capitalize">
                   {payment.name}
                 </p>
                 <p className="text-[11px] text-muted-foreground">
                   {t(`dashboard.billing.${payment.billingCycle}`)}
                 </p>
               </div>
-              <span className="font-mono font-semibold text-sm tabular-nums">
+              <span className="font-mono text-sm font-semibold tabular-nums">
                 {symbol}
                 {price.toLocaleString(toIntlLocale(language), {
                   minimumFractionDigits: 2,
@@ -66,12 +66,12 @@ export function DayPopoverContent({
       </div>
 
       {payments.length > 1 && (
-        <div className="border-border border-t border-dashed pt-2.5">
+        <div className="border-t border-dashed border-border pt-2.5">
           <div className="flex items-center justify-between px-1.5">
-            <span className="text-muted-foreground text-sm">
+            <span className="text-sm text-muted-foreground">
               {t("dashboard.calendar.total")}
             </span>
-            <span className="font-bold font-mono text-sm tabular-nums">
+            <span className="font-mono text-sm font-bold tabular-nums">
               $
               {total.toLocaleString(toIntlLocale(language), {
                 minimumFractionDigits: 2,
