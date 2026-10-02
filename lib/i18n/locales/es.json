@@ -485,7 +485,8 @@
   "landing": {
     "header": {
       "signIn": "Iniciar sesión",
-      "createAccount": "Crear cuenta"
+      "createAccount": "Crear cuenta",
+      "getStarted": "Empezar"
     },
     "hero": {
       "badge": "Beta abierta",

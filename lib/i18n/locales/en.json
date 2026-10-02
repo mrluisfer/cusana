@@ -485,7 +485,8 @@
   "landing": {
     "header": {
       "signIn": "Sign in",
-      "createAccount": "Create account"
+      "createAccount": "Create account",
+      "getStarted": "Sign up"
     },
     "hero": {
       "badge": "Open beta",
