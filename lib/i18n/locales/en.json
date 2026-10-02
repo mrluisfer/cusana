@@ -649,7 +649,14 @@
       "insights": "Insights",
       "activeSubscriptions": "Active subscriptions",
       "seeAll": "See all",
-      "monthly": "Monthly"
+      "yearlySpend": "Yearly spend",
+      "periodLabel": "Period",
+      "month": "Month",
+      "year": "Year",
+      "undo": "Undo",
+      "renewsIn_one": "In {{count}} day",
+      "renewsIn_other": "In {{count}} days",
+      "share": "{{percent}}% of spend"
     }
   }
 }

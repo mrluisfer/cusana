@@ -294,14 +294,14 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            <div className="relative flex justify-center overflow-hidden lg:justify-end lg:overflow-visible">
+            <div className="relative flex justify-center lg:justify-end">
               <ServiceIcon
                 service="netflix"
                 className="absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
               />
               <ServiceIcon
                 service="spotify"
-                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-24"
+                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-8"
               />
               <ServiceIcon
                 service="disney"

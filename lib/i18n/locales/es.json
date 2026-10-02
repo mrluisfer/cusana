@@ -655,7 +655,14 @@
       "insights": "Insights",
       "activeSubscriptions": "Suscripciones activas",
       "seeAll": "Ver todo",
-      "monthly": "Mensual"
+      "yearlySpend": "Gasto anual",
+      "periodLabel": "Periodo",
+      "month": "Mes",
+      "year": "Año",
+      "undo": "Deshacer",
+      "renewsIn_one": "En {{count}} día",
+      "renewsIn_other": "En {{count}} días",
+      "share": "{{percent}} % del gasto"
     }
   }
 }
