@@ -169,12 +169,12 @@ export default function LandingPage() {
 
       <div className="container mx-auto max-w-6xl px-4">
         {/* Header */}
-        <header className="sticky top-4 z-40 mt-4 flex items-center justify-between rounded-2xl border border-border/60 bg-background/60 px-4 py-2.5 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
+        <header className="sticky top-4 z-40 mt-4 flex items-center justify-between rounded-2xl border border-border/60 bg-background/60 px-3 py-2.5 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 sm:px-4">
           <Logo />
 
-          <div className="flex items-center justify-end gap-2">
-            <LanguageToggle />
-            <ThemeToggle />
+          <div className="flex items-center justify-end gap-1 sm:gap-2">
+            <LanguageToggle className="size-8 sm:size-9" />
+            <ThemeToggle className="size-8 sm:size-9" />
             <Button
               variant="ghost"
               className="hidden sm:inline-flex"
@@ -182,9 +182,19 @@ export default function LandingPage() {
             >
               {t("landing.header.signIn")}
             </Button>
+            {/* En móvil no caben logo, toggles y "Crear cuenta" en 360px: se
+                usa una etiqueta corta y se quita la flecha. */}
             <Button render={<Link href="/register" />}>
-              {t("landing.header.createAccount")}
-              <ArrowRight className="ml-1 size-4" aria-hidden="true" />
+              <span className="sm:hidden">
+                {t("landing.header.getStarted")}
+              </span>
+              <span className="hidden sm:inline">
+                {t("landing.header.createAccount")}
+              </span>
+              <ArrowRight
+                className="ml-1 hidden size-4 sm:block"
+                aria-hidden="true"
+              />
             </Button>
           </div>
         </header>
@@ -194,7 +204,9 @@ export default function LandingPage() {
           className="pt-20 pb-16 md:pt-28 md:pb-24"
           aria-labelledby="hero-heading"
         >
-          <div className="grid items-center gap-12 lg:grid-cols-2">
+          {/* grid-cols-1 (minmax(0,1fr)) evita que la palabra más larga del
+              título ensanche la columna en móvil y empuje todo fuera de la pantalla. */}
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <div className="space-y-7">
               <Link
                 href="#roadmap"
@@ -215,7 +227,7 @@ export default function LandingPage() {
 
               <h1
                 id="hero-heading"
-                className="text-5xl leading-[1.05] font-semibold tracking-tight text-balance text-foreground md:text-6xl lg:text-7xl"
+                className="text-4xl leading-[1.05] font-semibold tracking-tight text-balance wrap-break-word text-foreground sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl"
               >
                 {t("landing.hero.titleLead")}{" "}
                 <span className="relative inline-block bg-linear-to-br from-primary via-fuchsia-500 to-sky-500 bg-clip-text text-transparent">
@@ -282,14 +294,14 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            <div className="relative flex justify-center overflow-hidden lg:justify-end lg:overflow-visible">
+            <div className="relative flex justify-center lg:justify-end">
               <ServiceIcon
                 service="netflix"
                 className="absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
               />
               <ServiceIcon
                 service="spotify"
-                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-24"
+                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-8"
               />
               <ServiceIcon
                 service="disney"
@@ -446,12 +458,19 @@ export default function LandingPage() {
             onValueChange={(v) => setActiveRoadmap(v as RoadmapStatus)}
             className="space-y-8"
           >
-            <TabsList className="mx-auto w-fit border border-border/60 bg-card/40 backdrop-blur-xl">
+            <TabsList className="mx-auto w-full border border-border/60 bg-card/40 backdrop-blur-xl sm:w-fit">
               {(Object.keys(statusMeta) as RoadmapStatus[]).map((status) => {
                 const meta = statusMeta[status];
                 return (
-                  <TabsTrigger key={status} value={status} className="gap-2">
-                    <meta.icon className="size-3.5" aria-hidden="true" />
+                  <TabsTrigger
+                    key={status}
+                    value={status}
+                    className="gap-2 px-2 text-xs sm:px-3 sm:text-sm"
+                  >
+                    <meta.icon
+                      className="hidden size-3.5 sm:block"
+                      aria-hidden="true"
+                    />
                     {t(`landing.roadmap.status.${status}` as const)}
                   </TabsTrigger>
                 );

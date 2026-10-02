@@ -15,8 +15,10 @@ import {
 
 export function LanguageToggle({
   variant = "ghost",
+  className,
 }: {
   variant?: "ghost" | "outline";
+  className?: string;
 }) {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
@@ -25,7 +27,7 @@ export function LanguageToggle({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={t("language.label")}
-        className={cn(buttonVariants({ variant, size: "icon" }))}
+        className={cn(buttonVariants({ variant, size: "icon" }), className)}
       >
         <LanguagesIcon className="size-4" />
       </DropdownMenuTrigger>

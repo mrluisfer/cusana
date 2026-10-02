@@ -4,6 +4,7 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 
 const emptySubscribe = () => () => {};
@@ -18,8 +19,10 @@ function useMounted() {
 
 export function ThemeToggle({
   variant = "ghost",
+  className,
 }: {
   variant?: "ghost" | "outline";
+  className?: string;
 }) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
@@ -30,6 +33,7 @@ export function ThemeToggle({
       <Button
         variant="ghost"
         size="icon"
+        className={className}
         aria-label={t("theme.change")}
         disabled
       >
@@ -44,7 +48,7 @@ export function ThemeToggle({
     <Button
       variant={variant}
       size="icon"
-      className="relative"
+      className={cn("relative", className)}
       aria-label={isDark ? t("theme.switchToLight") : t("theme.switchToDark")}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
