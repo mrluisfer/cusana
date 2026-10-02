@@ -23,9 +23,9 @@ export function DashboardSectionHeader({
       >
         {t(`dashboard.${section}.title`)}
       </h2>
-      <p className="text-sm text-pretty text-muted-foreground">
+      {/* <p className="text-sm text-pretty text-muted-foreground">
         {t(`dashboard.${section}.description`)}
-      </p>
+      </p> */}
     </header>
   );
 }
