@@ -14,7 +14,7 @@ export default function LabsPage() {
           <ThemeToggle variant="outline" />
 
           <div>
-            <ul className="motion-safe:animate-marquee mt-2 flex flex-wrap items-center gap-4 motion-safe:group-hover:[animation-play-state:paused]">
+            <ul className="mt-2 flex flex-wrap items-center gap-4">
               {realServiceKeys.map((service) => (
                 <li key={service}>
                   <ServiceIcon

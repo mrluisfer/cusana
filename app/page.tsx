@@ -285,15 +285,15 @@ export default function LandingPage() {
             <div className="relative flex justify-center overflow-hidden lg:justify-end lg:overflow-visible">
               <ServiceIcon
                 service="netflix"
-                className="motion-safe:animate-float absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex"
+                className="absolute top-8 -left-4 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
               />
               <ServiceIcon
                 service="spotify"
-                className="motion-safe:animate-float-delayed absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex lg:-right-24"
+                className="absolute top-20 right-0 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float-delayed sm:flex lg:-right-24"
               />
               <ServiceIcon
                 service="disney"
-                className="motion-safe:animate-float absolute bottom-12 left-8 z-10 hidden shadow-xl ring-1 ring-border/50 sm:flex"
+                className="absolute bottom-12 left-8 z-10 hidden shadow-xl ring-1 ring-border/50 motion-safe:animate-float sm:flex"
               />
               <PhoneMockup />
             </div>
@@ -404,7 +404,7 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="group relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-            <ul className="motion-safe:animate-marquee mt-2 flex w-max items-center gap-4 motion-safe:group-hover:[animation-play-state:paused]">
+            <ul className="mt-2 flex w-max items-center gap-4 pr-4 motion-safe:animate-marquee motion-safe:group-hover:[animation-play-state:paused]">
               {marqueeItems.map(({ service, key, clone }) => (
                 <li key={key} aria-hidden={clone ? "true" : undefined}>
                   <ServiceIcon
@@ -624,43 +624,6 @@ export default function LandingPage() {
           </div>
         </footer>
       </div>
-
-      <style jsx global>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float 3s ease-in-out infinite;
-          animation-delay: 1.5s;
-        }
-        @keyframes marquee {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 35s linear infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .animate-float,
-          .animate-float-delayed,
-          .animate-marquee {
-            animation: none !important;
-          }
-        }
-      `}</style>
     </main>
   );
 }
