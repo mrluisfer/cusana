@@ -25,11 +25,81 @@ interface BillingDateOptions {
   billingMonth?: number | null;
 }
 
+/** Local calendar date as YYYY-MM-DD (avoids the UTC shift of toISOString). */
+export function toISODate(date: Date): string {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+/**
+ * Date of `billingDay` in a month, clamped to the month's length so a day 31
+ * subscription bills on Nov 30 instead of rolling over to Dec 1.
+ */
+function clampedDate(year: number, monthIndex: number, billingDay: number) {
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  return new Date(year, monthIndex, Math.min(billingDay, daysInMonth));
+}
+
+/** Month (0-11) a yearly subscription bills in. */
+function resolveYearlyMonth(
+  billingMonth: number | null | undefined,
+  createdAt: string | Date,
+) {
+  // Use explicit billingMonth (1-12) if provided, otherwise fallback to createdAt month
+  return billingMonth ? billingMonth - 1 : new Date(createdAt).getMonth();
+}
+
+/** Billing date within a month (0-11), or null if the subscription doesn't bill that month. */
+export function getBillingDateInMonth(
+  options: BillingDateOptions,
+  year: number,
+  monthIndex: number,
+): Date | null {
+  if (
+    options.billingCycle === "yearly" &&
+    resolveYearlyMonth(options.billingMonth, options.createdAt) !== monthIndex
+  ) {
+    return null;
+  }
+  return clampedDate(year, monthIndex, options.billingDay);
+}
+
+/** Every billing date between `from` and `to` (YYYY-MM-DD, inclusive), oldest first. */
+export function getBillingDatesBetween(
+  options: BillingDateOptions,
+  from: string,
+  to: string,
+): string[] {
+  const [fromYear, fromMonth] = from.split("-").map(Number);
+  const [toYear, toMonth] = to.split("-").map(Number);
+  const dates: string[] = [];
+
+  for (
+    let index = fromYear * 12 + fromMonth - 1;
+    index <= toYear * 12 + toMonth - 1;
+    index++
+  ) {
+    const date = getBillingDateInMonth(
+      options,
+      Math.floor(index / 12),
+      index % 12,
+    );
+    if (!date) continue;
+    const iso = toISODate(date);
+    if (iso >= from && iso <= to) dates.push(iso);
+  }
+
+  return dates;
+}
+
 /**
  * Calculates the next billing date based on cycle type.
  *
- * - Monthly: next occurrence of `billingDay` (this month or next).
- * - Yearly: same month as `createdAt`, same `billingDay`, next occurrence.
+ * - Monthly: next occurrence of `billingDay` after today (today's charge
+ *   counts as done, so it moves to next month).
+ * - Yearly: same month as `createdAt`, same `billingDay`, next occurrence
+ *   (today included).
  */
 export function getNextBillingDateFull({
   billingDay,
@@ -40,32 +110,24 @@ export function getNextBillingDateFull({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const currentDay = today.getDate();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
 
   if (billingCycle === "yearly") {
-    // Use explicit billingMonth (1-12) if provided, otherwise fallback to createdAt month
-    const resolvedMonth = billingMonth
-      ? billingMonth - 1 // Convert 1-12 to 0-11
-      : new Date(createdAt).getMonth();
+    const resolvedMonth = resolveYearlyMonth(billingMonth, createdAt);
 
-    // This year's anniversary
-    let nextDate = new Date(currentYear, resolvedMonth, billingDay);
-
-    // If it already passed this year, go to next year
-    if (nextDate.getTime() < today.getTime()) {
-      nextDate = new Date(currentYear + 1, resolvedMonth, billingDay);
-    }
-
-    return nextDate;
+    // This year's anniversary; if it already passed, next year's
+    const thisYear = clampedDate(currentYear, resolvedMonth, billingDay);
+    return thisYear.getTime() < today.getTime()
+      ? clampedDate(currentYear + 1, resolvedMonth, billingDay)
+      : thisYear;
   }
 
   // Monthly
-  if (currentDay >= billingDay) {
-    return new Date(currentYear, currentMonth + 1, billingDay);
-  }
-  return new Date(currentYear, currentMonth, billingDay);
+  const thisMonth = clampedDate(currentYear, currentMonth, billingDay);
+  return thisMonth.getTime() <= today.getTime()
+    ? clampedDate(currentYear, currentMonth + 1, billingDay)
+    : thisMonth;
 }
 
 /**

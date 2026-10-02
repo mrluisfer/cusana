@@ -155,6 +155,17 @@
       "services": "Servicios",
       "other": "Otros"
     },
+    "payments": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "overdue": "Sin pagar",
+      "paidOn": "Pagado el {{date}}",
+      "auto": "automático",
+      "manual": "manual",
+      "markPaid": "Marcar como pagado",
+      "markUnpaid": "Marcar como pendiente",
+      "allPaid": "todo pagado"
+    },
     "budget": {
       "title": "Presupuesto mensual",
       "setPrompt": "Define un límite mensual para controlar tu gasto.",

@@ -47,13 +47,22 @@ Client components fetch through React Query → `app/api/[userid]/…/route.ts` 
 
 `deleteSubscription` is a **soft delete** (`active: false`); `hardDeleteSubscription` removes the row but keeps its events. `GET /api/[userid]/subscription?status=inactive` returns soft-deleted rows.
 
+### Payments (paid / pending charges)
+
+`subscription_payments` holds one row per charge, keyed by `(subscriptionId, dueDate)`, with `status` (`paid`/`unpaid`), `source` (`auto`/`manual`), `paidOn`, and an `amount`/`currency` snapshot taken when the row is created.
+
+- **Automatic rows:** `GET /api/[userid]/payments?from&to&today` first runs `syncAutoPayments()`, which inserts `paid`/`auto` rows for active subscriptions whose charge dates have arrived. It covers charges since the subscription's `createdAt`, at most 24 months back, and never overwrites an existing row, so manual corrections always win.
+- **Manual rows:** `PUT` upserts with `source: "manual"`, and on conflict it keeps the original amount snapshot.
+- **The client's date:** the client sends its local `today` (YYYY-MM-DD) because the server runs in UTC. Budgets do the same with `period`.
+- **Client side:** `hooks/use-subscription-payments.ts` has `usePayments`, `useSetPaymentStatus` and `getPaymentState`. The UI keys charges with `paymentKey(subscriptionId, dueDate)`, and `dueDate` must come from `getBillingDateInMonth` / `getNextBillingDateFull` so the calendar and upcoming payments agree on the date.
+
 ### Money, currency and periods
 
 - `price` is a Postgres `numeric` and arrives as a **string** — always `Number.parseFloat(String(price))`.
 - Prices are stored in their **original** currency. `getMonthlyAmount()` in `utils/subscription-insights.ts` normalizes yearly → monthly; `convertToTarget()` converts using a Frankfurter rate map and returns `null` when a rate is missing (callers must handle it).
 - Exchange rates come from the public Frankfurter API, fetched **per component** on the client (and in two API routes) — there is no shared rates module.
 - Budgets are keyed by "period", the first day of a month as `YYYY-MM-01`. Use the helpers in `lib/period.ts` rather than formatting dates by hand.
-- Next-billing math lives in `utils/get-next-billing-date.tsx`; sort by `getNextBillingDateFull().getTime()`, not by `billingDay`, or yearly cycles order incorrectly.
+- Next-billing math lives in `utils/get-next-billing-date.tsx`; sort by `getNextBillingDateFull().getTime()`, not by `billingDay`, or yearly cycles order incorrectly. Billing days are clamped to the month's length (day 31 bills on Nov 30), and `toISODate()` formats local dates without the UTC shift of `toISOString()`.
 
 ### State
 

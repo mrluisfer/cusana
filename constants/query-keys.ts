@@ -3,4 +3,5 @@ export enum QueryKeys {
   INACTIVE_SUBSCRIPTIONS = "inactive-subscriptions",
   RESUME_TOTAL = "resume-total",
   BUDGET = "budget",
+  PAYMENTS = "payments",
 }

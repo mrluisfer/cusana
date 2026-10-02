@@ -50,6 +50,13 @@
       "when": 1782404126613,
       "tag": "0006_misty_freak",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790960505824,
+      "tag": "0007_subscription_payments",
+      "breakpoints": true
     }
   ]
 }
